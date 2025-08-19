@@ -21,9 +21,10 @@ public class RenameProvider {
         Position cursorPosition = params.getPosition();
         cursorPosition.setCharacter(cursorPosition.getCharacter() - 1);
         Range cursor = Utils.positionToRange(cursorPosition);
-        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
+        //从项目的SouffleProjectContext 中 根据 文件的getTextDocument().getUri() 获取该文件的 context
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);// 定位：cursor指向的内容
         if (context != null) {
-            SouffleSymbol currentSymbol = context.getSymbol(cursor);
+            SouffleSymbol currentSymbol = context.getSymbol(cursor); //根据光标的range，从context中获得对应的符号
             if (currentSymbol != null) {
                 switch (currentSymbol.getKind()) {
                     case RELATION_DECL:
@@ -34,6 +35,7 @@ public class RenameProvider {
                     case RELATION_USE:
                     case RULE:
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
+                        //
                         for (Location reference : references) {
                             if (!textEdits.containsKey(reference.getUri())) {
                                 textEdits.put(reference.getUri(), new ArrayList<TextEdit>());
