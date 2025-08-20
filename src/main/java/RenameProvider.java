@@ -21,10 +21,10 @@ public class RenameProvider {
         Position cursorPosition = params.getPosition();
         cursorPosition.setCharacter(cursorPosition.getCharacter() - 1);
         Range cursor = Utils.positionToRange(cursorPosition);
-        //从项目的SouffleProjectContext 中 根据 文件的getTextDocument().getUri() 获取该文件的 context
-        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);// 定位：cursor指向的内容
+        //定位。从项目的SouffleProjectContext 中 根据 文件的getTextDocument().getUri() 获取该文件的 context
+        SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         if (context != null) {
-            SouffleSymbol currentSymbol = context.getSymbol(cursor); //根据光标的range，从context中获得对应的符号
+            SouffleSymbol currentSymbol = context.getSymbol(cursor); //搜索：根据光标的range，从context中获得对应的符号
             if (currentSymbol != null) {
                 switch (currentSymbol.getKind()) {
                     case RELATION_DECL:
@@ -34,8 +34,8 @@ public class RenameProvider {
                     case TYPE_USE:
                     case RELATION_USE:
                     case RULE:
+                        //对引用的地方进行修改。这个函数是搜索 + 遍历
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
-                        //
                         for (Location reference : references) {
                             if (!textEdits.containsKey(reference.getUri())) {
                                 textEdits.put(reference.getUri(), new ArrayList<TextEdit>());
@@ -48,6 +48,7 @@ public class RenameProvider {
                         }
                         break;
                     case ATTRIBUTE:
+                        // 获取所有同名符号进行修改
                         textEdits.put(params.getTextDocument().getUri(), new ArrayList<TextEdit>());
                         List<SouffleSymbol> vars = context.getSymbols(currentSymbol.getName())
                                 .stream()

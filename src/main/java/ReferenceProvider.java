@@ -15,12 +15,13 @@ public class ReferenceProvider {
         return getReferences(params, true);
     }
     public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params, boolean includeComponent) {
-        Range cursor = Utils.positionToRange(params.getPosition());
+        Range cursor = Utils.positionToRange(params.getPosition()); //搜索
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         Set<Location> references = new HashSet<>();
         if (context != null) {
-            SouffleSymbol currentSymbol = context.getSymbol(cursor);
+            SouffleSymbol currentSymbol = context.getSymbol(cursor); //搜索
             for (Map.Entry<String, SouffleContext> documentContext : SouffleProjectContext.getInstance().getDocuments().entrySet()) {
+                //遍历。此处遍历 首先获取当前作用域下同名符号列表，然后递归查找子作用域，每个子作用域查找同名符号列表
                 Optional.ofNullable(documentContext.getValue()
                                 .getSymbols(currentSymbol.getName()))
                         .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(documentContext.getKey(), symbol.getRange()))));

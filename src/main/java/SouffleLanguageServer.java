@@ -52,17 +52,23 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         ServerCapabilities serverCapabilities = new ServerCapabilities();
         serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         serverCapabilities.setHoverProvider(true);
+
         serverCapabilities.setDefinitionProvider(true);
+
         serverCapabilities.setTypeDefinitionProvider(true);
         serverCapabilities.setReferencesProvider(true);
         serverCapabilities.setImplementationProvider(true);
+
         SignatureHelpOptions signatureHelpOptions = new SignatureHelpOptions();
         signatureHelpOptions.setTriggerCharacters(List.of("("));
         signatureHelpOptions.setRetriggerCharacters(List.of(","));
         serverCapabilities.setSignatureHelpProvider(signatureHelpOptions);
+
         serverCapabilities.setDocumentSymbolProvider(true);
         serverCapabilities.setWorkspaceSymbolProvider(true);
+
         serverCapabilities.setRenameProvider(true);
+
 //        serverCapabilities.setCodeActionProvider(true);
         CodeActionOptions codeActionOptions = new CodeActionOptions();
 //        codeActionOptions.setResolveProvider(true);
@@ -189,6 +195,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         souffleParser.setErrorHandler(new SouffleError());
 //        souffleParser.setErrorHandler(new BailErrorStrategy());
         souffleParser.addErrorListener(new SouffleSyntaxErrorListener(path.toUri().toString()));
+        // difference : declaration
         SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, path.toUri().toString(), projectContext);
         visitor.visit(souffleParser.program());
 
@@ -202,6 +209,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
+        //  difference : use
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, path.toUri().toString());
         visitor2.visit(souffleParser.program());
     }

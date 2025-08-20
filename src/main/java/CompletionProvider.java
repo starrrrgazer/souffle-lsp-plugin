@@ -50,7 +50,7 @@ public class CompletionProvider {
         switch (state){
             case IDLE:
                 Set<String> items = new HashSet<>();
-                SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range);
+                SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range); //搜索
                 boolean directiveTrigger = params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals(".");
                 if(directiveTrigger){
                     for (String directive : directives) {
@@ -66,8 +66,11 @@ public class CompletionProvider {
                 }
 
                 for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
+                    //遍历 document 次数
                     findInScope(documentContext.getScope(), completionItems, items);
                 }
+
+                //遍历 1 次
                 if(context != null){
                     if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
                         context = context.getParent();
@@ -140,6 +143,7 @@ public class CompletionProvider {
     }
 
     private void findInScope(Map<String, List<SouffleSymbol>> scope, List<CompletionItem> completionItems, Set<String> items) {
+        //获取scope列表下的所有符号，每个进行对比
         for (List<SouffleSymbol> symbols : scope.values()) {
             for (SouffleSymbol symbol : symbols) {
                 if(!items.contains(symbol.toString())){

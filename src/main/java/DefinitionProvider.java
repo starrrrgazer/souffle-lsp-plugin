@@ -20,12 +20,12 @@ public class DefinitionProvider {
     public Either<List<? extends Location>, List<? extends LocationLink>> getDefinition(DefinitionParams params) {
         List<Location> declLocations = new ArrayList<Location>();
         Range cursor = Utils.positionToRange(params.getPosition());
-        Optional<SouffleContext> context = Optional.ofNullable(SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor));
+        Optional<SouffleContext> context = Optional.ofNullable(SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor)); //
         if (context.isPresent()) {
-            Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));
+            Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor)); //查表
             if (currentSymbol.isPresent()) {
                 for(SouffleSymbol symbol :currentSymbol.get().getDeclarations()){
-                    declLocations.add(new Location(symbol.getURI(), symbol.getRange()));
+                    declLocations.add(new Location(symbol.getURI(), symbol.getRange())); //构建 useVisitor
                 }
             }
         }
