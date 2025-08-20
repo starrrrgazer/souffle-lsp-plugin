@@ -13,6 +13,7 @@ public class SouffleLanguageServerLauncher {
 
    public static void main(String[] args) throws InterruptedException, ExecutionException {
        startServer(System.in, System.out);
+       System.err.println("run server");
    }
 
    /**

@@ -1,5 +1,7 @@
 import path = require("path");
 import * as vscode from "vscode";
+import * as fs from "fs";
+
 import {
   LanguageClientOptions,
   RevealOutputChannelOn,
@@ -72,21 +74,54 @@ function getServerOptions() {
   //Change the project home accordingly.
   const PROJECT_HOME = path.resolve(__dirname, "../");
   const LS_LIB_CONFIG = vscode.workspace.getConfiguration().get("PATH_LSP");
-  let LS_LIB = "build/libs/*";
-  if (LS_LIB_CONFIG) {
-    LS_LIB = String(LS_LIB_CONFIG);
-  }
-  const LS_HOME = path.join(PROJECT_HOME, LS_LIB);
-  const JAVA_HOME = vscode.workspace.getConfiguration().get("JAVA_HOME");
+  
+  //only for linux
+  // let LS_LIB = "build/libs/*";
+  // if (LS_LIB_CONFIG) {
+  //   LS_LIB = String(LS_LIB_CONFIG);
+  // }
+  // const LS_HOME = path.join(PROJECT_HOME, LS_LIB);
+  // const JAVA_HOME = vscode.workspace.getConfiguration().get("JAVA_HOME");
 
-  let executable: string = path.join(String(JAVA_HOME), "bin", "java");
-  let args: string[] = ["-cp", LS_HOME];
-  console.log(LS_HOME)
-  let serverOptions: ServerOptions = {
-    command: executable,
-    args: [...args, LS_LAUNCHER_MAIN],
-    options: {},
-  };
+  // let executable: string = path.join(String(JAVA_HOME), "bin", "java");
+  // let args: string[] = ["-cp", LS_HOME];
+  // console.log("LS HOME : " + LS_HOME)
+
+
+  // let classpath: string;
+  // if (LS_LIB_CONFIG) {
+  //   classpath = String(LS_LIB_CONFIG);
+  // } else {
+  //   // 默认：枚举 build/libs 下所有 jar
+  //   const libsDir = path.join(PROJECT_HOME, "build", "libs");
+  //   const jars = fs.readdirSync(libsDir).filter(f => f.endsWith(".jar"));
+  //   if (process.platform === "win32") {
+  //     classpath = jars.map(j => path.join(libsDir, j)).join(";");
+  //   } else {
+  //     classpath = jars.map(j => path.join(libsDir, j)).join(":");
+  //   }
+  // }
+
+  // // JAVA_HOME
+  // const JAVA_HOME = vscode.workspace.getConfiguration().get("JAVA_HOME") || process.env.JAVA_HOME;
+  // let executable = "java"; // 默认用 PATH 里的 java
+  // if (JAVA_HOME) {
+  //   executable = path.join(String(JAVA_HOME), "bin", "java");
+  // }
+  // const args: string[] = ["-cp", classpath, LS_LAUNCHER_MAIN];
+  // console.log("executable : " + executable);
+  // let serverOptions: ServerOptions = {
+  //   command: executable,
+  //   args,
+  //   options: {env: process.env},
+  // };
+  // console.log("severOptions : " + serverOptions.args);
+  let jarPath: string = path.join(PROJECT_HOME, "build","libs", "Souffle_Ide_Plugin-1.0-SNAPSHOT.jar");
+  console.log(jarPath);
+  const serverOptions: ServerOptions = {
+  command: "java",
+  args: ["-jar", jarPath],
+};
   return serverOptions;
 }
 

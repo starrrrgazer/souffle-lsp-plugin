@@ -37,7 +37,7 @@
                 "JAVA_HOME": {
                     "type": "string",
                     "description": "To start the LSP service, please set the JAVA_HOME variable.",
-                    "default": "/usr/lib/jvm/java-11-openjdk-amd64/"
+                    "default": "C:\\Program Files\\Java\\jdk-21"
                 },
                 "PATH_LSP": {
                     "type": "string",
