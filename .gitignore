@@ -83,5 +83,6 @@ dist/
 .gradle/*
 *.lock
 *.class
+node_modules/
 
 souffle-lang-server-0.1.0.vsix
