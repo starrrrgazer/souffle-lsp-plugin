@@ -145,9 +145,25 @@ public class SouffleTextDocumentService implements TextDocumentService {
         return CompletableFuture.supplyAsync(() -> new HoverProvider().getHover(params));
     }
 
+
+    //修改reference，调用definition，rename，completion
+    //加入组件测试:定位 , 搜索
     @Override
     public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
-        return CompletableFuture.supplyAsync(() -> new ReferenceProvider().getReferences(params));
+        ReferenceProvider referenceProvider = new ReferenceProvider();
+        referenceProvider.getLocateTime(params);
+        referenceProvider.getSearchTime(params);
+
+        DefinitionProvider definitionProvider = new DefinitionProvider();
+        definitionProvider.getDefinition(params);
+
+        RenameProvider renameProvider = new RenameProvider();
+        renameProvider.getRename(params);
+
+        CompletionProvider completionProvider = new CompletionProvider(params);
+        completionProvider.testCompletions();
+
+        return CompletableFuture.supplyAsync(() -> referenceProvider.getReferences(params));
 
     }
 

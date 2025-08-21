@@ -1,7 +1,4 @@
-import org.eclipse.lsp4j.DefinitionParams;
-import org.eclipse.lsp4j.Location;
-import org.eclipse.lsp4j.LocationLink;
-import org.eclipse.lsp4j.Range;
+import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import parsing.Utils;
 import parsing.symbols.SouffleContext;
@@ -26,10 +23,30 @@ public class DefinitionProvider {
         Range cursor = Utils.positionToRange(params.getPosition());
         Optional<SouffleContext> context = Optional.ofNullable(SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor)); //
         if (context.isPresent()) {
-            Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor)); //查表
+            Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor)); //定位 获取cursor对应的symbol
             if (currentSymbol.isPresent()) {
-                for(SouffleSymbol symbol :currentSymbol.get().getDeclarations()){
-                    declLocations.add(new Location(symbol.getURI(), symbol.getRange())); //构建 useVisitor
+                for(SouffleSymbol symbol :currentSymbol.get().getDeclarations()){ //搜索
+                    declLocations.add(new Location(symbol.getURI(), symbol.getRange()));
+                }
+            }
+        }
+        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        LOG.info("gotoDefinition: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+
+        return Either.forLeft(declLocations);
+    }
+
+    //only for test definition time
+    public Either<List<? extends Location>, List<? extends LocationLink>> getDefinition(TextDocumentPositionAndWorkDoneProgressParams params) {
+        List<Location> declLocations = new ArrayList<Location>();
+        var started = Instant.now();
+        Range cursor = Utils.positionToRange(params.getPosition());
+        Optional<SouffleContext> context = Optional.ofNullable(SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor)); //
+        if (context.isPresent()) {
+            Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor)); //定位 获取cursor对应的symbol
+            if (currentSymbol.isPresent()) {
+                for(SouffleSymbol symbol :currentSymbol.get().getDeclarations()){ //搜索
+                    declLocations.add(new Location(symbol.getURI(), symbol.getRange()));
                 }
             }
         }

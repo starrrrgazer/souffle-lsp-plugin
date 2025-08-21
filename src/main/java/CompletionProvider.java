@@ -44,6 +44,13 @@ public class CompletionProvider {
         this.position = params.getPosition();
     }
 
+    public CompletionProvider(TextDocumentPositionAndWorkDoneProgressParams params) {
+//        this.params = params;
+        this.params = null;
+        this.documentUri = params.getTextDocument().getUri();
+        this.position = params.getPosition();
+    }
+
     public Either<List<CompletionItem>, CompletionList> getCompletions() {
         Range range = Utils.positionToRange(position);
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
@@ -55,7 +62,7 @@ public class CompletionProvider {
         switch (state){
             case IDLE:
                 Set<String> items = new HashSet<>();
-                SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range); //搜索
+                SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range); //定位
                 boolean directiveTrigger = params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals(".");
                 if(directiveTrigger){
                     for (String directive : directives) {
@@ -71,11 +78,11 @@ public class CompletionProvider {
                 }
 
                 for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
-                    //遍历 document 次数
+                    //搜索 document 次数
                     findInScope(documentContext.getScope(), completionItems, items);
                 }
 
-                //遍历 1 次
+                //搜索 1 次
                 if(context != null){
                     if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
                         context = context.getParent();
@@ -92,6 +99,60 @@ public class CompletionProvider {
                         (params.getContext().getTriggerCharacter().equals(")") || params.getContext().getTriggerCharacter().equals("."))){
                     state = CompletionState.IDLE;
                 }
+//                return Either.forLeft(completionItems);
+        }
+        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        LOG.info("completion: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+        return Either.forLeft(completionItems);
+//        return null;
+    }
+
+    public Either<List<CompletionItem>, CompletionList> testCompletions() {
+        Range range = Utils.positionToRange(position);
+        List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
+//        if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
+//            state = CompletionState.IN_ARGS;
+//            return Either.forLeft(completionItems);
+//        }
+        String testTriggerCharacter = ".";
+        var started = Instant.now();
+        switch (state){
+            case IDLE:
+                Set<String> items = new HashSet<>();
+                SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range); //定位
+                boolean directiveTrigger = true;
+                if(directiveTrigger){
+                    for (String directive : directives) {
+                        CompletionItem completionItem = new CompletionItem();
+                        completionItem.setLabel(directive);
+                        completionItem.setInsertText(directive.substring(1));
+                        completionItem.setKind(CompletionItemKind.Keyword);
+                        completionItems.add(completionItem);
+                        if (directive.equals(".symboltype") || directive.equals(".numbertype")) {
+                            completionItem.setTags(List.of(CompletionItemTag.Deprecated));
+                        }
+                    }
+                }
+
+                for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
+                    //搜索 document 次数
+                    findInScope(documentContext.getScope(), completionItems, items);
+                }
+
+                //搜索 1 次
+                if(context != null){
+                    if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
+                        context = context.getParent();
+                    }
+                    if(context.getKind() == SouffleContextType.COMPONENT){
+                        findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), completionItems, items);
+                    }
+                }
+                addSnippets(completionItems);
+
+//                return Either.forLeft(completionItems);
+            case IN_ARGS:
+                state = CompletionState.IDLE;
 //                return Either.forLeft(completionItems);
         }
         var elapsedMs = Duration.between(started, Instant.now()).toMillis();
