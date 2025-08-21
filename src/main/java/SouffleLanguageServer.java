@@ -1,4 +1,5 @@
 import logging.LSClientLogger;
+import logging.LogConfig;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -45,6 +46,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     public SouffleLanguageServer() {
         this.textDocumentService = new SouffleTextDocumentService(this);
         this.workspaceService = new SouffleWorkSpaceService(this);
+        LogConfig.setup();
     }
 
     @Override

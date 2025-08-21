@@ -3,7 +3,11 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import parsing.Utils;
 import parsing.symbols.*;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
+import java.util.logging.Logger;
+
 enum CompletionState{
     IDLE,
     IN_ARGS
@@ -28,7 +32,7 @@ public class CompletionProvider {
             ".include",
             ".once"
     };
-
+    private static final Logger LOG = Logger.getLogger("main");
     static CompletionState state = CompletionState.IDLE;
     private final CompletionParams params;
     private final String documentUri;
@@ -47,6 +51,7 @@ public class CompletionProvider {
             state = CompletionState.IN_ARGS;
             return Either.forLeft(completionItems);
         }
+        var started = Instant.now();
         switch (state){
             case IDLE:
                 Set<String> items = new HashSet<>();
@@ -81,15 +86,18 @@ public class CompletionProvider {
                 }
                 addSnippets(completionItems);
 
-                return Either.forLeft(completionItems);
+//                return Either.forLeft(completionItems);
             case IN_ARGS:
                 if( params.getContext().getTriggerCharacter() != null &&
                         (params.getContext().getTriggerCharacter().equals(")") || params.getContext().getTriggerCharacter().equals("."))){
                     state = CompletionState.IDLE;
                 }
-                return Either.forLeft(completionItems);
+//                return Either.forLeft(completionItems);
         }
-        return null;
+        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        LOG.info("completion: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+        return Either.forLeft(completionItems);
+//        return null;
     }
 
     private static void addSnippets(List<CompletionItem> completionItems) {

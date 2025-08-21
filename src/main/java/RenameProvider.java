@@ -5,19 +5,24 @@ import parsing.symbols.SouffleProjectContext;
 import parsing.symbols.SouffleSymbol;
 import parsing.symbols.SouffleSymbolType;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class RenameProvider {
+    private static final Logger LOG = Logger.getLogger("main");
     public RenameProvider() {
     }
 
     public WorkspaceEdit getRename(RenameParams params) {
         WorkspaceEdit edit = new WorkspaceEdit();
         Map<String, List<TextEdit>> textEdits = new HashMap<String, List<TextEdit>>();
+        var started = Instant.now();
         Position cursorPosition = params.getPosition();
         cursorPosition.setCharacter(cursorPosition.getCharacter() - 1);
         Range cursor = Utils.positionToRange(cursorPosition);
@@ -74,6 +79,8 @@ public class RenameProvider {
                 }
             }
         }
+        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        LOG.info("rename: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
         edit.setChanges(textEdits);
         return edit;
     }
