@@ -1,0 +1,188 @@
+8月 22, 2025 9:20:37 上午 logging.LogConfig setup
+严重: 严重错误：服务崩溃！
+8月 22, 2025 9:20:37 上午 logging.LogConfig setup
+警告: 警告：内存接近上限
+8月 22, 2025 9:20:37 上午 logging.LogConfig setup
+信息: 信息：服务已启动
+8月 22, 2025 9:20:37 上午 logging.LogConfig setup
+详细: 调试信息：请求已接收
+8月 22, 2025 9:20:37 上午 logging.LogConfig setup
+较详细: 更详细的调试信息
+8月 22, 2025 9:20:37 上午 logging.LogConfig setup
+非常详细: 最详细的调试信息
+8月 22, 2025 9:20:47 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:51 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:51 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:51 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:51 上午 ReferenceProvider getSearchTime
+信息: search: 3 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:51 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:51 上午 RenameProvider getRename
+信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:57 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:57 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:57 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:57 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:57 上午 ReferenceProvider getSearchTime
+信息: search: 1 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:57 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:20:57 上午 RenameProvider getRename
+信息: rename: 3 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:00 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:00 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:00 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:00 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:00 上午 ReferenceProvider getSearchTime
+信息: search: 1 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:00 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:00 上午 RenameProvider getRename
+信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:03 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:03 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:03 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:03 上午 ReferenceProvider getSearchTime
+信息: search: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:03 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:03 上午 RenameProvider getRename
+信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:21:06 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:34:58 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:01 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:01 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:01 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:01 上午 ReferenceProvider getSearchTime
+信息: search: 6 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:01 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:01 上午 RenameProvider getRename
+信息: rename: 4 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:08 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:11 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:11 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:11 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:11 上午 ReferenceProvider getSearchTime
+信息: search: 2 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:11 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:11 上午 RenameProvider getRename
+信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:19 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:19 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:19 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:19 上午 ReferenceProvider getSearchTime
+信息: search: 1 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:19 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:35:19 上午 RenameProvider getRename
+信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:39:43 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:39:43 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:39:43 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:39:43 上午 ReferenceProvider getSearchTime
+信息: search: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:39:43 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:39:43 上午 RenameProvider getRename
+信息: rename: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:46:45 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:46:48 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:46:48 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:46:48 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:46:48 上午 ReferenceProvider getSearchTime
+信息: search: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:46:48 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:46:48 上午 RenameProvider getRename
+信息: rename: 8 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:55:34 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:55:34 上午 ReferenceProvider getSearchTime
+信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:55:34 上午 ReferenceProvider getSearchTime
+信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:55:34 上午 ReferenceProvider getSearchTime
+信息: search: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:55:34 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 9:55:34 上午 RenameProvider getRename
+信息: rename: 7 document: souffle-lsp-plugin/example/2sat/2sat.dl
+8月 22, 2025 10:15:12 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:15:12 上午 ReferenceProvider getSearchTime
+信息: OCC: 35 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:15:12 上午 ReferenceProvider getSearchTime
+信息: DEF: 34 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:15:12 上午 ReferenceProvider getSearchTime
+信息: search: 3 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:15:12 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:15:12 上午 RenameProvider getRename
+信息: rename: 5 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:15:32 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:29:25 上午 ReferenceProvider getLocateTime
+信息: locate: 1 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:29:25 上午 ReferenceProvider getSearchTime
+信息: OCC: 35 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:29:25 上午 ReferenceProvider getSearchTime
+信息: DEF: 34 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:29:25 上午 ReferenceProvider getSearchTime
+信息: search: 5 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:29:25 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:29:25 上午 RenameProvider getRename
+信息: rename: 7 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:29:25 上午 TestCompletion testCompletions
+信息: completion: 4 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:41:31 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:41:31 上午 ReferenceProvider getSearchTime
+信息: OCC: 35 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:41:31 上午 ReferenceProvider getSearchTime
+信息: DEF: 34 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:41:31 上午 ReferenceProvider getSearchTime
+信息: search: 5 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:41:31 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:41:31 上午 RenameProvider getRename
+信息: rename: 4 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 22, 2025 10:41:31 上午 TestCompletion testCompletions
+信息: completion: 2 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
