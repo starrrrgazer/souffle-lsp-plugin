@@ -8,11 +8,8 @@ import java.time.Instant;
 import java.util.*;
 import java.util.logging.Logger;
 
-enum CompletionState{
-    IDLE,
-    IN_ARGS
-}
-public class CompletionProvider {
+
+public class TestCompletion {
 
     private static final String[] directives = new String[]{
             ".decl",
@@ -34,36 +31,26 @@ public class CompletionProvider {
     };
     private static final Logger LOG = Logger.getLogger("main");
     static CompletionState state = CompletionState.IDLE;
-    private final CompletionParams params;
-    private final String documentUri;
-    private final Position position;
 
-    public CompletionProvider(CompletionParams params) {
-        this.params = params;
-        this.documentUri = params.getTextDocument().getUri();
-        this.position = params.getPosition();
+    public TestCompletion() {
+
     }
 
-//    public CompletionProvider(TextDocumentPositionAndWorkDoneProgressParams params) {
-////        this.params = params;
-//        this.params = params;
-//        this.documentUri = params.getTextDocument().getUri();
-//        this.position = params.getPosition();
-//    }
 
-    public Either<List<CompletionItem>, CompletionList> getCompletions() {
-        Range range = Utils.positionToRange(position);
+    public Either<List<CompletionItem>, CompletionList> testCompletions(TextDocumentPositionAndWorkDoneProgressParams params) {
+        Range range = Utils.positionToRange(params.getPosition());
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
-        if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
-            state = CompletionState.IN_ARGS;
-            return Either.forLeft(completionItems);
-        }
+//        if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
+//            state = CompletionState.IN_ARGS;
+//            return Either.forLeft(completionItems);
+//        }
+        String testTriggerCharacter = ".";
         var started = Instant.now();
         switch (state){
             case IDLE:
                 Set<String> items = new HashSet<>();
-                SouffleContext context = SouffleProjectContext.getInstance().getContext(this.documentUri, range); //定位
-                boolean directiveTrigger = params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals(".");
+                SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), range); //定位
+                boolean directiveTrigger = true;
                 if(directiveTrigger){
                     for (String directive : directives) {
                         CompletionItem completionItem = new CompletionItem();
@@ -77,10 +64,10 @@ public class CompletionProvider {
                     }
                 }
 
-                for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
-                    //搜索 document 次数
-                    findInScope(documentContext.getScope(), completionItems, items);
-                }
+//                for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
+//                    //搜索 document 次数
+//                    findInScope(documentContext.getScope(), completionItems, items);
+//                }
 
                 //搜索 1 次
                 if(context != null){
@@ -95,10 +82,7 @@ public class CompletionProvider {
 
 //                return Either.forLeft(completionItems);
             case IN_ARGS:
-                if( params.getContext().getTriggerCharacter() != null &&
-                        (params.getContext().getTriggerCharacter().equals(")") || params.getContext().getTriggerCharacter().equals("."))){
-                    state = CompletionState.IDLE;
-                }
+                state = CompletionState.IDLE;
 //                return Either.forLeft(completionItems);
         }
         var elapsedMs = Duration.between(started, Instant.now()).toMillis();
@@ -106,8 +90,6 @@ public class CompletionProvider {
         return Either.forLeft(completionItems);
 //        return null;
     }
-
-
 
     private static void addSnippets(List<CompletionItem> completionItems) {
         CompletionItem factSnippet = new CompletionItem();
@@ -192,7 +174,7 @@ public class CompletionProvider {
     }
 
     private void addCompletionItem(CompletionItem completionItem, SouffleSymbol symbol, CompletionItemKind itemKind, List<CompletionItem> completionItems) {
-        String triggerCharacter = params.getContext().getTriggerCharacter();
+        String triggerCharacter = ".";
         if (triggerCharacter == null || !triggerCharacter.equals(":")) {
             completionItem.setKind(itemKind);
             completionItems.add(completionItem);

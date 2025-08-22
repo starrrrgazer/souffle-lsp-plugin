@@ -150,18 +150,22 @@ public class SouffleTextDocumentService implements TextDocumentService {
     //加入组件测试:定位 , 搜索
     @Override
     public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
+        System.err.println("reference begin ");
         ReferenceProvider referenceProvider = new ReferenceProvider();
         referenceProvider.getLocateTime(params);
         referenceProvider.getSearchTime(params);
-
+        System.err.println("locate / search end ");
         DefinitionProvider definitionProvider = new DefinitionProvider();
         definitionProvider.getDefinition(params);
-
+        System.err.println("definition end ");
         RenameProvider renameProvider = new RenameProvider();
         renameProvider.getRename(params);
+        System.err.println("rename end ");
 
-        CompletionProvider completionProvider = new CompletionProvider(params);
-        completionProvider.testCompletions();
+        TestCompletion testCompletion = new TestCompletion();
+        testCompletion.testCompletions(params);
+
+        System.err.println("completion end ");
 
         return CompletableFuture.supplyAsync(() -> referenceProvider.getReferences(params));
 
