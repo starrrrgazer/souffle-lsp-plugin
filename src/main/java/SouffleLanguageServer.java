@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
@@ -17,7 +18,9 @@ import parsing.souffle.SouffleLexer;
 import parsing.souffle.SouffleParser;
 import parsing.symbols.SouffleProjectContext;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,7 +43,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     private ClientCapabilities clientCapabilities;
     LanguageClient languageClient;
     private int shutdown = 1;
-
+    private static final Logger LOG = Logger.getLogger("main");
     Set<String> defines;
     private SouffleProjectContext projectContext;
 
@@ -169,6 +173,16 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                 }
 //                System.err.println("End " + s);
             }
+            for (String s : fileNamesList) {
+                try {
+                    countNodeNum(s);
+                    countLineNum(s);
+                } catch (Exception e){
+                    System.err.println(e.getMessage());
+                }
+            }
+
+
 //            System.err.println("Error rate " + errorCount + " : " + fileNamesList.size());
         } catch (Exception e) {
             System.err.println("Exit exception" + e.getMessage());
@@ -185,6 +199,27 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         preprocessorParser.setErrorHandler(new BailErrorStrategy());
         PreprocessorVisitor preprocessorVisitor = new PreprocessorVisitor(projectContext.defines);
         preprocessorVisitor.visit(preprocessorParser.program());
+    }
+
+    private void countLineNum(String documentPath) throws IOException{
+        LineNumberReader reader = new LineNumberReader(new FileReader(documentPath));
+        while (reader.readLine() != null) {}
+        int lineCount = reader.getLineNumber();
+        reader.close();
+        LOG.info("LOC: "+ lineCount + " document: " + LogUtils.extractRelativeUri(documentPath));
+    }
+
+    private void countNodeNum(String documentPath) throws IOException {
+        Path path = Path.of(documentPath);
+        CharStream input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
+        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+        SouffleParser souffleParser = new SouffleParser(tokens);
+
+        ParseTree parseTree = souffleParser.program();
+
+        int totalNodes = NodeNumVisitor.countNodes(parseTree);
+        LOG.info("NOD: "+ totalNodes + " document: " + LogUtils.extractRelativeUri(documentPath));
     }
 
     private void stageOneParse(String documentPath) throws IOException {

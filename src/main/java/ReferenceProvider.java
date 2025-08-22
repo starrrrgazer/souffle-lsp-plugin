@@ -64,16 +64,20 @@ public class ReferenceProvider {
     public void getSearchTime(TextDocumentPositionAndWorkDoneProgressParams params){
 
         SouffleContext documentContext = SouffleProjectContext.getInstance().getDocumentContext(params.getTextDocument().getUri());
-        ArrayList<String> items = new ArrayList<>();
+        ArrayList<String> DEF = new ArrayList<>();
+        int OCC = 0;
         ArrayList<SouffleSymbol> souffleSymbols = new ArrayList<>();
         for (List<SouffleSymbol> symbols : documentContext.getScope().values()) {
             for (SouffleSymbol symbol : symbols) {
-                if(!items.contains(symbol.toString())){
-                    items.add(symbol.toString());
+                OCC = OCC + 1;
+                if(!DEF.contains(symbol.toString())){
+                    DEF.add(symbol.toString());
                     souffleSymbols.add(symbol);
                 }
             }
         }
+        LOG.info("OCC: "+ OCC + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+        LOG.info("DEF: "+ DEF.size() + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 
         Random random = new Random();
         var started = Instant.now();
