@@ -50,11 +50,13 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     public SouffleLanguageServer() {
         this.textDocumentService = new SouffleTextDocumentService(this);
         this.workspaceService = new SouffleWorkSpaceService(this);
-        LogConfig.setup();
+
     }
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams initializeParams) {
+        LogConfig.setup();
+
         ServerCapabilities serverCapabilities = new ServerCapabilities();
         serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         serverCapabilities.setHoverProvider(true);
