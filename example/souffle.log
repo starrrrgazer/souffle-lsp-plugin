@@ -1,188 +1,968 @@
-8月 22, 2025 9:20:37 上午 logging.LogConfig setup
-严重: 严重错误：服务崩溃！
-8月 22, 2025 9:20:37 上午 logging.LogConfig setup
-警告: 警告：内存接近上限
-8月 22, 2025 9:20:37 上午 logging.LogConfig setup
-信息: 信息：服务已启动
-8月 22, 2025 9:20:37 上午 logging.LogConfig setup
-详细: 调试信息：请求已接收
-8月 22, 2025 9:20:37 上午 logging.LogConfig setup
-较详细: 更详细的调试信息
-8月 22, 2025 9:20:37 上午 logging.LogConfig setup
-非常详细: 最详细的调试信息
-8月 22, 2025 9:20:47 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:51 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:51 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:51 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:51 上午 ReferenceProvider getSearchTime
-信息: search: 3 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:51 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:51 上午 RenameProvider getRename
-信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:57 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:57 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:57 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:57 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:57 上午 ReferenceProvider getSearchTime
-信息: search: 1 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:57 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:20:57 上午 RenameProvider getRename
-信息: rename: 3 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:00 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:00 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:00 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:00 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:00 上午 ReferenceProvider getSearchTime
-信息: search: 1 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:00 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:00 上午 RenameProvider getRename
-信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:03 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:03 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:03 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:03 上午 ReferenceProvider getSearchTime
-信息: search: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:03 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:03 上午 RenameProvider getRename
-信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:21:06 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:34:58 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:01 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:01 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:01 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:01 上午 ReferenceProvider getSearchTime
-信息: search: 6 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:01 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:01 上午 RenameProvider getRename
-信息: rename: 4 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:08 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:11 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:11 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:11 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:11 上午 ReferenceProvider getSearchTime
-信息: search: 2 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:11 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:11 上午 RenameProvider getRename
-信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:19 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:19 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:19 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:19 上午 ReferenceProvider getSearchTime
-信息: search: 1 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:19 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:35:19 上午 RenameProvider getRename
-信息: rename: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:39:43 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:39:43 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:39:43 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:39:43 上午 ReferenceProvider getSearchTime
-信息: search: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:39:43 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:39:43 上午 RenameProvider getRename
-信息: rename: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:46:45 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:46:48 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:46:48 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:46:48 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:46:48 上午 ReferenceProvider getSearchTime
-信息: search: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:46:48 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:46:48 上午 RenameProvider getRename
-信息: rename: 8 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:55:34 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:55:34 上午 ReferenceProvider getSearchTime
-信息: OCC: 20 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:55:34 上午 ReferenceProvider getSearchTime
-信息: DEF: 16 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:55:34 上午 ReferenceProvider getSearchTime
-信息: search: 5 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:55:34 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 9:55:34 上午 RenameProvider getRename
-信息: rename: 7 document: souffle-lsp-plugin/example/2sat/2sat.dl
-8月 22, 2025 10:15:12 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:15:12 上午 ReferenceProvider getSearchTime
-信息: OCC: 35 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:15:12 上午 ReferenceProvider getSearchTime
-信息: DEF: 34 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:15:12 上午 ReferenceProvider getSearchTime
-信息: search: 3 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:15:12 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:15:12 上午 RenameProvider getRename
-信息: rename: 5 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:15:32 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:29:25 上午 ReferenceProvider getLocateTime
-信息: locate: 1 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:29:25 上午 ReferenceProvider getSearchTime
-信息: OCC: 35 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:29:25 上午 ReferenceProvider getSearchTime
-信息: DEF: 34 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:29:25 上午 ReferenceProvider getSearchTime
-信息: search: 5 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:29:25 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:29:25 上午 RenameProvider getRename
-信息: rename: 7 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:29:25 上午 TestCompletion testCompletions
-信息: completion: 4 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:41:31 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:41:31 上午 ReferenceProvider getSearchTime
-信息: OCC: 35 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:41:31 上午 ReferenceProvider getSearchTime
-信息: DEF: 34 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:41:31 上午 ReferenceProvider getSearchTime
-信息: search: 5 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:41:31 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:41:31 上午 RenameProvider getRename
-信息: rename: 4 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
-8月 22, 2025 10:41:31 上午 TestCompletion testCompletions
-信息: completion: 2 document: souffle-lsp-plugin/example/access-policy/access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 549 document: d:\work24\souffle-lsp-plugin\example\2sat\2sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 20 document: d:\work24\souffle-lsp-plugin\example\2sat\2sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 10 document: d:\work24\souffle-lsp-plugin\example\2sat\2sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 42 document: d:\work24\souffle-lsp-plugin\example\2sat\2sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1413 document: d:\work24\souffle-lsp-plugin\example\access-policy\access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 54 document: d:\work24\souffle-lsp-plugin\example\access-policy\access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 13 document: d:\work24\souffle-lsp-plugin\example\access-policy\access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 97 document: d:\work24\souffle-lsp-plugin\example\access-policy\access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 897 document: d:\work24\souffle-lsp-plugin\example\ackermann\ackermann.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 59 document: d:\work24\souffle-lsp-plugin\example\ackermann\ackermann.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\ackermann\ackermann.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 65 document: d:\work24\souffle-lsp-plugin\example\ackermann\ackermann.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 379 document: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 12 document: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 28 document: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 399 document: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 24 document: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 34 document: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 756 document: d:\work24\souffle-lsp-plugin\example\array\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 25 document: d:\work24\souffle-lsp-plugin\example\array\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 8 document: d:\work24\souffle-lsp-plugin\example\array\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 58 document: d:\work24\souffle-lsp-plugin\example\array\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 128 document: d:\work24\souffle-lsp-plugin\example\bigrams\bigrams.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 6 document: d:\work24\souffle-lsp-plugin\example\bigrams\bigrams.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\bigrams\bigrams.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 12 document: d:\work24\souffle-lsp-plugin\example\bigrams\bigrams.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 416 document: d:\work24\souffle-lsp-plugin\example\catalan\catalan.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 12 document: d:\work24\souffle-lsp-plugin\example\catalan\catalan.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\catalan\catalan.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 27 document: d:\work24\souffle-lsp-plugin\example\catalan\catalan.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1362 document: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 48 document: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 13 document: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 95 document: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 756 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 25 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 8 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 58 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\array.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 740 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 19 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 53 document: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 710 document: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 10 document: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 51 document: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 674 document: d:\work24\souffle-lsp-plugin\example\circuit_eval\circuit_eval.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 28 document: d:\work24\souffle-lsp-plugin\example\circuit_eval\circuit_eval.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 8 document: d:\work24\souffle-lsp-plugin\example\circuit_eval\circuit_eval.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 53 document: d:\work24\souffle-lsp-plugin\example\circuit_eval\circuit_eval.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1856 document: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 74 document: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 22 document: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 126 document: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 933 document: d:\work24\souffle-lsp-plugin\example\circuit_sat\circuit_sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 42 document: d:\work24\souffle-lsp-plugin\example\circuit_sat\circuit_sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 11 document: d:\work24\souffle-lsp-plugin\example\circuit_sat\circuit_sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 69 document: d:\work24\souffle-lsp-plugin\example\circuit_sat\circuit_sat.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 441 document: d:\work24\souffle-lsp-plugin\example\clique\clique.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 22 document: d:\work24\souffle-lsp-plugin\example\clique\clique.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\clique\clique.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 33 document: d:\work24\souffle-lsp-plugin\example\clique\clique.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 414 document: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 18 document: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 33 document: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 461 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized\comp-parametrized.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 24 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized\comp-parametrized.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 7 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized\comp-parametrized.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 29 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized\comp-parametrized.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 351 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 22 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 8 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 27 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 378 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-multilvl\comp-parametrized-multilvl.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 27 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-multilvl\comp-parametrized-multilvl.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 9 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-multilvl\comp-parametrized-multilvl.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 20 document: d:\work24\souffle-lsp-plugin\example\comp-parametrized-multilvl\comp-parametrized-multilvl.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2901 document: d:\work24\souffle-lsp-plugin\example\convex_hull\convex_hull.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 88 document: d:\work24\souffle-lsp-plugin\example\convex_hull\convex_hull.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 16 document: d:\work24\souffle-lsp-plugin\example\convex_hull\convex_hull.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 141 document: d:\work24\souffle-lsp-plugin\example\convex_hull\convex_hull.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 456 document: d:\work24\souffle-lsp-plugin\example\counter\counter.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 17 document: d:\work24\souffle-lsp-plugin\example\counter\counter.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\counter\counter.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 24 document: d:\work24\souffle-lsp-plugin\example\counter\counter.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 262 document: d:\work24\souffle-lsp-plugin\example\degree\degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 9 document: d:\work24\souffle-lsp-plugin\example\degree\degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\degree\degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 20 document: d:\work24\souffle-lsp-plugin\example\degree\degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2307 document: d:\work24\souffle-lsp-plugin\example\dfa\dfa.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 83 document: d:\work24\souffle-lsp-plugin\example\dfa\dfa.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 21 document: d:\work24\souffle-lsp-plugin\example\dfa\dfa.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 176 document: d:\work24\souffle-lsp-plugin\example\dfa\dfa.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 534 document: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 27 document: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 7 document: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 42 document: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 618 document: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 10 document: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 51 document: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 500 document: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 24 document: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 10 document: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 41 document: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2495 document: d:\work24\souffle-lsp-plugin\example\dfa_summary_function\dfa_summary_function.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 88 document: d:\work24\souffle-lsp-plugin\example\dfa_summary_function\dfa_summary_function.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 23 document: d:\work24\souffle-lsp-plugin\example\dfa_summary_function\dfa_summary_function.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 190 document: d:\work24\souffle-lsp-plugin\example\dfa_summary_function\dfa_summary_function.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 438 document: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 12 document: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 30 document: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 899 document: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 40 document: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 13 document: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 78 document: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1045 document: d:\work24\souffle-lsp-plugin\example\dominance\dominance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 43 document: d:\work24\souffle-lsp-plugin\example\dominance\dominance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 11 document: d:\work24\souffle-lsp-plugin\example\dominance\dominance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 89 document: d:\work24\souffle-lsp-plugin\example\dominance\dominance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 12949 document: d:\work24\souffle-lsp-plugin\example\double_tree\double_tree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 612 document: d:\work24\souffle-lsp-plugin\example\double_tree\double_tree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 305 document: d:\work24\souffle-lsp-plugin\example\double_tree\double_tree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 1221 document: d:\work24\souffle-lsp-plugin\example\double_tree\double_tree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 912 document: d:\work24\souffle-lsp-plugin\example\earley\earley.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 26 document: d:\work24\souffle-lsp-plugin\example\earley\earley.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 14 document: d:\work24\souffle-lsp-plugin\example\earley\earley.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 65 document: d:\work24\souffle-lsp-plugin\example\earley\earley.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1011 document: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 27 document: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 13 document: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 71 document: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 551 document: d:\work24\souffle-lsp-plugin\example\equal\equal.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 29 document: d:\work24\souffle-lsp-plugin\example\equal\equal.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\equal\equal.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 39 document: d:\work24\souffle-lsp-plugin\example\equal\equal.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 5447 document: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 254 document: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 29 document: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 267 document: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 143 document: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 6 document: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 11 document: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 376 document: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 12 document: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 28 document: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 820 document: d:\work24\souffle-lsp-plugin\example\family\family.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 32 document: d:\work24\souffle-lsp-plugin\example\family\family.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 9 document: d:\work24\souffle-lsp-plugin\example\family\family.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 63 document: d:\work24\souffle-lsp-plugin\example\family\family.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 732 document: d:\work24\souffle-lsp-plugin\example\fib\fib.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 37 document: d:\work24\souffle-lsp-plugin\example\fib\fib.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\fib\fib.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 49 document: d:\work24\souffle-lsp-plugin\example\fib\fib.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 139 document: d:\work24\souffle-lsp-plugin\example\fib1\fib1.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 5 document: d:\work24\souffle-lsp-plugin\example\fib1\fib1.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 1 document: d:\work24\souffle-lsp-plugin\example\fib1\fib1.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 9 document: d:\work24\souffle-lsp-plugin\example\fib1\fib1.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 565 document: d:\work24\souffle-lsp-plugin\example\flights\flights.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 22 document: d:\work24\souffle-lsp-plugin\example\flights\flights.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\flights\flights.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 39 document: d:\work24\souffle-lsp-plugin\example\flights\flights.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1147 document: d:\work24\souffle-lsp-plugin\example\flights2\flights2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 41 document: d:\work24\souffle-lsp-plugin\example\flights2\flights2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 7 document: d:\work24\souffle-lsp-plugin\example\flights2\flights2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 54 document: d:\work24\souffle-lsp-plugin\example\flights2\flights2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 47 document: d:\work24\souffle-lsp-plugin\example\floydwarshall\floydwarshall.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 4 document: d:\work24\souffle-lsp-plugin\example\floydwarshall\floydwarshall.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 0 document: d:\work24\souffle-lsp-plugin\example\floydwarshall\floydwarshall.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 8 document: d:\work24\souffle-lsp-plugin\example\floydwarshall\floydwarshall.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1347 document: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 36 document: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 12 document: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 78 document: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 585 document: d:\work24\souffle-lsp-plugin\example\func\func.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\func\func.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\func\func.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 42 document: d:\work24\souffle-lsp-plugin\example\func\func.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 462 document: d:\work24\souffle-lsp-plugin\example\game2\game2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\game2\game2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\game2\game2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 37 document: d:\work24\souffle-lsp-plugin\example\game2\game2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 478 document: d:\work24\souffle-lsp-plugin\example\grad\grad.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 29 document: d:\work24\souffle-lsp-plugin\example\grad\grad.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\grad\grad.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 40 document: d:\work24\souffle-lsp-plugin\example\grad\grad.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 462 document: d:\work24\souffle-lsp-plugin\example\graph\graph.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 20 document: d:\work24\souffle-lsp-plugin\example\graph\graph.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\graph\graph.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 32 document: d:\work24\souffle-lsp-plugin\example\graph\graph.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2309 document: d:\work24\souffle-lsp-plugin\example\grid\grid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 48 document: d:\work24\souffle-lsp-plugin\example\grid\grid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 14 document: d:\work24\souffle-lsp-plugin\example\grid\grid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 145 document: d:\work24\souffle-lsp-plugin\example\grid\grid.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 416 document: d:\work24\souffle-lsp-plugin\example\highest_degree\highest_degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 13 document: d:\work24\souffle-lsp-plugin\example\highest_degree\highest_degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\highest_degree\highest_degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 30 document: d:\work24\souffle-lsp-plugin\example\highest_degree\highest_degree.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1646 document: d:\work24\souffle-lsp-plugin\example\hmmer\hmmer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 54 document: d:\work24\souffle-lsp-plugin\example\hmmer\hmmer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 18 document: d:\work24\souffle-lsp-plugin\example\hmmer\hmmer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 130 document: d:\work24\souffle-lsp-plugin\example\hmmer\hmmer.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 341 document: d:\work24\souffle-lsp-plugin\example\independent_body3\independent_body3.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 14 document: d:\work24\souffle-lsp-plugin\example\independent_body3\independent_body3.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\independent_body3\independent_body3.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 26 document: d:\work24\souffle-lsp-plugin\example\independent_body3\independent_body3.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 208 document: d:\work24\souffle-lsp-plugin\example\inline_nats\inline_nats.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 8 document: d:\work24\souffle-lsp-plugin\example\inline_nats\inline_nats.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\inline_nats\inline_nats.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 16 document: d:\work24\souffle-lsp-plugin\example\inline_nats\inline_nats.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2705 document: d:\work24\souffle-lsp-plugin\example\input_output\input_output.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 130 document: d:\work24\souffle-lsp-plugin\example\input_output\input_output.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 34 document: d:\work24\souffle-lsp-plugin\example\input_output\input_output.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 228 document: d:\work24\souffle-lsp-plugin\example\input_output\input_output.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2796 document: d:\work24\souffle-lsp-plugin\example\java-pointsto\java-pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 134 document: d:\work24\souffle-lsp-plugin\example\java-pointsto\java-pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 44 document: d:\work24\souffle-lsp-plugin\example\java-pointsto\java-pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 237 document: d:\work24\souffle-lsp-plugin\example\java-pointsto\java-pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 500 document: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 29 document: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 25 document: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 155 document: d:\work24\souffle-lsp-plugin\example\k-permutations\k-permutations.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 6 document: d:\work24\souffle-lsp-plugin\example\k-permutations\k-permutations.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\k-permutations\k-permutations.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 11 document: d:\work24\souffle-lsp-plugin\example\k-permutations\k-permutations.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 890 document: d:\work24\souffle-lsp-plugin\example\linksum\linksum.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 43 document: d:\work24\souffle-lsp-plugin\example\linksum\linksum.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\linksum\linksum.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 59 document: d:\work24\souffle-lsp-plugin\example\linksum\linksum.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 283 document: d:\work24\souffle-lsp-plugin\example\longest_path\longest_path.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 9 document: d:\work24\souffle-lsp-plugin\example\longest_path\longest_path.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\longest_path\longest_path.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 21 document: d:\work24\souffle-lsp-plugin\example\longest_path\longest_path.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 3192 document: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 148 document: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 41 document: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 274 document: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 207 document: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 8 document: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 17 document: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1418 document: d:\work24\souffle-lsp-plugin\example\magic_access-policy\magic_access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 55 document: d:\work24\souffle-lsp-plugin\example\magic_access-policy\magic_access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 13 document: d:\work24\souffle-lsp-plugin\example\magic_access-policy\magic_access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 97 document: d:\work24\souffle-lsp-plugin\example\magic_access-policy\magic_access-policy.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 18323 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\edb.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 1095 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\edb.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 0 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\edb.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 1095 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\edb.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 526 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\magic_pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 33 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\magic_pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 10 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\magic_pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 47 document: d:\work24\souffle-lsp-plugin\example\magic_pointsto\magic_pointsto.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 651 document: d:\work24\souffle-lsp-plugin\example\magic_prime2\magic_prime2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 19 document: d:\work24\souffle-lsp-plugin\example\magic_prime2\magic_prime2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 7 document: d:\work24\souffle-lsp-plugin\example\magic_prime2\magic_prime2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 47 document: d:\work24\souffle-lsp-plugin\example\magic_prime2\magic_prime2.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 487 document: d:\work24\souffle-lsp-plugin\example\metro\metro.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countLineNum
+信息: LOC: 18 document: d:\work24\souffle-lsp-plugin\example\metro\metro.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\metro\metro.dl
+8月 29, 2025 11:36:35 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 34 document: d:\work24\souffle-lsp-plugin\example\metro\metro.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2309 document: d:\work24\souffle-lsp-plugin\example\minesweeper\grid.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 48 document: d:\work24\souffle-lsp-plugin\example\minesweeper\grid.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 14 document: d:\work24\souffle-lsp-plugin\example\minesweeper\grid.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 145 document: d:\work24\souffle-lsp-plugin\example\minesweeper\grid.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 292 document: d:\work24\souffle-lsp-plugin\example\minesweeper\minesweeper.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 11 document: d:\work24\souffle-lsp-plugin\example\minesweeper\minesweeper.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\minesweeper\minesweeper.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 15 document: d:\work24\souffle-lsp-plugin\example\minesweeper\minesweeper.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2264 document: d:\work24\souffle-lsp-plugin\example\minimum_spanning_tree\minimum_spanning_tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 91 document: d:\work24\souffle-lsp-plugin\example\minimum_spanning_tree\minimum_spanning_tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 20 document: d:\work24\souffle-lsp-plugin\example\minimum_spanning_tree\minimum_spanning_tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 146 document: d:\work24\souffle-lsp-plugin\example\minimum_spanning_tree\minimum_spanning_tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 696 document: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 31 document: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 44 document: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 622 document: d:\work24\souffle-lsp-plugin\example\minpath2\minpath2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 28 document: d:\work24\souffle-lsp-plugin\example\minpath2\minpath2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\minpath2\minpath2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 38 document: d:\work24\souffle-lsp-plugin\example\minpath2\minpath2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1530 document: d:\work24\souffle-lsp-plugin\example\minpath3\minpath3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 96 document: d:\work24\souffle-lsp-plugin\example\minpath3\minpath3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 15 document: d:\work24\souffle-lsp-plugin\example\minpath3\minpath3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 101 document: d:\work24\souffle-lsp-plugin\example\minpath3\minpath3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 533 document: d:\work24\souffle-lsp-plugin\example\mmult\mmult.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\mmult\mmult.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\mmult\mmult.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 37 document: d:\work24\souffle-lsp-plugin\example\mmult\mmult.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 614 document: d:\work24\souffle-lsp-plugin\example\movies\movies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 28 document: d:\work24\souffle-lsp-plugin\example\movies\movies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 7 document: d:\work24\souffle-lsp-plugin\example\movies\movies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 46 document: d:\work24\souffle-lsp-plugin\example\movies\movies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2891 document: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 103 document: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 32 document: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 248 document: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 93 document: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 5 document: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 8 document: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 745 document: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 19 document: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 9 document: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 44 document: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 439 document: d:\work24\souffle-lsp-plugin\example\orbits\orbits.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 28 document: d:\work24\souffle-lsp-plugin\example\orbits\orbits.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\orbits\orbits.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 36 document: d:\work24\souffle-lsp-plugin\example\orbits\orbits.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 338 document: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 22 document: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 28 document: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1230 document: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 47 document: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 67 document: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 228 document: d:\work24\souffle-lsp-plugin\example\paths\paths.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 11 document: d:\work24\souffle-lsp-plugin\example\paths\paths.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\paths\paths.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 18 document: d:\work24\souffle-lsp-plugin\example\paths\paths.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1224 document: d:\work24\souffle-lsp-plugin\example\peano_arithmetic\peano_arithmetic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 58 document: d:\work24\souffle-lsp-plugin\example\peano_arithmetic\peano_arithmetic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\peano_arithmetic\peano_arithmetic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 93 document: d:\work24\souffle-lsp-plugin\example\peano_arithmetic\peano_arithmetic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 277 document: d:\work24\souffle-lsp-plugin\example\perfect_numbers\perfect_numbers.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 10 document: d:\work24\souffle-lsp-plugin\example\perfect_numbers\perfect_numbers.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\perfect_numbers\perfect_numbers.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 21 document: d:\work24\souffle-lsp-plugin\example\perfect_numbers\perfect_numbers.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2923 document: d:\work24\souffle-lsp-plugin\example\planar\planar.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 68 document: d:\work24\souffle-lsp-plugin\example\planar\planar.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\planar\planar.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 75 document: d:\work24\souffle-lsp-plugin\example\planar\planar.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1837 document: d:\work24\souffle-lsp-plugin\example\po1\po1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 25 document: d:\work24\souffle-lsp-plugin\example\po1\po1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\po1\po1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 78 document: d:\work24\souffle-lsp-plugin\example\po1\po1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1749 document: d:\work24\souffle-lsp-plugin\example\po2\po2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 24 document: d:\work24\souffle-lsp-plugin\example\po2\po2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\po2\po2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 75 document: d:\work24\souffle-lsp-plugin\example\po2\po2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1485 document: d:\work24\souffle-lsp-plugin\example\po3\po3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\po3\po3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\po3\po3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 66 document: d:\work24\souffle-lsp-plugin\example\po3\po3.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 957 document: d:\work24\souffle-lsp-plugin\example\po4\po4.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 15 document: d:\work24\souffle-lsp-plugin\example\po4\po4.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\po4\po4.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 48 document: d:\work24\souffle-lsp-plugin\example\po4\po4.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1485 document: d:\work24\souffle-lsp-plugin\example\po5\po5.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\po5\po5.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\po5\po5.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 66 document: d:\work24\souffle-lsp-plugin\example\po5\po5.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 18323 document: d:\work24\souffle-lsp-plugin\example\pointsto\edb.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 1095 document: d:\work24\souffle-lsp-plugin\example\pointsto\edb.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 0 document: d:\work24\souffle-lsp-plugin\example\pointsto\edb.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 1095 document: d:\work24\souffle-lsp-plugin\example\pointsto\edb.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 521 document: d:\work24\souffle-lsp-plugin\example\pointsto\pointsto.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 32 document: d:\work24\souffle-lsp-plugin\example\pointsto\pointsto.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 10 document: d:\work24\souffle-lsp-plugin\example\pointsto\pointsto.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 47 document: d:\work24\souffle-lsp-plugin\example\pointsto\pointsto.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 647 document: d:\work24\souffle-lsp-plugin\example\prime\prime.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 34 document: d:\work24\souffle-lsp-plugin\example\prime\prime.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\prime\prime.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 48 document: d:\work24\souffle-lsp-plugin\example\prime\prime.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 646 document: d:\work24\souffle-lsp-plugin\example\prime2\prime2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 18 document: d:\work24\souffle-lsp-plugin\example\prime2\prime2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 7 document: d:\work24\souffle-lsp-plugin\example\prime2\prime2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 47 document: d:\work24\souffle-lsp-plugin\example\prime2\prime2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 158 document: d:\work24\souffle-lsp-plugin\example\profile_default\profile_default.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 7 document: d:\work24\souffle-lsp-plugin\example\profile_default\profile_default.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\profile_default\profile_default.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 13 document: d:\work24\souffle-lsp-plugin\example\profile_default\profile_default.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 158 document: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 7 document: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 13 document: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 797 document: d:\work24\souffle-lsp-plugin\example\puzzle\puzzle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 35 document: d:\work24\souffle-lsp-plugin\example\puzzle\puzzle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\puzzle\puzzle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 46 document: d:\work24\souffle-lsp-plugin\example\puzzle\puzzle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 957 document: d:\work24\souffle-lsp-plugin\example\ranpo\ranpo.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 15 document: d:\work24\souffle-lsp-plugin\example\ranpo\ranpo.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\ranpo\ranpo.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 48 document: d:\work24\souffle-lsp-plugin\example\ranpo\ranpo.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 517 document: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 14 document: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 36 document: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1048 document: d:\work24\souffle-lsp-plugin\example\rewrite\rewrite.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 44 document: d:\work24\souffle-lsp-plugin\example\rewrite\rewrite.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\rewrite\rewrite.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 43 document: d:\work24\souffle-lsp-plugin\example\rewrite\rewrite.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 518 document: d:\work24\souffle-lsp-plugin\example\rsg\rsg.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 28 document: d:\work24\souffle-lsp-plugin\example\rsg\rsg.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\rsg\rsg.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 40 document: d:\work24\souffle-lsp-plugin\example\rsg\rsg.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 2658 document: d:\work24\souffle-lsp-plugin\example\sequences\sequences.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 70 document: d:\work24\souffle-lsp-plugin\example\sequences\sequences.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 27 document: d:\work24\souffle-lsp-plugin\example\sequences\sequences.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 192 document: d:\work24\souffle-lsp-plugin\example\sequences\sequences.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 450 document: d:\work24\souffle-lsp-plugin\example\ship\ship.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 25 document: d:\work24\souffle-lsp-plugin\example\ship\ship.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\ship\ship.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 36 document: d:\work24\souffle-lsp-plugin\example\ship\ship.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 156 document: d:\work24\souffle-lsp-plugin\example\shortest_edges\shortest_edges.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 6 document: d:\work24\souffle-lsp-plugin\example\shortest_edges\shortest_edges.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\shortest_edges\shortest_edges.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 13 document: d:\work24\souffle-lsp-plugin\example\shortest_edges\shortest_edges.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 318 document: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 9 document: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 23 document: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 334 document: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 15 document: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 21 document: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 430 document: d:\work24\souffle-lsp-plugin\example\small\small.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 21 document: d:\work24\souffle-lsp-plugin\example\small\small.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\small\small.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 34 document: d:\work24\souffle-lsp-plugin\example\small\small.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1498 document: d:\work24\souffle-lsp-plugin\example\sort\sort.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 46 document: d:\work24\souffle-lsp-plugin\example\sort\sort.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 14 document: d:\work24\souffle-lsp-plugin\example\sort\sort.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 86 document: d:\work24\souffle-lsp-plugin\example\sort\sort.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 441 document: d:\work24\souffle-lsp-plugin\example\speed\speed.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 17 document: d:\work24\souffle-lsp-plugin\example\speed\speed.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\speed\speed.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 29 document: d:\work24\souffle-lsp-plugin\example\speed\speed.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 558 document: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 28 document: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 8 document: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 36 document: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 479 document: d:\work24\souffle-lsp-plugin\example\tak\tak.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 16 document: d:\work24\souffle-lsp-plugin\example\tak\tak.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\tak\tak.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 26 document: d:\work24\souffle-lsp-plugin\example\tak\tak.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 464 document: d:\work24\souffle-lsp-plugin\example\tc\tc.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 19 document: d:\work24\souffle-lsp-plugin\example\tc\tc.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\tc\tc.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 36 document: d:\work24\souffle-lsp-plugin\example\tc\tc.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 6988 document: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 144 document: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 22 document: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 346 document: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 799 document: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 44 document: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 8 document: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 62 document: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 448 document: d:\work24\souffle-lsp-plugin\example\traffic\traffic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 23 document: d:\work24\souffle-lsp-plugin\example\traffic\traffic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 6 document: d:\work24\souffle-lsp-plugin\example\traffic\traffic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 39 document: d:\work24\souffle-lsp-plugin\example\traffic\traffic.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 5444 document: d:\work24\souffle-lsp-plugin\example\trains\trains.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 269 document: d:\work24\souffle-lsp-plugin\example\trains\trains.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 5 document: d:\work24\souffle-lsp-plugin\example\trains\trains.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 280 document: d:\work24\souffle-lsp-plugin\example\trains\trains.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 159 document: d:\work24\souffle-lsp-plugin\example\trans\trans.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 8 document: d:\work24\souffle-lsp-plugin\example\trans\trans.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 2 document: d:\work24\souffle-lsp-plugin\example\trans\trans.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 12 document: d:\work24\souffle-lsp-plugin\example\trans\trans.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 398 document: d:\work24\souffle-lsp-plugin\example\tree\tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 14 document: d:\work24\souffle-lsp-plugin\example\tree\tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\tree\tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 28 document: d:\work24\souffle-lsp-plugin\example\tree\tree.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 201 document: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 7 document: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 3 document: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 13 document: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 1159 document: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 55 document: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 7 document: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 62 document: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countNodeNum
+信息: NOD: 418 document: d:\work24\souffle-lsp-plugin\example\weighted_distances\weighted_distances.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countLineNum
+信息: LOC: 14 document: d:\work24\souffle-lsp-plugin\example\weighted_distances\weighted_distances.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: DEF: 4 document: d:\work24\souffle-lsp-plugin\example\weighted_distances\weighted_distances.dl
+8月 29, 2025 11:36:36 上午 SouffleLanguageServer countDEFAndOCC
+信息: OCC: 28 document: d:\work24\souffle-lsp-plugin\example\weighted_distances\weighted_distances.dl

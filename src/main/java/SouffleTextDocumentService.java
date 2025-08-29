@@ -13,6 +13,7 @@ import parsing.souffle.SouffleLexer;
 import parsing.souffle.SouffleParser;
 import parsing.symbols.*;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -84,10 +85,18 @@ public class SouffleTextDocumentService implements TextDocumentService {
     }
 
     private void countLineNum(String documentPath) throws IOException{
-        LineNumberReader reader = new LineNumberReader(new FileReader(documentPath));
-        while (reader.readLine() != null) {}
-        int lineCount = reader.getLineNumber();
-        reader.close();
+        int lineCount = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(documentPath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String trimmed = line.trim();
+                // 跳过空行和注释行
+                if (trimmed.isEmpty() || trimmed.startsWith("//")) {
+                    continue;
+                }
+                lineCount++;
+            }
+        }
         LOG.info("LOC: "+ lineCount + " document: " + LogUtils.extractRelativeUri(documentPath));
     }
 
