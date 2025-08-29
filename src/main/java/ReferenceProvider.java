@@ -76,8 +76,8 @@ public class ReferenceProvider {
                 }
             }
         }
-        LOG.info("OCC: "+ OCC + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
-        LOG.info("DEF: "+ DEF.size() + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+//        LOG.info("OCC: "+ OCC + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+//        LOG.info("DEF: "+ DEF.size() + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 
         Random random = new Random();
         var started = Instant.now();

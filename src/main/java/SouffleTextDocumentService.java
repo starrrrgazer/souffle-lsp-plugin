@@ -2,6 +2,7 @@ import logging.LSClientLogger;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
@@ -12,12 +13,15 @@ import parsing.souffle.SouffleLexer;
 import parsing.souffle.SouffleParser;
 import parsing.symbols.*;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 /**
  * TextDocumentService implementation for Souffle Datalog.
@@ -27,7 +31,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
     private SouffleLanguageServer languageServer;
     private LSClientLogger  clientLogger;
     private SouffleProjectContext projectContext;
-
+    private static final Logger LOG = Logger.getLogger("main");
     public SouffleTextDocumentService(SouffleLanguageServer languageServer) {
         this.languageServer = languageServer;
         this.clientLogger = LSClientLogger.getInstance();
@@ -46,6 +50,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
     }*/
 
     private void parseInput(String documentURI) throws IOException, URISyntaxException {
+//        System.err.println("Parsing begin: " + documentURI);
         URI uri = new URI(documentURI);
         Path path = Path.of(uri);
         CharStream input = CharStreams.fromPath(path);
@@ -67,6 +72,50 @@ public class SouffleTextDocumentService implements TextDocumentService {
         souffleParser.reset();
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
         visitor2.visit(souffleParser.program());
+
+
+        String fixedPath = uri.getPath();
+        if (fixedPath.matches("^/[a-zA-Z]:.*")) {
+            fixedPath = fixedPath.substring(1);  // 去掉开头的 '/'
+        }
+        countLineNum(fixedPath);
+        countNodeNum(fixedPath);
+        countDEFAndOCC(fixedPath);
+    }
+
+    private void countLineNum(String documentPath) throws IOException{
+        LineNumberReader reader = new LineNumberReader(new FileReader(documentPath));
+        while (reader.readLine() != null) {}
+        int lineCount = reader.getLineNumber();
+        reader.close();
+        LOG.info("LOC: "+ lineCount + " document: " + LogUtils.extractRelativeUri(documentPath));
+    }
+
+    private void countNodeNum(String documentPath) throws IOException {
+        Path path = Path.of(documentPath);
+        CharStream input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
+        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+        SouffleParser souffleParser = new SouffleParser(tokens);
+
+        ParseTree parseTree = souffleParser.program();
+
+        int totalNodes = NodeNumVisitor.countNodes(parseTree);
+        LOG.info("NOD: "+ totalNodes + " document: " + LogUtils.extractRelativeUri(documentPath));
+    }
+
+    private void countDEFAndOCC(String documentPath) throws IOException {
+        Path path = Path.of(documentPath);
+        CharStream input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
+        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+        SouffleParser souffleParser = new SouffleParser(tokens);
+
+        DEFAndOCCVisitor visitor = new DEFAndOCCVisitor();
+        visitor.visit(souffleParser.program());
+
+        LOG.info("DEF: "+ visitor.getDEF() + " document: " + LogUtils.extractRelativeUri(documentPath));
+        LOG.info("OCC: "+ visitor.getOCC() + " document: " + LogUtils.extractRelativeUri(documentPath));
     }
 
     private void preprocessInput(CharStream input) {

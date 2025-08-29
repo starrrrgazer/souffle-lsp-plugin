@@ -112,6 +112,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             directory = URI.create(initializeParams.getRootUri()).getPath();
         }
         if(directory != null) {
+            System.err.println("initialize directory: " + directory);
             projectContext.setProjectPath(directory);
             traverseWorkspace(directory);
         }
@@ -138,11 +139,20 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     }
 
     private void traverseWorkspace(String directory) {
+//        System.err.println("traverseWorkspace begin");
 //        int errorCount = 0;
         // Reading the folder and getting Stream.
-        try (Stream<Path> walk = Files.walk(Paths.get(directory))) {
+        String fixedDir = directory;
+        if (fixedDir.matches("^/[a-zA-Z]:.*")) {
+            fixedDir = fixedDir.substring(1);  // 去掉开头的 '/'
+        }
+
+        try (Stream<Path> walk = Files.walk(Paths.get(fixedDir))) {
+//            System.err.println("walk begin");
             // Filtering the paths by a folder and adding into a list.
-            List<String> fileNamesList = walk.map(Path::toString).filter(f -> f.endsWith(".dl"))
+            List<String> fileNamesList = walk
+                    .map(Path::toString)
+                    .filter(f -> f.endsWith(".dl"))
                     .collect(Collectors.toList());
             // printing the folder names
             for (String s : fileNamesList) {
@@ -166,7 +176,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             }
 
             for (String s : fileNamesList) {
-//                System.err.println("Start" + s);
+//                System.err.println("Start stageTwoParse");
                 try {
                     stageTwoParse(s);
                 } catch (Exception e){
@@ -175,14 +185,21 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
                 }
 //                System.err.println("End " + s);
             }
-            for (String s : fileNamesList) {
-                try {
-                    countNodeNum(s);
-                    countLineNum(s);
-                } catch (Exception e){
-                    System.err.println(e.getMessage());
-                }
-            }
+//            for (String s : fileNamesList) {
+////                System.err.println("Start" + s);
+////                System.err.println("--------------------------start print code feature--------------------------");
+//                try {
+//                    countNodeNum(s);
+////                    System.err.println("--------------------------start print NOD--------------------------");
+//                    countLineNum(s);
+////                    System.err.println("--------------------------start print LOC--------------------------");
+//                    countDEFAndOCC(s);
+////                    System.err.println("--------------------------start print DEF--------------------------");
+////                    System.err.println("--------------------------start print OCC--------------------------");
+//                } catch (Exception e){
+//                    System.err.println(e.getMessage());
+//                }
+//            }
 
 
 //            System.err.println("Error rate " + errorCount + " : " + fileNamesList.size());
@@ -222,6 +239,20 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
 
         int totalNodes = NodeNumVisitor.countNodes(parseTree);
         LOG.info("NOD: "+ totalNodes + " document: " + LogUtils.extractRelativeUri(documentPath));
+    }
+
+    private void countDEFAndOCC(String documentPath) throws IOException {
+        Path path = Path.of(documentPath);
+        CharStream input = CharStreams.fromPath(path);
+        SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
+        CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
+        SouffleParser souffleParser = new SouffleParser(tokens);
+
+        DEFAndOCCVisitor visitor = new DEFAndOCCVisitor();
+        visitor.visit(souffleParser.program());
+
+        LOG.info("DEF: "+ visitor.getDEF() + " document: " + LogUtils.extractRelativeUri(documentPath));
+        LOG.info("OCC: "+ visitor.getOCC() + " document: " + LogUtils.extractRelativeUri(documentPath));
     }
 
     private void stageOneParse(String documentPath) throws IOException {
@@ -277,6 +308,11 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     public void connect(LanguageClient languageClient) {
         this.languageClient = languageClient;
         LSClientLogger.getInstance().initialize(this.languageClient);
+
+    }
+
+    @Override
+    public void setTrace(SetTraceParams params) {
 
     }
 
