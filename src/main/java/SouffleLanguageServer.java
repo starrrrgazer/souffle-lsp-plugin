@@ -140,7 +140,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
     }
 
     private void traverseWorkspace(String directory) {
-//        System.err.println("traverseWorkspace begin");
+        System.err.println("traverseWorkspace begin");
 //        int errorCount = 0;
         // Reading the folder and getting Stream.
         String fixedDir = directory;
@@ -149,7 +149,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         }
 
         try (Stream<Path> walk = Files.walk(Paths.get(fixedDir))) {
-//            System.err.println("walk begin");
+            System.err.println("walk begin");
             // Filtering the paths by a folder and adding into a list.
             List<String> fileNamesList = walk
                     .map(Path::toString)
@@ -159,7 +159,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             for (String s : fileNamesList) {
 //                logging.LSClientLogger.getInstance().clearDiagnostics(Path.of(s).toUri().toString());
                 try {
-//                    System.err.println("Preprocess " + s);
+                    System.err.println("Preprocess " + s);
                     preprocessInput(s);
                 } catch (Exception e){
                     System.err.println(e.getMessage());
@@ -169,6 +169,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
             for (String s : fileNamesList) {
                 try {
                     stageOneParse(s);
+                    System.err.println("StageOneParse " + s);
                 } catch (Exception e){
 //                    System.err.println("Parse 1 " + s);
                     System.err.println(e.getMessage());
@@ -180,6 +181,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
 //                System.err.println("Start stageTwoParse");
                 try {
                     stageTwoParse(s);
+                    System.err.println("StageTwoParse " + s);
                 } catch (Exception e){
 //                    System.err.println("Parse 2 " + s);
                     System.err.println(e.getMessage());
@@ -271,7 +273,11 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
-        souffleParser.setErrorHandler(new SouffleError());
+
+        souffleParser.setErrorHandler(new BailErrorStrategy());
+//        souffleParser.setErrorHandler(new SouffleError());
+
+
 //        souffleParser.setErrorHandler(new BailErrorStrategy());
         souffleParser.addErrorListener(new SouffleSyntaxErrorListener(path.toUri().toString()));
         // difference : declaration
@@ -288,6 +294,7 @@ public class SouffleLanguageServer implements LanguageServer, LanguageClientAwar
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
+        souffleParser.setErrorHandler(new BailErrorStrategy());
         //  difference : use
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, path.toUri().toString());
         visitor2.visit(souffleParser.program());

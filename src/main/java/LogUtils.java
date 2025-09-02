@@ -1,13 +1,19 @@
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 public class LogUtils {
     public static String extractRelativeUri(String uri) {
-        String prefix = "file:///d%3A/work24/";
-
+        String prefix = "file:///";
         if (uri.startsWith(prefix)) {
-            String newPath = uri.substring(prefix.length());
-            return newPath;
+            // 去掉 "file:///"
+            String path = uri.substring(prefix.length());
+            // URL 解码（把 %3A 转换为 : 等）
+            path = URLDecoder.decode(path, StandardCharsets.UTF_8);
+            return path;
         }
         return uri;
     }
 }
+
+

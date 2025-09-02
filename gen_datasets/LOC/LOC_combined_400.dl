@@ -1,0 +1,647 @@
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\independent_body3\independent_body3.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Tests rules containing body literals that are independent of the
+// head arguments (i.e. they are 'constant' wrt. head arguments).
+
+.decl a(x:number)
+a(x) :- b(x), c(y), d(y).
+
+.decl b(x:number)
+b(0).
+b(x+1) :- a(x), x < 1000000.
+
+.decl c(x:number)
+c(0).
+c(x+2) :- c(x), x < 1000.
+
+.decl d(x:number)
+d(0).
+d(x+3) :- d(x), x < 1000.
+
+.decl query(x:number)
+.output query()
+query(x) :- a(x), x < 10.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\independent_body3\independent_body3.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\flights2\flights2.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Airport <: symbol
+.type Hour <: number
+.type Route = [
+	source : Airport,
+	destination : Airport,
+	start : Hour,
+	duration : Hour
+]
+
+// List of flights
+.decl flight(r : Route)
+flight(["Sydney", "Melbourne", 8, 2]).
+flight(["Sydney", "Melbourne", 20, 2]).
+flight(["Sydney", "Singapore", 6, 10]).
+flight(["Melbourne", "Auckland", 14, 4]).
+flight(["Sydney", "Auckland", 12, 3]).
+flight(["Singapore", "Tokyo", 21, 12]).
+flight(["Singapore", "Dubai", 10, 11]).
+flight(["Singapore", "London", 14, 14]).
+flight(["Dubai", "London", 5, 6]).
+flight(["London", "New York", 17, 15]).
+flight(["London", "New York", 5, 15]).
+flight(["London", "Oslo", 15, 3]).
+flight(["London", "Paris", 10, 3]).
+flight(["London", "Reykjavik", 8, 5]).
+flight(["Oslo", "Reykjavik", 9, 4]).
+flight(["Oslo", "Reykjavik", 21, 4]).
+flight(["Los Angeles", "New York", 14, 5]).
+flight(["Tokyo", "Los Angeles", 4, 14]).
+flight(["Singapore", "Los Angeles", 9, 14]).
+flight(["Singapore", "Los Angeles", 17, 14]).
+flight(["Tokyo", "Vancouver", 12, 10]).
+flight(["Singapore", "Vancouver", 18, 14]).
+flight(["Los Angeles", "Vancouver", 5, 5]).
+
+// Input starting airport and time
+.decl travel(s : Airport, t : Hour)
+.input travel()
+
+// Find all connecting flights from starting airport
+.decl connection(s : Airport, d : Airport, t : Hour, h : Hour)
+.output connection()
+connection(s, d, (t + h) % 24, (24 + t - tx) % 24 + h) :- travel(s, tx), flight([s, d, t, h]).
+connection(s, d, (tx + h) % 24, hx + (24 + t - tx) % 24 + h) :- connection(s, x, tx, hx), flight([x, d, t, h]).
+
+// Total time in hours to reach destination airport
+.decl total_time(d : Airport, h : Hour)
+.output total_time()
+total_time(d, h) :- connection(s, d, _, _), h = min x : connection(s, d, _, x).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\flights2\flights2.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\prime\prime.dl ====
+.type Integer <: symbol
+
+.decl succ (a:Integer, b:Integer)
+.decl count_second(a:Integer)
+.output count_second()
+.decl count_third(a:Integer)
+.output count_third()
+.decl count_all(a:Integer)
+.output count_all()
+
+count_second("3").
+count_second(n) :- succ(pn, n), succ(ppn, pn), count_second(ppn).
+
+count_third("3").
+count_third(n) :- succ(pn, n), succ(ppn, pn), succ(pppn, ppn), count_third(pppn).
+
+count_all(x) :- count_second(x), count_third(x).
+
+
+succ("0", "1").
+succ("1", "2").
+succ("2", "3").
+succ("3", "4").
+succ("4", "5").
+succ("5", "6").
+succ("6", "7").
+succ("7", "8").
+succ("8", "9").
+succ("9", "10").
+succ("10", "11").
+succ("11", "12").
+succ("12", "13").
+succ("13", "14").
+succ("14", "15").
+succ("15", "16").
+succ("16", "17").
+succ("17", "18").
+succ("18", "19").
+succ("19", "20").
+succ("20", "21").
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\prime\prime.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find pairs of amicable numbers up to a limit
+// A pair of numbers are amicable if the sum of their factors add up to each other
+
+// Build search range
+.decl num(x : number)
+num(1).
+num(x+1) :- num(x), x < l, lim(l).
+
+// Search limit
+.decl lim(n : number)
+.input lim
+
+// Find factors of x excluding itself
+.decl factor(x : number, f : number)
+factor(x, f) :- num(x), num(f), f <= x / 2, x % f = 0.
+
+// Compute the sum of all the factors of x
+.decl factor_sum(x : number, fs : number)
+factor_sum(x, f) :- num(x), f = sum i : factor(x, i).
+
+// Find pairs of numbers whose factors add up to each other
+.decl amicable(a : number, b : number)
+.output amicable()
+amicable(a, b) :- factor_sum(a, b), factor_sum(b, a), a < b.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+//
+// An example constraint-based analysis:
+//
+// Given the Lambda term: (\ denotes a lambda)
+//
+//	(\x. x 3 2) (\y.\z.z)
+//
+// what is its value?
+//
+
+
+// Step A) model the input code
+
+.type Kind <: symbol
+
+.decl kind(k:Kind)
+
+kind("Lit").
+kind("Var").
+kind("Abs").
+kind("App").
+
+// the global term register - id, kind and index in corresponding relation
+.decl term( id:number, k:Kind, i:number )
+
+
+.type Value <: symbol
+
+.decl lits( i:number, n:Value )
+
+lits( 0, "3" ).
+lits( 1, "2" ).
+
+term( 0, "Lit", 0 ).
+term( 1, "Lit", 1 ).
+
+
+.type VarName <: symbol
+.decl vars( i:number, n:VarName )
+
+vars( 0, "x" ).
+vars( 1, "y" ).
+vars( 2, "z" ).
+
+term( 2, "Var", 0 ).
+term( 3, "Var", 1 ).
+term( 4, "Var", 2 ).
+
+
+.decl abs( i:number, v:number, b:number)
+
+abs( 0, 0, 8 ).
+abs( 1, 1, 7 ).
+abs( 2, 2, 4 ).
+
+term( 5, "Abs", 0 ).
+term( 6, "Abs", 1 ).
+term( 7, "Abs", 2 ).
+
+
+.decl app( i:number, t1:number, t2:number )
+
+app( 0, 9, 1 ).
+app( 1, 2, 0 ).
+app( 2, 5, 6 ).
+
+term( 8, "App", 0 ).
+term( 9, "App", 1 ).
+term(10, "App", 2 ).
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Step B) Analysis - get the value computed by the term
+
+
+.decl data_var( i:number, v:Value )
+.decl data_term( i:number, v:Value )
+.output data_term()
+
+.decl ctrl_var( i:number, f:number )
+.decl ctrl_term( i:number, f:number )
+
+
+//////////// D - Data Analysis //////////////
+
+// the value of a literal is the value it is representing
+data_term( i, v ) :- term(i,"Lit",l), lits( l, v ).
+
+// the value of a variable is the value in the variable assignment
+data_term( i, v ) :- term(i,"Var",x), data_var( x, v ).
+
+// the value of an application is the value of the body of the targeted abstraction
+data_term( i, v ) :- term(i,"App",x), app(x,t1,_), ctrl_term(t1, f), abs( f, _, b), data_term( b, v ).
+
+// the value of an abstraction is not defined
+
+// parameter binding
+data_var( i, v ) :- app( _, a, b ), ctrl_term( a, f ), abs( f, i, _), data_term( b, v).
+
+
+//////////// C - Control Flow Analysis //////////////
+
+// the value of a variable is the value in the variable assignment
+ctrl_term( i, v ) :- term(i,"Var",x), ctrl_var( x, v ).
+
+// the value of an application is the value of the body of the targeted abstraction
+ctrl_term( i, v ) :- term(i,"App",x), app(x,t1,_), ctrl_term(t1, f), abs( f, _, b), ctrl_term( b, v ).
+
+// the control flow value of an abstraction is the term itself
+ctrl_term( i, v ) :- term( i, "Abs", v ).
+
+// parameter binding
+ctrl_var( i, v ) :- app( _, a, b ), ctrl_term( a, f ), abs( f, i, _), ctrl_term( b, v).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Topological Ordering
+
+// Gives a topological ordering over the vertices of an input graph. Note that is works only on input graph is acyclic.
+
+// Graph
+
+// Vertices
+.decl vertices(v:symbol)
+.input vertices()
+.decl vertex(v:symbol)
+.output vertex()
+vertex(v) :- vertices(v).
+
+// Edges
+.decl edges(v1:symbol, v2:symbol)
+.input edges()
+.decl edge(v1:symbol, v2:symbol)
+.output edge()
+edge(v1, v2) :- vertex(v1), vertex(v2), edges(v1, v2).
+
+// Tests if vertex v1 proceeds vertex v2 in the ordering.
+.decl is_before(v1:symbol, v2:symbol)
+.output is_before()
+
+// Tests if vertex v1 succeeds vertex v2 in the ordering.
+.decl is_after(v1:symbol, v2:symbol)
+.output is_after()
+
+// Gives the possible indices of the vertices in the ordering.
+.decl indices(v:symbol, i:number)
+.output indices()
+
+// Gives the exact index of the vertex in the ordering.
+.decl index(v:symbol, i:number)
+.output index()
+
+// Vertex x is before vertex y if the graph has an edge from x to y.
+is_before(x, y) :-
+    edge(x, y).
+
+// Vertex x is before vertex y if some vertex z is before x and z is before y.
+is_before(x, y) :-
+    is_before(x, z),
+    is_before(z, y).
+
+// Vertex x is after vertex y if the graph has an edge from y to x.
+is_after(x, y) :-
+    edge(y, x).
+
+// Vertex x is after vertex y if some vertex z is after x and y is after z.
+is_after(x, y) :-
+    is_after(z, x),
+    is_after(y, z).
+
+// The index of a vertex x is 0 if it has no inbound or outbound edges.
+indices(x, 0) :-
+    vertex(x),
+    !edge(_, x),
+    !edge(x, _).
+
+// The index of a vertex x is 1 if it has no inbound but only outbound edges.
+indices(x, 1) :-
+    vertex(x),
+    !edge(_, x),
+    edge(x, _).
+
+// The possible indices of a vertex x are 1 more than the index of some vertex y if that vertex y is before x but not after x.
+indices(x, i+1) :-
+    is_before(y, x),
+    !is_before(x, y),
+    is_after(x, y),
+    indices(y, i).
+
+// The exact index of a vertex is the maximum of its possible indices.
+index(x, i) :-
+    indices(x, i),
+    !indices(x, i+1).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Test Case adopted from Ocaml datalog
+
+.type Node <: symbol
+
+.decl reachable (node1:Node, node2:Node)
+.output reachable ()
+.decl same_clique (node1:Node, node2:Node)
+.output same_clique ()
+.decl edge (node1:Node, node2:Node)
+.output edge ()
+.decl leg (node1:Node, node2:Node)
+.output leg ()
+
+leg(X,Z) :- edge(X,Y), edge(Y,Z).
+
+reachable(X,Y) :- edge(X,Y).
+reachable(X,Y) :- edge(X,Z), reachable(Z,Y).
+same_clique(X,Y) :- reachable(X,Y), reachable(Y,X).
+
+edge("a", "b").
+edge("b", "c").
+edge("c", "d").
+edge("d", "a").
+
+reachable("e","f").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+//triangle
+
+.type Text <: symbol
+
+.decl addrecurse(b:number, result:Text, level:number)
+
+addrecurse(b,cat(cat("*",result),"*"),level+1) :- addrecurse(b,result,level), level!=b.
+
+addrecurse(12,"*",0).
+
+
+.decl out(result:Text)
+.output out()
+
+out(result) :- addrecurse(_,result,_).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2021, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Item=[x:float,y:float]
+.type List=[head:Item,amount:float,rest:List]
+
+.decl capacity(value:float)
+.input capacity
+
+.decl item(value:float, weight:float)
+.input item
+
+.decl item_ratio(ratio:float, value:float, weight:float)
+item_ratio(value/weight, value, weight) :- item(value, weight).
+
+.decl first(value:float, weight:float)
+
+.decl last(value:float, weight:float)
+
+.decl next(value1:float, weight1:float, value2:float, weight2:float)
+.decl next_candidate(value1:float, weight1:float, value2:float, weight2:float)
+
+// first item has no prev
+first(value,weight) :- item(value,weight), !next(_,_,value,weight).
+
+// last item has no next
+last(value,weight) :- item(value,weight), !next(value,weight,_,_).
+
+next_candidate(v1,w1,v2,w2) :- item_ratio(r1,v1,w1), w2 = min w : { item_ratio(r,_,w), r = r1, w > w1 }, item_ratio(r1,v2,w2).
+
+// next item in lexicographical ordering
+next(v1,w1,v2,w2) :- item_ratio(r1,v1,w1),
+		     r2 = min r : { item_ratio(r,_,_), r > r1 },
+		     w2 = min w : { item_ratio(r,_,w), r = r2, w >= 0 },
+	             item_ratio(r2,v2,w2), !next_candidate(v1,w1,_,_).
+
+next(v1,w1,v2,w2) :- next_candidate(v1,w1,v2,w2).
+
+
+.decl item_array(index:number, p:Item)
+item_array(0,[v,w]) :- first(v,w).
+item_array(i+1,[v2,w2]) :- item_array(i,[v1,w1]), next(v1,w1,v2,w2).
+
+
+.decl knapsack_iteration(knapsack:List, index:number, weight:float, value:float)
+knapsack_iteration(nil, count : item_array(_,_) - 1, cap, 0) :- capacity(cap).
+
+// skip over iteration if we have exhausted capacity
+knapsack_iteration(list, index-1, 0, value) :- knapsack_iteration(list, index, 0, value), index >= 0.
+
+// otherwise exhaust the item and decrement
+knapsack_iteration([[val,weight],amount,rest],index-1,remaining_cap, value+(val/weight)*amount) :-
+	knapsack_iteration(rest, index, cap, value),
+	item_array(index, [val,weight]),
+	index >= 0,
+	amount = min(cap,weight),
+	remaining_cap = cap - amount,
+	cap > 0.
+
+
+.decl fractional_knapsack(val:float)
+.output fractional_knapsack
+
+fractional_knapsack(val) :- knapsack_iteration(_,-1,_,val).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\prime\prime.dl ====
+.type Integer <: symbol
+
+.decl succ (a:Integer, b:Integer)
+.decl count_second(a:Integer)
+.output count_second()
+.decl count_third(a:Integer)
+.output count_third()
+.decl count_all(a:Integer)
+.output count_all()
+
+count_second("3").
+count_second(n) :- succ(pn, n), succ(ppn, pn), count_second(ppn).
+
+count_third("3").
+count_third(n) :- succ(pn, n), succ(ppn, pn), succ(pppn, ppn), count_third(pppn).
+
+count_all(x) :- count_second(x), count_third(x).
+
+
+succ("0", "1").
+succ("1", "2").
+succ("2", "3").
+succ("3", "4").
+succ("4", "5").
+succ("5", "6").
+succ("6", "7").
+succ("7", "8").
+succ("8", "9").
+succ("9", "10").
+succ("10", "11").
+succ("11", "12").
+succ("12", "13").
+succ("13", "14").
+succ("14", "15").
+succ("15", "16").
+succ("16", "17").
+succ("17", "18").
+succ("18", "19").
+succ("19", "20").
+succ("20", "21").
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\prime\prime.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\planar\planar.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Determines whether a graph is planar i.e. has no lines that intersect
+
+// Define an edge by its two x,y endpoints
+.decl edge(x1 : number, y1 : number, x2 : number, y2 : number)
+.input edge()
+
+// Check if two edges join only at an endpoint; this does not count as an intersection
+.decl sharedNode(x1 : number, y1 : number, x2 : number, y2 : number,
+	x3 : number, y3 : number, x4 : number, y4 : number)
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x3 - x1 = 0, y3 - y1 = 0.
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x4 - x1 = 0, y4 - y1 = 0.
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x3 - x2 = 0, y3 - y2 = 0.
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x4 - x2 = 0, y4 - y2 = 0.
+
+// Check if there exists two intersecting lines, using the idea of orientation from computational geometry
+.decl intersect(x1 : number, y1 : number, x2 : number, y2 : number,
+	x3 : number, y3 : number, x4 : number, y4 : number)
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) > 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) < 0,
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) > 0,
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) < 0.
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) > 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) < 0, (y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) < 0, (y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) > 0.
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) < 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) > 0,
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) > 0,
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) < 0.
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) < 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) > 0,
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) < 0,
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) > 0.
+// The following lines check the case if the endpoint of one line lies on the other line (other than that line's endpoints)
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) = 0,
+	x3 > min(x1, x2), x3 < max(x1, x2),
+	y3 > min(y1, y2), y3 < max(y1, y2).
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) = 0,
+	x4 > min(x1, x2), x4 < max(x1, x2),
+	y4 > min(y1, y2), y4 < max(y1, y2).
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) = 0,
+	x1 > min(x3, x4), x1 < max(x3, x4),
+	y1 > min(y3, y4), y1 < max(y3, y4).
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) = 0,
+	x2 > min(x3, x4), x1 < max(x3, x4),
+	y2 > min(y3, y4), y2 < max(y3, y4).
+
+// Main function checking if graph is planar
+.decl planar(x1 : number, y1 : number, x2 : number, y2 : number,
+	x3 : number, y3 : number, x4 : number, y4 : number)
+// If not planar, program outputs the pairs of lines that intersect
+.output planar()
+planar(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	intersect(x1, y1, x2, y2, x3, y3, x4, y4),
+	!sharedNode(x1, y1, x2, y2, x3, y3, x4, y4),
+	x1 <= x3, y1 <= y3.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\planar\planar.dl ====
+

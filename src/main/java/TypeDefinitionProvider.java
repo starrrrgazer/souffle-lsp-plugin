@@ -19,7 +19,7 @@ public class TypeDefinitionProvider {
         Range cursor = Utils.positionToRange(params.getPosition());
         Optional<SouffleContext> context = Optional.ofNullable(SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor));
         if (context.isPresent()) {
-            Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));
+            Optional<SouffleSymbol> currentSymbol = Optional.ofNullable(context.get().getSymbol(cursor));//locate
             if (currentSymbol.isPresent()) {
                 if (currentSymbol.get().getKind() == SouffleSymbolType.ATTRIBUTE) {
                     Optional<SouffleSymbol> declaration = Optional.ofNullable(((SouffleAttribute) (currentSymbol.get())).getType());

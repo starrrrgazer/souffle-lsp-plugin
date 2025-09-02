@@ -42,7 +42,6 @@ d:\work24\souffle-lsp-plugin\example\fib\fib.dl,0.0,0.0,0.0,732.0,4.0,49.0,37.0,
 d:\work24\souffle-lsp-plugin\example\fib1\fib1.dl,0.0,0.0,0.0,139.0,1.0,9.0,5.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\flights\flights.dl,0.0,0.0,0.0,565.0,5.0,39.0,22.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\flights2\flights2.dl,0.0,0.0,0.0,1147.0,7.0,54.0,41.0,0.0,0.0,0.0
-d:\work24\souffle-lsp-plugin\example\floydwarshall\floydwarshall.dl,0.0,0.0,0.0,47.0,0.0,8.0,4.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl,0.0,0.0,0.0,1347.0,12.0,78.0,36.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\func\func.dl,0.0,0.0,0.0,585.0,6.0,42.0,21.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\game2\game2.dl,0.0,0.0,0.0,462.0,6.0,37.0,21.0,0.0,0.0,0.0
@@ -62,7 +61,6 @@ d:\work24\souffle-lsp-plugin\example\longest_path\longest_path.dl,0.0,0.0,0.0,28
 d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl,0.0,0.0,0.0,3192.0,41.0,274.0,148.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl,0.0,0.0,0.0,207.0,3.0,17.0,8.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\magic_access-policy\magic_access-policy.dl,0.0,0.0,0.0,1418.0,13.0,97.0,55.0,0.0,0.0,0.0
-d:\work24\souffle-lsp-plugin\example\magic_pointsto\edb.dl,0.0,0.0,0.0,18323.0,0.0,1095.0,1095.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\magic_pointsto\magic_pointsto.dl,0.0,0.0,0.0,526.0,10.0,47.0,33.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\magic_prime2\magic_prime2.dl,0.0,0.0,0.0,651.0,7.0,47.0,19.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\metro\metro.dl,0.0,0.0,0.0,487.0,5.0,34.0,18.0,0.0,0.0,0.0
@@ -89,7 +87,6 @@ d:\work24\souffle-lsp-plugin\example\po2\po2.dl,0.0,0.0,0.0,1749.0,3.0,75.0,24.0
 d:\work24\souffle-lsp-plugin\example\po3\po3.dl,0.0,0.0,0.0,1485.0,3.0,66.0,21.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\po4\po4.dl,0.0,0.0,0.0,957.0,3.0,48.0,15.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\po5\po5.dl,0.0,0.0,0.0,1485.0,3.0,66.0,21.0,0.0,0.0,0.0
-d:\work24\souffle-lsp-plugin\example\pointsto\edb.dl,0.0,0.0,0.0,18323.0,0.0,1095.0,1095.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\pointsto\pointsto.dl,0.0,0.0,0.0,521.0,10.0,47.0,32.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\prime\prime.dl,0.0,0.0,0.0,647.0,5.0,48.0,34.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\prime2\prime2.dl,0.0,0.0,0.0,646.0,7.0,47.0,18.0,0.0,0.0,0.0
@@ -114,7 +111,6 @@ d:\work24\souffle-lsp-plugin\example\tc\tc.dl,0.0,0.0,0.0,464.0,5.0,36.0,19.0,0.
 d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl,0.0,0.0,0.0,6988.0,22.0,346.0,144.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl,0.0,0.0,0.0,799.0,8.0,62.0,44.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\traffic\traffic.dl,0.0,0.0,0.0,448.0,6.0,39.0,23.0,0.0,0.0,0.0
-d:\work24\souffle-lsp-plugin\example\trains\trains.dl,0.0,0.0,0.0,5444.0,5.0,280.0,269.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\trans\trans.dl,0.0,0.0,0.0,159.0,2.0,12.0,8.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\tree\tree.dl,0.0,0.0,0.0,398.0,4.0,28.0,14.0,0.0,0.0,0.0
 d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl,0.0,0.0,0.0,201.0,3.0,13.0,7.0,0.0,0.0,0.0

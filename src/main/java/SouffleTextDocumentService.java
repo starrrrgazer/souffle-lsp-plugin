@@ -1,4 +1,5 @@
 import logging.LSClientLogger;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -52,6 +53,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
 
     private void parseInput(String documentURI) throws IOException, URISyntaxException {
 //        System.err.println("Parsing begin: " + documentURI);
+        System.err.println("parse input");
         URI uri = new URI(documentURI);
         Path path = Path.of(uri);
         CharStream input = CharStreams.fromPath(path);
@@ -62,7 +64,10 @@ public class SouffleTextDocumentService implements TextDocumentService {
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
         souffleParser.removeErrorListeners();
-        souffleParser.setErrorHandler(new SouffleError());
+
+//        souffleParser.setErrorHandler(new SouffleError());
+        souffleParser.setErrorHandler(new BailErrorStrategy());
+
         souffleParser.addErrorListener(new SouffleSyntaxErrorListener(uri.toString()));
         SouffleProjectContext projectContext = SouffleProjectContext.getInstance();
         SouffleDeclarationVisitor visitor = new SouffleDeclarationVisitor(souffleParser, uri.toString(), projectContext);
@@ -71,6 +76,9 @@ public class SouffleTextDocumentService implements TextDocumentService {
         projectContext.addDocument(uri.toString(), visitor.getDocumentContext());
         souffleParser.removeErrorListeners();
         souffleParser.reset();
+
+        souffleParser.setErrorHandler(new BailErrorStrategy());
+
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
         visitor2.visit(souffleParser.program());
 
@@ -79,6 +87,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         if (fixedPath.matches("^/[a-zA-Z]:.*")) {
             fixedPath = fixedPath.substring(1);  // 去掉开头的 '/'
         }
+        System.err.println("begin count code feature");
         countLineNum(fixedPath);
         countNodeNum(fixedPath);
         countDEFAndOCC(fixedPath);
@@ -106,7 +115,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
-
+        souffleParser.setErrorHandler(new BailErrorStrategy());
         ParseTree parseTree = souffleParser.program();
 
         int totalNodes = NodeNumVisitor.countNodes(parseTree);
@@ -119,7 +128,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
         SouffleLexer souffleLexer = new SouffleLexer(input, projectContext.defines);
         CommonTokenStream tokens = new CommonTokenStream(souffleLexer);
         SouffleParser souffleParser = new SouffleParser(tokens);
-
+        souffleParser.setErrorHandler(new BailErrorStrategy());
         DEFAndOCCVisitor visitor = new DEFAndOCCVisitor();
         visitor.visit(souffleParser.program());
 

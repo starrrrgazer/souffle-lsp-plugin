@@ -107,16 +107,16 @@ public class RenameProvider {
                     case RULE:
                         //对引用的地方进行修改。这个函数是定位 + 搜索
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
-                        for (Location reference : references) {
-                            if (!textEdits.containsKey(reference.getUri())) {
-                                textEdits.put(reference.getUri(), new ArrayList<TextEdit>());
-                            }
-                            TextEdit textEdit1 = new TextEdit();
-                            textEdit1.setRange(reference.getRange());
-                            textEdit1.setNewText("renameTest");
-                            textEdits.get(reference.getUri()).add(textEdit1);
+//                        for (Location reference : references) {
+//                            if (!textEdits.containsKey(reference.getUri())) {
+//                                textEdits.put(reference.getUri(), new ArrayList<TextEdit>());
+//                            }
+//                            TextEdit textEdit1 = new TextEdit();
+//                            textEdit1.setRange(reference.getRange());
+//                            textEdit1.setNewText("renameTest");
+//                            textEdits.get(reference.getUri()).add(textEdit1);
 //                                System.err.println(reference);
-                        }
+//                        }
                         break;
                     case ATTRIBUTE:
                         // 搜索，获取所有同名符号进行修改
@@ -125,12 +125,12 @@ public class RenameProvider {
                                 .stream()
                                 .filter(symbol -> symbol.getKind() == SouffleSymbolType.ATTRIBUTE)
                                 .collect(Collectors.toList());
-                        for (SouffleSymbol var : vars) {
-                            TextEdit textEdit = new TextEdit();
-                            textEdit.setRange(var.getRange());
-                            textEdit.setNewText("renameTest");
-                            textEdits.get(params.getTextDocument().getUri()).add(textEdit);
-                        }
+//                        for (SouffleSymbol var : vars) {
+//                            TextEdit textEdit = new TextEdit();
+//                            textEdit.setRange(var.getRange());
+//                            textEdit.setNewText("renameTest");
+//                            textEdits.get(params.getTextDocument().getUri()).add(textEdit);
+//                        }
 
                         break;
 //                    case TYPE_USE:
