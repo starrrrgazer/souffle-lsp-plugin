@@ -58,14 +58,20 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         boolean inComponent = false;
         if(symbol.getComponent() != null){
             inComponent = true;
-            SouffleAttribute componentVariable = ((SouffleAttribute) symbol.getComponent().getDeclaration());
-            if(componentVariable != null){
-                SouffleComponent componentParent = (SouffleComponent) componentVariable.getType().getDeclaration();
-                if(componentParent != null){
-                    scope = componentParent.getScope().get(symbol.getName());
-                    componentUri = componentParent.getURI();
+            SouffleSymbol souffleSymbol = symbol.getComponent().getDeclaration();
+            if ((souffleSymbol instanceof SouffleAttribute)) {
+                SouffleAttribute componentVariable = ((SouffleAttribute) symbol.getComponent().getDeclaration());
+                if(componentVariable != null){
+                    if(componentVariable.getType().getDeclaration() instanceof  SouffleComponent){
+                        SouffleComponent componentParent = (SouffleComponent) componentVariable.getType().getDeclaration();
+                        if(componentParent != null){
+                            scope = componentParent.getScope().get(symbol.getName());
+                            componentUri = componentParent.getURI();
+                        }
+                    }
                 }
             }
+
         }
         if(scope == null){
             return null;
@@ -154,10 +160,17 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             List<SouffleSymbol> souffleSymbolList = findDecl(symbol);
             symbol.setDeclaration(souffleSymbolList);
             SouffleSymbol decl = souffleSymbolList.stream().findFirst().orElse(null);
-            component.setParent((SouffleComponent) decl);
-            component.addToScope(component.getParent().getScope());
+            if (decl instanceof SouffleComponent){
+                component.setParent((SouffleComponent) decl);
+            }
+
+            if (component.getParent() != null){
+                component.addToScope(component.getParent().getScope());
+                souffleContext.addToContextScope(component.getParent().getScope());
+            }
+
             souffleContext.addContextSymbol(symbol);
-            souffleContext.addToContextScope(component.getParent().getScope());
+
         }
 
         return null;
@@ -204,12 +217,17 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         ArrayDeque<SouffleSymbol> attributes = currentScope.pop();
 
         List<SouffleSymbol> souffleSymbolList = findDecl(relationNames.getFirst());
-        SouffleRelation declSymbol = (SouffleRelation) souffleSymbolList.stream().findFirst().get();
-        int i=0;
-        for (SouffleSymbol attribute : attributes) {
-            SouffleAttribute arg = (SouffleAttribute) attribute;
-            declSymbol.getArgs().get(i).getType().setDeclaration(findDecl(arg.getType()));
-            i++;
+        if (souffleSymbolList.stream().findFirst().get() instanceof SouffleRelation){
+            SouffleRelation declSymbol = (SouffleRelation) souffleSymbolList.stream().findFirst().get();
+            int i=0;
+            for (SouffleSymbol attribute : attributes) {
+                if (i >= declSymbol.getArgs().size()){
+                    break;
+                }
+                SouffleAttribute arg = (SouffleAttribute) attribute;
+                declSymbol.getArgs().get(i).getType().setDeclaration(findDecl(arg.getType()));
+                i++;
+            }
         }
         return null;
     }
@@ -224,11 +242,16 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             ctx.union_type_list().accept(this);
             ArrayDeque<SouffleSymbol> types = currentScope.pop();
             List<SouffleSymbol> souffleSymbolList = findDecl(new SouffleType(ctx.IDENT().getText(), Utils.toRange(ctx)));
-            SouffleType declSymbol = (SouffleType) souffleSymbolList.stream().findFirst().get();
-            int i=0;
-            for(SouffleSymbol type: types){
-                declSymbol.getUnion().get(i).setDeclaration(findDecl(type));
-                i++;
+            if (souffleSymbolList.stream().findFirst().get() instanceof SouffleType){
+                SouffleType declSymbol = (SouffleType) souffleSymbolList.stream().findFirst().get();
+                int i=0;
+                for(SouffleSymbol type: types){
+                    if (i >= declSymbol.getUnion().size()){
+                        break;
+                    }
+                    declSymbol.getUnion().get(i).setDeclaration(findDecl(type));
+                    i++;
+                }
             }
         }
 
@@ -276,7 +299,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             for (int i = 0; i < args.size(); i++) {
                 SouffleAttribute arg = args.get(i);
                 rule.addArg(arg);
-                if(decl != null) {
+                if(decl instanceof SouffleRelation) {
                     List<SouffleAttribute> declArgs = ((SouffleRelation) decl).getArgs();
                     if (i < declArgs.size()) {
                         arg.setType(declArgs.get(i).getType());
@@ -304,7 +327,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             bodySymbol.setDeclaration(souffleSymbolList);
             SouffleSymbol decl = souffleSymbolList.stream().findFirst().orElse(null);
 
-            if(decl != null
+            if(decl instanceof SouffleRelation
                     && bodySymbol.getKind() == SouffleSymbolType.RELATION_USE
                     && decl.getKind() == SouffleSymbolType.RELATION_DECL){
                 List<SouffleAttribute> args = ((SouffleRelation) bodySymbol).getArgs();
@@ -417,7 +440,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
         List<SouffleAttribute> args = fact.getArgs();
         for (int i = 0; i < args.size(); i++) {
             SouffleAttribute arg = args.get(i);
-            if(decl != null) {
+            if(decl instanceof SouffleRelation) {
                 List<SouffleAttribute> declArgs = ((SouffleRelation) decl).getArgs();
                 if (i < declArgs.size()) {
                     arg.setType(declArgs.get(i).getType());
@@ -555,7 +578,7 @@ public class SouffleUsesVisitor extends SouffleBaseVisitor<SouffleSymbol> {
             componentVar.setDeclaration(souffleSymbolList);
             SouffleSymbol decl = souffleSymbolList.stream().findFirst().orElse(null);
             symbol.setComponent(componentVar);
-            if(decl != null){
+            if(decl instanceof  SouffleAttribute){
                 componentVar.setType(((SouffleAttribute) decl).getType());
             }
 
