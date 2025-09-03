@@ -51,9 +51,22 @@ public class SouffleTextDocumentService implements TextDocumentService {
         souffleParser.addErrorListener(new SyntaxErrorListener(uri.toString()));
     }*/
 
+    private void getCodeFeature(String documentURI) throws IOException, URISyntaxException {
+        URI uri = new URI(documentURI);
+        String fixedPath = uri.getPath();
+        if (fixedPath.matches("^/[a-zA-Z]:.*")) {
+            fixedPath = fixedPath.substring(1);  // 去掉开头的 '/'
+        }
+        System.err.println("begin count code feature");
+        countLineNum(fixedPath);
+        countNodeNum(fixedPath);
+        countDEFAndOCC(fixedPath);
+    }
+
+
     private void parseInput(String documentURI) throws IOException, URISyntaxException {
 //        System.err.println("Parsing begin: " + documentURI);
-        System.err.println("parse input");
+//        System.err.println("parse input");
         URI uri = new URI(documentURI);
         Path path = Path.of(uri);
         CharStream input = CharStreams.fromPath(path);
@@ -82,15 +95,6 @@ public class SouffleTextDocumentService implements TextDocumentService {
         SouffleUsesVisitor visitor2 = new SouffleUsesVisitor(souffleParser, uri.toString());
         visitor2.visit(souffleParser.program());
 
-
-        String fixedPath = uri.getPath();
-        if (fixedPath.matches("^/[a-zA-Z]:.*")) {
-            fixedPath = fixedPath.substring(1);  // 去掉开头的 '/'
-        }
-        System.err.println("begin count code feature");
-        countLineNum(fixedPath);
-        countNodeNum(fixedPath);
-        countDEFAndOCC(fixedPath);
     }
 
     private void countLineNum(String documentPath) throws IOException{
@@ -150,6 +154,7 @@ public class SouffleTextDocumentService implements TextDocumentService {
             URI uri = new URI(didOpenTextDocumentParams.getTextDocument().getUri());
             this.clientLogger.clearDiagnostics(uri.toString());
             parseInput(didOpenTextDocumentParams.getTextDocument().getUri());
+            getCodeFeature(didOpenTextDocumentParams.getTextDocument().getUri());
 //            SouffleContext context = SouffleProjectContext.getInstance().getDocumentContext(didOpenTextDocumentParams.getTextDocument().getUri());
 //            logging.LSClientLogger.getInstance().reportHint(context.getRange(), uri.toString(), "Lint");
             this.clientLogger.logMessage("Operation '" + "text/didOpen" +
@@ -229,10 +234,10 @@ public class SouffleTextDocumentService implements TextDocumentService {
         renameProvider.getRename(params);
         System.err.println("rename end ");
 
-        TestCompletion testCompletion = new TestCompletion();
-        testCompletion.testCompletions(params);
-
-        System.err.println("completion end ");
+//        TestCompletion testCompletion = new TestCompletion();
+//        testCompletion.testCompletions(params);
+//
+//        System.err.println("completion end ");
 
         return CompletableFuture.supplyAsync(() -> referenceProvider.getReferences(params));
 
