@@ -1,0 +1,669 @@
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Text <: symbol
+
+.decl food(name:Text, carbs:number, fat:number, protein:number, per:number, measure:Text)
+.input food()
+
+.decl recipe(index: number, name:Text, amount: number, measure: Text)
+.input recipe()
+
+.decl max_index(result:number)
+.output max_index()
+
+max_index(a) :-  a = max a : recipe(a,_,_,_) .
+
+.decl totals(name:Text, amount:number, carbs:number, fat:number, protein:number, cal:number)
+.output totals()
+
+totals(name, amount, amount*a/per, amount*b/per, amount*c/per, ((4*amount*a/per)+(9*amount*b/per)+(4*amount*c/per))) :- recipe(_, name, amount, _), food(name, a,b,c,per,_).
+
+
+.decl calories(result:number)
+.output calories()
+
+calories(result) :- result = sum a : totals(_,_,_,_,_,a).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\longest_path\longest_path.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Finds the length of the path that visits the most nodes without overlapping itself
+
+.type node <: symbol
+
+.decl edge(x : node, y : node)
+.input edge()
+
+// Find all paths between all nodes
+.decl length(x : node, y : node, l : number)
+length(x,y,l) :- l = 2, edge(x, y).
+length(x,y,l+1) :- edge(x, z), length(z, y, l).
+
+// Find the start and end of the path with the most nodes visited
+.decl longest_path(x : node, y : node, l : number)
+.output longest_path()
+longest_path(y, x, l) :- l = max m : length(x, y, m).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\longest_path\longest_path.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\minesweeper\grid.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Grid
+// Simple grid data structure.
+
+// The default or NULL value for an element of the array.
+.decl default(null:number)
+.input default()
+
+// The parameters to the grid, including its number of rows and columns.
+.decl parameters(rows:number, columns:number)
+.input parameters()
+
+// The values of the elements in the grid, specified by row and column index. Note that any unspecified elements will take the default value.
+.decl values(row:number, column:number, value:number)
+.input values()
+
+// The row and column indices of the grid, used as a background set to ground the row and column parameter of elements.
+.decl indices(row:number, column:number)
+.output indices()
+indices(0, 0).
+indices(i+1, j) :- indices(i, j), parameters(I, J), i >= 0, i+1 < I, j >= 0, j < J.
+indices(i, j+1) :- indices(i, j), parameters(I, J), i >= 0, i < I, j >= 0, j+1 < J.
+
+// The elements of the grid, referenced by a row and column index, and having a specified value. Note that if a value is not specified an element takes the default value.
+.decl element(row:number, column:number, value:number)
+.output element()
+element(i, j, 0) :- indices(i, j), !values(i, j, _).
+element(i, j, x) :- indices(i, j), values(i, j, x).
+
+// The value of the element above the element specified by the index, or the default value if it is out of the grid bounds.
+.decl up(row:number, column:number, value:number)
+up(i, j, NULL) :- element(i, j, _), !element(i-1, j, _), default(NULL).
+up(i, j, x) :- element(i, j, _), element(i-1, j, x).
+
+// The value of the element below the element specified by the index, or the default value if it is out of the grid bounds.
+.decl down(row:number, column:number, value:number)
+down(i, j, NULL) :- element(i, j, _), !element(i+1, j, _), default(NULL).
+down(i, j, x) :- element(i, j, _), element(i+1, j, x).
+
+// The value of the element to the left of the element specified by the index, or the default value if it is out of the grid bounds.
+.decl left(row:number, column:number, value:number)
+left(i, j, NULL) :- element(i, j, _), !element(i, j-1, _), default(NULL).
+left(i, j, x) :- element(i, j, _), element(i, j-1, x).
+
+// The value of the element to the right of the element specified by the index, or the default value if it is out of the grid bounds.
+.decl right(row:number, column:number, value:number)
+right(i, j, NULL) :- element(i, j, _), !element(i, j+1, _), default(NULL).
+right(i, j, x) :- element(i, j, _), element(i, j+1, x).
+
+// The value of the element diagonally above and left of the element specified by the index, or the default value if it is out of the grid bounds.
+.decl up_left(row:number, column:number, value:number)
+up_left(i, j, NULL) :- element(i, j, _), !element(i-1, j-1, _), default(NULL).
+up_left(i, j, x) :- element(i, j, _), element(i-1, j-1, x).
+
+// The value of the element diagonally above and right of the element specified by the index, or the default value if it is out of the grid bounds.
+.decl up_right(row:number, column:number, value:number)
+up_right(i, j, NULL) :- element(i, j, _), !element(i-1, j+1, _), default(NULL).
+up_right(i, j, x) :- element(i, j, _), element(i-1, j+1, x).
+
+// The value of the element diagonally below and left of the element specified by the index, or the default value if it is out of the grid bounds.
+.decl down_left(row:number, column:number, value:number)
+down_left(i, j, NULL) :- element(i, j, _), !element(i+1, j-1, _), default(NULL).
+down_left(i, j, x) :- element(i, j, _), element(i+1, j-1, x).
+
+// The value of the element diagonally below and right of the element specified by the index, or the default value if it is out of the grid bounds.
+.decl down_right(row:number, column:number, value:number)
+down_right(i, j, NULL) :- element(i, j, _), !element(i+1, j+1, _), default(NULL).
+down_right(i, j, x) :- element(i, j, _), element(i+1, j+1, x).
+
+// The local neighbourhood of a specified element, giving the value of that element, and the elements surrounding it.
+.decl neighbourhood(row:number, column:number,
+  up_left:number, up:number, up_right:number,
+  left:number, current:number, right:number,
+  down_left:number, down:number, down_right:number)
+.output neighbourhood()
+neighbourhood(i, j, ul, u, ur, l, x, r, dl, d, dr) :-
+ up_left(i, j, ul), up(i, j, u), up_right(i, j, ur),
+ left(i, j, l), element(i, j, x), right(i, j, r),
+ down_left(i, j, dl), down(i, j, d), down_right(i, j, dr).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\minesweeper\grid.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\graph\graph.dl ====
+//// Test Case adopted from Ocaml datalog
+
+.decl reachable  (node1:number, node2:number)
+.output reachable  ()
+.decl increasing (node1:number, node2:number)
+.output increasing ()
+.decl edge       (node1:number, node2:number)
+
+reachable(X,Y)  :- edge(X,Y).
+reachable(X,Y)  :- edge(X,Z), reachable(Z,Y).
+increasing(X,Y) :- edge(X,Y), X < Y.
+increasing(X,Y) :- edge(X,Z), X < Z, increasing(Z,Y).
+
+edge(0, 1).
+edge(1, 2).
+edge(2, 3).
+edge(3, 4).
+edge(4, 5).
+edge(5, 6).
+edge(6, 7).
+edge(7, 8).
+edge(8, 9).
+edge(9, 10).
+edge(10, 0).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\graph\graph.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Compute the factorial function.
+
+// fact(i, n) holds iff i! = n
+.decl fact(i:number, n:number)
+.output fact()
+
+// Calculate only up to the lowest value satisfying lim(n)
+.decl lim(n:number)
+.input lim()
+
+fact(I+1, N*(I+1)) :- fact(I, N), !lim(I).
+
+// Ground Fact: 0! := 1
+fact(0, 1).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\tree\tree.dl ====
+
+.type Node <: symbol
+
+.decl S      (node1:Node, node2:Node)
+.output S      ()
+.decl T      (node1:Node, node2:Node)
+.output T      ()
+.decl R      (node1:Node, node2:Node, node3:Node)
+
+S (x1, x3) :- T(x1, x2), R(x2, _, x3).
+T (x1, x4) :- R(x1, _, x2), R(x2, _, x3), T(x3, x4).
+T (x1, x3) :- R(x1, a, x2), R(x2, a, x3).
+
+
+R("1", "a", "2").
+R("2", "b", "3").
+R("3", "a", "4").
+R("4", "a", "5").
+R("5", "a", "6").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\tree\tree.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\speed\speed.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.decl CurrentNode(DistanceToSink:number, deadline:number)
+
+CurrentNode(20,10).
+.output CurrentNode()
+
+
+.decl NeighborNode(DistanceToSink:number,DelayToNeighbor:number, id:symbol)
+
+NeighborNode(8,1,"a").
+NeighborNode(7,8,"b").
+NeighborNode(11,10,"c").
+NeighborNode(4,2,"d").
+.output NeighborNode()
+
+
+
+.decl CandidateNode(DistanceToNeighbor:number,DelayToNeighbor:number, id:symbol)
+CandidateNode(distance1-distance,delay,id) :-
+	NeighborNode(distance,delay,id),  CurrentNode(distance1,deadline), distance<distance1, ((distance1-distance)/delay)>=(distance1/deadline).
+.output CandidateNode()
+
+
+
+.decl NextHop(id:symbol, speed:number)
+NextHop(id,speed) :-
+	CandidateNode(distance1,delay1,id), speed = max (distance/delay) : CandidateNode(distance,delay,_), speed=distance1/delay1.
+.output NextHop()
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\speed\speed.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Topological Ordering
+
+// Gives a topological ordering over the vertices of an input graph. Note that is works only on input graph is acyclic.
+
+// Graph
+
+// Vertices
+.decl vertices(v:symbol)
+.input vertices()
+.decl vertex(v:symbol)
+.output vertex()
+vertex(v) :- vertices(v).
+
+// Edges
+.decl edges(v1:symbol, v2:symbol)
+.input edges()
+.decl edge(v1:symbol, v2:symbol)
+.output edge()
+edge(v1, v2) :- vertex(v1), vertex(v2), edges(v1, v2).
+
+// Tests if vertex v1 proceeds vertex v2 in the ordering.
+.decl is_before(v1:symbol, v2:symbol)
+.output is_before()
+
+// Tests if vertex v1 succeeds vertex v2 in the ordering.
+.decl is_after(v1:symbol, v2:symbol)
+.output is_after()
+
+// Gives the possible indices of the vertices in the ordering.
+.decl indices(v:symbol, i:number)
+.output indices()
+
+// Gives the exact index of the vertex in the ordering.
+.decl index(v:symbol, i:number)
+.output index()
+
+// Vertex x is before vertex y if the graph has an edge from x to y.
+is_before(x, y) :-
+    edge(x, y).
+
+// Vertex x is before vertex y if some vertex z is before x and z is before y.
+is_before(x, y) :-
+    is_before(x, z),
+    is_before(z, y).
+
+// Vertex x is after vertex y if the graph has an edge from y to x.
+is_after(x, y) :-
+    edge(y, x).
+
+// Vertex x is after vertex y if some vertex z is after x and y is after z.
+is_after(x, y) :-
+    is_after(z, x),
+    is_after(y, z).
+
+// The index of a vertex x is 0 if it has no inbound or outbound edges.
+indices(x, 0) :-
+    vertex(x),
+    !edge(_, x),
+    !edge(x, _).
+
+// The index of a vertex x is 1 if it has no inbound but only outbound edges.
+indices(x, 1) :-
+    vertex(x),
+    !edge(_, x),
+    edge(x, _).
+
+// The possible indices of a vertex x are 1 more than the index of some vertex y if that vertex y is before x but not after x.
+indices(x, i+1) :-
+    is_before(y, x),
+    !is_before(x, y),
+    is_after(x, y),
+    indices(y, i).
+
+// The exact index of a vertex is the maximum of its possible indices.
+index(x, i) :-
+    indices(x, i),
+    !indices(x, i+1).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\family\family.dl ====
+
+.type Node <: symbol
+
+.decl father      (node1:Node, node2:Node)
+.decl mother      (node1:Node, node2:Node)
+.decl parent      (node1:Node, node2:Node)
+.output parent      ()
+.decl ancestor    (node1:Node, node2:Node)
+.output ancestor    ()
+.decl grandmother (node1:Node, node2:Node)
+.output grandmother ()
+.decl sibling      (node1:Node, node2:Node)
+.output sibling      ()
+.decl cousin       (node1:Node, node2:Node)
+.output cousin       ()
+.decl relative       (node1:Node, node2:Node)
+.output relative       ()
+
+parent(X,Y) :- father(X,Y).
+parent(X,Y) :- mother(X,Y).
+
+ancestor(X,Y) :- parent(X,Y).
+ancestor(X,Y) :- parent(X,Z), ancestor(Z,Y).
+
+grandmother(X,Y) :- mother(X,Z), ancestor(Z,Y).
+
+sibling(X,Y) :- parent(Z,X), parent(Z,Y), X != Y.
+
+cousin(X,Y) :- ancestor(Z,X), ancestor(Z,Y), X != Y, !sibling(X,Y), !parent(X,Y).
+
+relative(X,Y) :- sibling(X,Z),parent(Z,Y).
+
+father("tom","amy").
+father("tom","adam").
+father("jack","fred").
+father("tony","carolII").
+father("fred","carolIII").
+mother("graceI","amy").
+mother("amy","fred").
+mother("carolI","carolII").
+mother("carolII","carolIII").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\family\family.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2018, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+//
+// profile_json.dl
+//
+// Example for logging in json format.
+//
+
+// The '.json' extension here is recognised, and so logging will be
+// produced in JSON format.
+.pragma "profile" "profile_json.json"
+
+.decl p(x:number, y:number)
+.input p
+
+.decl q(x:number, y:number)
+.output q
+
+q(x, y) :- p(x, y).
+q(x, z) :- p(x, y), q(y, z).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\tak\tak.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// The Takeuchi benchmark function.
+// Each tak(n, 0, n+1) requires T(n) recursive calls, which sequence this program generates.
+
+
+/* X, Y, Z : Parameters of the tak function;
+ * V       : The value of tak(X, Y, Z);
+ * Q       : The number of branches used in evaluating V */
+.decl tak(X:number, Y:number, Z:number, V:number, Q:number)
+
+tak(X,Y,Z,Y,0) :- Y >= X, natural(X), natural(Y), natural(Z).
+tak(X,Y,Z,V,Q1+Q2+Q3+Q4+1) :- tak(X-1,Y,Z,V1,Q1), tak(Y-1,Z,X,V2,Q2), tak(Z-1,X,Y,V3,Q3),
+                              tak(V1,V2,V3,V,Q4), Y < X.
+
+
+/* Restrict the range in which tak is evaluated. */
+.decl natural(N:number)
+
+natural(-8).
+natural(n+1) :- natural(n), n < 8.
+
+
+/* N : index
+ * Q : the value of the N'th Takeuchi number. */
+.decl query(N: number, Q:number)
+.output query()
+
+query(N, Q) :- tak(N, 0, N+1, _, Q), N >= 0, N < 10.
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\tak\tak.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\paths\paths.dl ====
+// Adopted from DES
+// Paths in a Graph
+//
+// Datalog Formulation
+
+.type Node <: symbol
+
+.decl path   (node1:Node, node2:Node)
+.output path   ()
+.decl edge   (node1:Node, node2:Node)
+.output edge   ()
+
+edge("a","b").
+edge("a","c").
+edge("b","a").
+edge("b","d").
+
+path(X,Y) :- path(X,Z), edge(Z,Y).
+path(X,Y) :- edge(X,Y).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\paths\paths.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\linksum\linksum.dl ====
+//
+// Compute the sum of a graph
+//
+
+.decl Edge      (x:number, y:number, z:number)
+.decl Linksum      (x:number, y:number, z:number)
+.output Linksum      ()
+.decl A (x:number, y:number, z:number)
+.decl R (x:number, y:number)
+
+Linksum(X,Y,N) :- Edge(X,Y,N).
+Linksum(X,Y,R) :- Edge(X,Z,N), Linksum(Z,Y,M), A(M, N, R).
+
+A(X,Y,X+Y) :- R(X,Y).
+
+Edge(1,2,1).
+Edge(1,3,1).
+Edge(2,6,1).
+Edge(2,4,1).
+Edge(4,2,1).
+Edge(3,5,1).
+Edge(3,4,1).
+Edge(5,6,1).
+
+R(0,0).
+R(1,0).
+R(1,1).
+R(2,0).
+R(2,1).
+R(2,2).
+R(0,3).
+R(1,3).
+R(3,2).
+R(3,3).
+R(0,4).
+R(4,1).
+R(2,4).
+R(3,4).
+R(4,4).
+R(0,5).
+R(1,5).
+R(2,5).
+R(3,5).
+R(4,5).
+R(5,5).
+R(5,0).
+R(5,1).
+R(5,2).
+R(5,3).
+R(5,4).
+R(5,5).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\linksum\linksum.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type State <: number
+.type Letter <: symbol
+
+.decl Q				(q:State)
+.decl Init			(q:State)
+.decl Final			(q:State)
+.decl Tr			(q:State, a:Letter, r:State)
+
+.input Final
+.input Tr
+
+Init(0).
+
+Q(q) :- Tr(q, _, _).
+
+.decl Dis			(q:State, r:State)
+
+Dis(q, r) :- Q(q), Q(r), Final(q), !Final(r).
+Dis(q, r) :- Tr(q, a, s), Tr(r, a, t), Dis(s, t).
+Dis(q, r) :- Dis(r, q).
+
+.decl Equiv		(q:State, r:State)
+
+Equiv(q, r) :- Q(q), Q(r), !Dis(q, r).
+
+.decl NotMinEquiv	(q:State, r:State)
+.decl MinEquiv		(q:State, r:State)
+
+NotMinEquiv(q, r) :- Equiv(q, r), Equiv(q, s), s < r.
+MinEquiv(q, r) :- Equiv(q, r), !NotMinEquiv(q, r).
+
+.output MinEquiv
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\paths\paths.dl ====
+// Adopted from DES
+// Paths in a Graph
+//
+// Datalog Formulation
+
+.type Node <: symbol
+
+.decl path   (node1:Node, node2:Node)
+.output path   ()
+.decl edge   (node1:Node, node2:Node)
+.output edge   ()
+
+edge("a","b").
+edge("a","c").
+edge("b","a").
+edge("b","d").
+
+path(X,Y) :- path(X,Z), edge(Z,Y).
+path(X,Y) :- edge(X,Y).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\paths\paths.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po2\po2.dl ====
+.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
+.input Check()
+.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
+.input In()
+.decl A(l:number, o:number)
+.output A()
+
+A(1,i) :- Check(_, b, c, d, e, _), In(_, b, c, d, e, _, i).
+A(2,i) :- Check(a, _, c, d, e, _), In(a, _, c, d, e, _, i).
+A(3,i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
+A(4,i) :- Check(_, _, c, d, _, _), In(_, _, c, d, _, _, i).
+A(5,i) :- Check(a, _, _, _, _, f), In(a, _, _, _, _, f, i).
+A(6,i) :- Check(_, b, c, d, _, f), In(_, b, c, d, _, f, i).
+A(7, i) :- Check(_, b, c, _, e, f), In(_, b, c, _, e, f, i).
+A(8, i) :- Check(_, b, _, d, e, f), In(_, b, _, d, e, f, i).
+A(9, i) :- Check(_, _, c, d, e, f), In(_, _, c, d, e, f, i).
+A(10, i) :- Check(_, b, c, d, _, _), In(_, b, c, d, _, _, i).
+A(11, i) :- Check(_, b, c, _, _, f), In(_, b, c, _, _, f, i).
+A(12, i) :- Check(_, b, _, _, e, f), In(_, b, _, _, e, f, i).
+A(13, i) :- Check(_, _, _, d, e, f), In(_, _, _, d, e, f, i).
+A(14, i) :- Check(_, b, c, _, _, _), In(_, b, c, _, _, _, i).
+A(15, i) :- Check(_, b, _, _, _, f), In(_, b, _, _, _, f, i).
+A(16, i) :- Check(_, _, _, _, e, f), In(_, _, _, _, e, f, i).
+A(17, i) :- Check(_, b, c, d, e, f), In(_, b, c, d, e, f, i).
+A(18, i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\po2\po2.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Text <: symbol
+
+.decl food(name:Text, carbs:number, fat:number, protein:number, per:number, measure:Text)
+.input food()
+
+.decl recipe(index: number, name:Text, amount: number, measure: Text)
+.input recipe()
+
+.decl max_index(result:number)
+.output max_index()
+
+max_index(a) :-  a = max a : recipe(a,_,_,_) .
+
+.decl totals(name:Text, amount:number, carbs:number, fat:number, protein:number, cal:number)
+.output totals()
+
+totals(name, amount, amount*a/per, amount*b/per, amount*c/per, ((4*amount*a/per)+(9*amount*b/per)+(4*amount*c/per))) :- recipe(_, name, amount, _), food(name, a,b,c,per,_).
+
+
+.decl calories(result:number)
+.output calories()
+
+calories(result) :- result = sum a : totals(_,_,_,_,_,a).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+

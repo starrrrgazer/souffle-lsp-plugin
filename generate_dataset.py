@@ -69,7 +69,12 @@ def generate_combined_files(documents, output_folder, metric, target_values):
             combined_docs.append(doc)
             total_value += val
 
-        output_path = os.path.join(output_folder, f"{metric}_combined_{target}.dl")
+        # 新增：为每个 target 建立单独的文件夹
+        file_name = f"{metric}_combined_{target}.dl"
+        file_folder = os.path.join(output_folder, file_name.replace(".dl", ""))
+        os.makedirs(file_folder, exist_ok=True)
+
+        output_path = os.path.join(file_folder, file_name)
         with open(output_path, "w", encoding="utf-8") as out:
             for d in combined_docs:
                 if os.path.exists(d['document']):
@@ -96,6 +101,7 @@ def generate_combined_files(documents, output_folder, metric, target_values):
         print(f"[{metric}] Generated {output_path} with {metric} ~ {total_value}")
 
     return summary
+
 
 
 def save_summary_to_csv(summary, output_csv):

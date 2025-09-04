@@ -1,0 +1,476 @@
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Text <: symbol
+
+.decl food(name:Text, carbs:number, fat:number, protein:number, per:number, measure:Text)
+.input food()
+
+.decl recipe(index: number, name:Text, amount: number, measure: Text)
+.input recipe()
+
+.decl max_index(result:number)
+.output max_index()
+
+max_index(a) :-  a = max a : recipe(a,_,_,_) .
+
+.decl totals(name:Text, amount:number, carbs:number, fat:number, protein:number, cal:number)
+.output totals()
+
+totals(name, amount, amount*a/per, amount*b/per, amount*c/per, ((4*amount*a/per)+(9*amount*b/per)+(4*amount*c/per))) :- recipe(_, name, amount, _), food(name, a,b,c,per,_).
+
+
+.decl calories(result:number)
+.output calories()
+
+calories(result) :- result = sum a : totals(_,_,_,_,_,a).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.decl gen(x : number)
+gen(1).
+gen(x+1) :- gen(x), !lim(x).
+
+.decl lim(x : number)
+lim(100).
+
+//factors excluding 1
+.decl factor(num : number, fc : number)
+factor(x, fc) :- gen(x), gen(fc), x % fc = 0, fc != 1.
+
+//finds if there exist two numbers which multiply to x
+.decl prod(num : number)
+prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
+
+//finds the prime factors
+.decl p_factor(x : number, fc : number)
+.output p_factor()
+p_factor(x, fc) :- factor(x, fc), !prod(fc).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
+//// Hypothetical Queries
+//// Source: [Bonn99], extended and adapted
+//// Adopted from DES
+
+.type Node <: symbol
+
+.decl student (node1:Node)
+.output student ()
+.decl course (node1:Node)
+.output course ()
+.decl pre (node1:Node, node2:Node)
+.output pre ()
+.decl take (node1:Node, node2:Node)
+.output take ()
+.decl grad (node1:Node)
+.output grad ()
+
+student("adam").
+student("bob").
+student("pete").
+student("scott").
+student("tony").
+
+course("eng").
+course("his").
+course("lp").
+
+take("adam","eng").
+take("pete","his").
+take("pete","eng").
+take("scott","his").
+take("scott","lp").
+take("tony","his").
+
+pre("eng","lp").
+pre("hist","eng").
+
+pre(Pre,Post) :- pre(Pre,X), pre(X,Post).
+
+grad(S) :- take(S,"his"), take(S,"eng").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+//             88                                   88
+//             ""                                   ""   ,d
+//                                                       88
+//   ,adPPYba, 88 8b,dPPYba,  ,adPPYba, 88       88 88 MM88MMM
+//  a8"     "" 88 88P'   "Y8 a8"     "" 88       88 88   88
+//  8b         88 88         8b         88       88 88   88
+//  "8a,   ,aa 88 88         "8a,   ,aa "8a,   ,a88 88   88,
+//   `"Ybbd8"' 88 88          `"Ybbd8"'  `"YbbdP'Y8 88   "Y888
+//
+//                                                                   88
+//                                                                   88
+//                                                                   88
+//  8b,dPPYba,  ,adPPYba,  ,adPPYba,  ,adPPYba,  8b,dPPYba,  ,adPPYb,88
+//  88P'   "Y8 a8P_____88 a8"     "" a8"     "8a 88P'   "Y8 a8"    `Y88
+//  88         8PP""""""" 8b         8b       d8 88         8b       88
+//  88         "8b,   ,aa "8a,   ,aa "8a,   ,a8" 88         "8a,   ,d88
+//  88          `"Ybbd8"'  `"Ybbd8"'  `"YbbdP"'  88          `"8bbdP"Y8
+
+// Circuit record
+// Determine the required inputs to satisfy the outputs
+// Different from circuit_sat, which encoded wire state in integers
+// i.e. limited to 32 wires.
+// This stores them in recursive records, accessed by treating
+// the list as a sort of associative list.
+//
+
+.type Wire <: symbol
+.type Wire_state = [id : Wire, val : number]
+.type Wire_list = [head : Wire_state, tail: Wire_list]
+
+.decl in(a : Wire)
+in("a").
+in("b").
+in("c").
+
+//helpers to determine ordering in the list
+.decl less(a: Wire, b: Wire)
+less(x, y) :- in(x), in(y), ord(x) < ord(y).
+
+.decl leg(a: Wire, b: Wire)
+leg(x, z) :- less(x,y), less(y,z).
+
+//element x is before el y
+.decl succ(a: Wire, b: Wire)
+succ(x, y) :- less(x, y), !leg(x,y).
+
+//el x is first in list
+.decl first(a: Wire)
+first(a) :- in(a), !less(_,a).
+
+//el x is last
+.decl last(a:Wire)
+last(a) :- in(a), !less(a,_).
+
+//boolean states
+.decl bin(a : number)
+bin(0).
+bin(1).
+
+// generate all ordered lists (including list stubs)
+.decl gen_wire_states( wl : Wire_list)
+gen_wire_states([[x, v], nil]) :-
+	first(x),
+    bin(v).
+
+gen_wire_states( [[y, v], l]) :-
+    gen_wire_states(l),
+	succ(x, y),
+    bin(v),
+    l = [[x,xv],tail].
+
+// collect full length ordered lists (i.e. ignore stubs)
+.decl final_gen_wire_states(wl : Wire_list)
+final_gen_wire_states(l) :-
+    gen_wire_states(l),
+    l = [[x,xv],tail],
+    last(x).
+
+//extract a wire's value from the array (associative array type)
+.decl get_by_key(key : Wire, val : number, rec : Wire_list, conf: Wire_list)
+get_by_key(k, v, tail, [[a,av], tail]) :-
+	in(a), bin(av), a=k, av=v, gen_wire_states([[a,av], tail]), last(a).
+get_by_key(k, v, tail, conf) :-
+	in(k), bin(v), get_by_key(_, _, [[k, v], tail], conf).
+
+.decl required_out(ws : Wire_state)
+required_out([w, v]) :- required_out_fi(w, v).
+//which wires are required to have certain values
+.decl required_out_fi(w : Wire, v : number)
+.input required_out_fi()
+
+.decl circuit_and(result : Wire, op1 : Wire, op2 : Wire)
+.input circuit_and()
+.decl circuit_or(result : Wire, op1 : Wire, op2 : Wire)
+.input circuit_or()
+.decl circuit_not(result : Wire, op1 : Wire)
+.input circuit_not()
+
+// evaluate the wire's required value from a set of inputs
+.decl evaluate(circuit_state : Wire_list, wire_state : Wire_state)
+evaluate(cs, [k, v]) :-
+	get_by_key(k,v,  _, cs).
+evaluate(cs, [k, av band bv]) :-
+	circuit_and(k, a, b),
+	evaluate(cs, [a, av]),
+	evaluate(cs, [b, bv]).
+evaluate(cs, [k, av bor bv]) :-
+	circuit_or(k, a, b),
+	evaluate(cs, [a, av]),
+	evaluate(cs, [b, bv]).
+evaluate(cs, [k, lnot av]) :-
+	circuit_not(k, a),
+	evaluate(cs, [a, av]).
+
+.decl satisfy(conf : Wire_list, ws: Wire_state)
+satisfy(conf, [var, val]) :-
+	required_out([var, val]),
+	evaluate(conf, [var, val]).
+
+// print the required inputs to reach the configuration (turned off atm, as the souffle tester cannot handle the output of records)
+.decl sat_print(var : Wire, val : number, conf : Wire_list)
+sat_print(var, val, conf) :-
+	satisfy(conf,_), get_by_key(var, val, _, conf).
+
+// print the count of total circuits configurations mul inputs
+.decl print_states(val : number)
+.output print_states()
+print_states(val) :-
+	val = count : { sat_print(_, _, _) }.
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
+// The Lehigh University Benchmark (LUBM)
+// http://swat.cse.lehigh.edu/projects/lubm/
+// ported by Anthony Potter
+//
+// Unary relations
+.decl University (a:symbol)
+.output University ()
+.input University ()
+.decl Person (a:symbol)
+.output Person ()
+.decl Employee (a:symbol)
+.output Employee ()
+.decl Faculty (a:symbol)
+.output Faculty ()
+.decl Professor (a:symbol)
+.output Professor ()
+.decl Course (a:symbol)
+.output Course ()
+.input Course ()
+.decl AssociateProfessor (a:symbol)
+.input AssociateProfessor ()
+.decl AssistantProfessor (a:symbol)
+.input AssistantProfessor ()
+.decl Organization (a:symbol)
+.output Organization ()
+.decl Chair (a:symbol)
+.output Chair ()
+.decl Work (a:symbol)
+.output Work ()
+.decl Lecturer (a:symbol)
+.output Lecturer ()
+.input Lecturer ()
+.decl Student (a:symbol)
+.output Student ()
+.decl GraduateStudent (a:symbol)
+.input GraduateStudent ()
+.decl ResearchAssistant (a:symbol)
+.input ResearchAssistant ()
+.decl GraduateCourse (a:symbol)
+.input GraduateCourse ()
+.decl UndergraduateStudent (a:symbol)
+.input UndergraduateStudent ()
+.decl ResearchGroup (a:symbol)
+.output ResearchGroup ()
+.input ResearchGroup ()
+.decl Publication (a:symbol)
+.output Publication ()
+.input Publication ()
+.decl TeachingAssistant (a:symbol)
+.output TeachingAssistant ()
+.input TeachingAssistant ()
+.decl FullProfessor (a:symbol)
+.input FullProfessor ()
+.decl Department (a:symbol)
+.input Department ()
+
+// Binary relations
+.decl hasAlumnus (a:symbol, b:symbol)
+.output hasAlumnus ()
+.decl degreeFrom (a:symbol, b:symbol)
+.output degreeFrom ()
+.decl member (a:symbol, b:symbol)
+.output member ()
+.decl teachingAssistantOf (a:symbol, b:symbol)
+.input teachingAssistantOf ()
+.decl headOf (a:symbol, b:symbol)
+.input headOf ()
+.decl teacherOf (a:symbol, b:symbol)
+.input teacherOf ()
+.decl publicationAuthor (a:symbol, b:symbol)
+.input publicationAuthor ()
+.decl doctoralDegreeFrom (a:symbol, b:symbol)
+.input doctoralDegreeFrom ()
+.decl undergraduateDegreeFrom (a:symbol, b:symbol)
+.input undergraduateDegreeFrom ()
+.decl mastersDegreeFrom (a:symbol, b:symbol)
+.input mastersDegreeFrom ()
+.decl subOrganizationOf (a:symbol, b:symbol)
+.output subOrganizationOf ()
+.input subOrganizationOf ()
+.decl takesCourse (a:symbol, b:symbol)
+.input takesCourse ()
+.decl worksFor (a:symbol, b:symbol)
+.output worksFor ()
+.input worksFor ()
+.decl memberOf (a:symbol, b:symbol)
+.output memberOf ()
+.input memberOf ()
+.decl advisor (a:symbol, b:symbol)
+.input advisor ()
+.decl emailAddress (a:symbol, b:symbol)
+.input emailAddress ()
+.decl telephone (a:symbol, b:symbol)
+.input telephone ()
+.decl name (a:symbol, b:symbol)
+.input name ()
+.decl researchInterest (a:symbol, b:symbol)
+.input researchInterest ()
+
+// Ontology
+University(Y) :- mastersDegreeFrom(_,Y) .
+degreeFrom(X,Y) :- hasAlumnus(Y,X) .
+hasAlumnus(X,Y) :- degreeFrom(Y,X) .
+Employee(X) :- Faculty(X) .
+Faculty(X) :- Professor(X) .
+Professor(X) :- AssociateProfessor(X) .
+Person(Y) :- member(_,Y) .
+Professor(X) :- AssistantProfessor(X) .
+Professor(X) :- Chair(X) .
+worksFor(X,Y) :- headOf(X,Y) .
+Person(X) :- degreeFrom(X,_) .
+University(Y) :- degreeFrom(_,Y) .
+Person(Y) :- hasAlumnus(_,Y) .
+TeachingAssistant(X) :- Person(X), teachingAssistantOf(X,Y), Course(Y) .
+Chair(X) :- Person(X), headOf(X,Y), Department(Y) .
+memberOf(X,Y) :- member(Y,X) .
+member(X,Y) :- memberOf(Y,X) .
+Course(Y) :- teacherOf(_,Y) .
+University(X) :- hasAlumnus(X,_) .
+Person(X) :- telephone(X,_) .
+Organization(Y) :- subOrganizationOf(_,Y) .
+memberOf(X,Y) :- worksFor(X,Y) .
+Person(X) :- Employee(X) .
+Person(X) :- advisor(X,_) .
+Organization(X) :- member(X,_) .
+Organization(X) :- Department(X) .
+Faculty(X) :- Lecturer(X) .
+Person(Y) :- publicationAuthor(_,Y) .
+Professor(Y) :- advisor(_,Y) .
+Work(X) :- Course(X) .
+Professor(X) :- FullProfessor(X) .
+degreeFrom(X,Y) :- doctoralDegreeFrom(X,Y) .
+TeachingAssistant(X) :- teachingAssistantOf(X,_) .
+Person(X) :- undergraduateDegreeFrom(X,_) .
+Organization(X) :- University(X) .
+Person(X) :- doctoralDegreeFrom(X,_) .
+University(Y) :- doctoralDegreeFrom(_,Y) .
+Course(Y) :- teachingAssistantOf(_,Y) .
+University(Y) :- undergraduateDegreeFrom(_,Y) .
+degreeFrom(X,Y) :- mastersDegreeFrom(X,Y) .
+Person(X) :- GraduateStudent(X) .
+Person(X) :- ResearchAssistant(X) .
+Student(X) :- UndergraduateStudent(X) .
+degreeFrom(X,Y) :- undergraduateDegreeFrom(X,Y) .
+Publication(X) :- publicationAuthor(X,_) .
+Person(X) :- mastersDegreeFrom(X,_) .
+Organization(X) :- ResearchGroup(X) .
+Faculty(X) :- teacherOf(X,_) .
+Person(X) :- Chair(X) .
+Employee(X) :- Person(X), worksFor(X,Y), Organization(Y) .
+Course(X) :- GraduateCourse(X) .
+Student(X) :- Person(X), takesCourse(X,Y), Course(Y) .
+Person(X) :- TeachingAssistant(X) .
+Organization(X) :- subOrganizationOf(X,_) .
+Person(X) :- Student(X) .
+Person(X) :- emailAddress(X,_) .
+subOrganizationOf(X,Z) :- subOrganizationOf(X,Y), subOrganizationOf(Y,Z) .
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
+
+// some subsets
+.decl A( x : number )
+.decl B( x : number )
+.decl C( x : number )
+.decl D( x : number )
+.decl E( x : number )
+
+
+// A
+A(0).
+
+// B
+B(1).
+B(2).
+B(3).
+
+// C
+C(4).
+C(5).
+C(6).
+
+// D
+D(3).
+D(4).
+
+// E
+E(6).
+E(7).
+
+// the universe
+.decl U( x : number )
+.output U()
+U(X) :- A(X) ; B(X) ; C(X) ; D(X); E(X) .
+
+// an empty set
+.decl N( x : number )
+.output N()
+N(X) :- A(X), B(X).
+
+
+.decl R1( x : number )
+.output R1()
+R1(X) :- A(X) ; B(X) , D(X) .
+
+.decl R2( x : number )
+.output R2()
+R2(X) :- U(X) , !( B(X) ; D(X) ) .
+
+.decl R3( x : number )
+.output R3()
+R3(X) :- U(X) , !( B(X) , D(X) ) .
+
+.decl R4( x : number )
+.output R4()
+R4(X) :- U(X) , !( B(X) ; D(X) ) .
+
+.decl R5( x : number )
+.output R5()
+R5(X) :- U(X) , !!!( B(X) ; D(X) ) .
+
+.decl R6( x : number )
+.output R6()
+R6(X) :- (!B(X) ; D(X)) , U(X) .
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
+

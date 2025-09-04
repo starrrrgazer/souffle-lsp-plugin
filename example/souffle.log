@@ -950,3 +950,103 @@
 信息: DEF: 4 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
 9月 02, 2025 11:30:58 上午 SouffleTextDocumentService countDEFAndOCC
 信息: OCC: 27 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:06 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 12 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:06 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 416 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:06 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 4 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:06 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 27 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:13 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:13 上午 ReferenceProvider getSearchTime
+信息: search: 4 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:13 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:13 上午 RenameProvider getRename
+信息: rename: 7 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:13 上午 TestCompletion testCompletions
+信息: completion: 3 document: d:/work24/souffle-lsp-plugin/example/catalan/catalan.dl
+9月 03, 2025 10:17:18 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 12 document: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl
+9月 03, 2025 10:17:18 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 379 document: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl
+9月 03, 2025 10:17:18 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 5 document: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl
+9月 03, 2025 10:17:18 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 28 document: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl
+9月 03, 2025 10:17:26 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 12 document: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl
+9月 03, 2025 10:17:26 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 376 document: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl
+9月 03, 2025 10:17:26 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 5 document: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl
+9月 03, 2025 10:17:26 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 28 document: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl
+9月 03, 2025 10:17:35 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 54 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 10:17:35 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 1413 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 10:17:35 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 13 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 10:17:35 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 97 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:28 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 20 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:29 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 549 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:29 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 10 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:29 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 42 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:36 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:36 上午 ReferenceProvider getSearchTime
+信息: search: 3 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:36 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:36 上午 RenameProvider getRename
+信息: rename: 9 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:36 上午 TestCompletion testCompletions
+信息: completion: 3 document: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl
+9月 03, 2025 11:27:43 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 54 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:43 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 1413 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:43 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 13 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:43 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 97 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:46 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:46 上午 ReferenceProvider getSearchTime
+信息: search: 1 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:46 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:46 上午 RenameProvider getRename
+信息: rename: 3 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:46 上午 TestCompletion testCompletions
+信息: completion: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:27:50 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 55 document: d:/work24/souffle-lsp-plugin/example/magic_access-policy/magic_access-policy.dl
+9月 03, 2025 11:27:50 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 1418 document: d:/work24/souffle-lsp-plugin/example/magic_access-policy/magic_access-policy.dl
+9月 03, 2025 11:27:50 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 13 document: d:/work24/souffle-lsp-plugin/example/magic_access-policy/magic_access-policy.dl
+9月 03, 2025 11:27:50 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 97 document: d:/work24/souffle-lsp-plugin/example/magic_access-policy/magic_access-policy.dl
+9月 03, 2025 11:28:01 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:28:10 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:28:23 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:28:23 上午 ReferenceProvider getSearchTime
+信息: search: 1 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:28:23 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:28:23 上午 RenameProvider getRename
+信息: rename: 2 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl
+9月 03, 2025 11:28:23 上午 TestCompletion testCompletions
+信息: completion: 0 document: d:/work24/souffle-lsp-plugin/example/access-policy/access-policy.dl

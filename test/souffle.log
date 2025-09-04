@@ -6,3 +6,11 @@
 信息: DEF: 79 document: d:/work24/souffle-lsp-plugin/test/DEF_combined_100.dl
 9月 02, 2025 5:16:28 下午 SouffleTextDocumentService countDEFAndOCC
 信息: OCC: 554 document: d:/work24/souffle-lsp-plugin/test/DEF_combined_100.dl
+9月 03, 2025 8:43:30 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 297 document: d:/work24/souffle-lsp-plugin/test/DEF_combined_100.dl
+9月 03, 2025 8:43:30 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 7852 document: d:/work24/souffle-lsp-plugin/test/DEF_combined_100.dl
+9月 03, 2025 8:43:30 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 79 document: d:/work24/souffle-lsp-plugin/test/DEF_combined_100.dl
+9月 03, 2025 8:43:30 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 554 document: d:/work24/souffle-lsp-plugin/test/DEF_combined_100.dl

@@ -1,0 +1,818 @@
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\comp-parametrized\comp-parametrized.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+
+.comp CallGraph {
+    .decl CallGraphEdge(caller: number, callee: number)
+.output CallGraphEdge()
+    .decl Node(n: number)
+    Node(1).
+    Node(n + 1) :- Node(n), n < 10.
+}
+
+.comp CHACallGraph : CallGraph {
+    CallGraphEdge(x, y + 1) :- Node(x), Node(y+1), x = y.
+    CallGraphEdge(x + 1, y) :- Node(x+1), Node(y), x = y, x < 5.
+}
+
+.comp CICallGraph : CallGraph {
+    CallGraphEdge(1,4).
+}
+
+.comp Main<CallGraphFlavour> {
+    .init cg = CallGraphFlavour
+
+    .decl NoWayBack(x: number, y: number)
+.output NoWayBack()
+    NoWayBack(x, y) :-
+        cg.Node(x), cg.Node(y),
+        cg.CallGraphEdge(x, y), !cg.CallGraphEdge(y, x).
+}
+
+.init cha_main = Main<CHACallGraph>
+.init ci_main = Main<CICallGraph>
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\comp-parametrized\comp-parametrized.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
+
+// some subsets
+.decl A( x : number )
+.decl B( x : number )
+.decl C( x : number )
+.decl D( x : number )
+.decl E( x : number )
+
+
+// A
+A(0).
+
+// B
+B(1).
+B(2).
+B(3).
+
+// C
+C(4).
+C(5).
+C(6).
+
+// D
+D(3).
+D(4).
+
+// E
+E(6).
+E(7).
+
+// the universe
+.decl U( x : number )
+.output U()
+U(X) :- A(X) ; B(X) ; C(X) ; D(X); E(X) .
+
+// an empty set
+.decl N( x : number )
+.output N()
+N(X) :- A(X), B(X).
+
+
+.decl R1( x : number )
+.output R1()
+R1(X) :- A(X) ; B(X) , D(X) .
+
+.decl R2( x : number )
+.output R2()
+R2(X) :- U(X) , !( B(X) ; D(X) ) .
+
+.decl R3( x : number )
+.output R3()
+R3(X) :- U(X) , !( B(X) , D(X) ) .
+
+.decl R4( x : number )
+.output R4()
+R4(X) :- U(X) , !( B(X) ; D(X) ) .
+
+.decl R5( x : number )
+.output R5()
+R5(X) :- U(X) , !!!( B(X) ; D(X) ) .
+
+.decl R6( x : number )
+.output R6()
+R6(X) :- (!B(X) ; D(X)) , U(X) .
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\highest_degree\highest_degree.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find the highest in and out degree nodes in the graph
+.type Node <: symbol
+
+.decl Edge(n:Node, m:Node, w:number)
+.input Edge()
+
+.decl OutDegree(n:Node, l:number)
+OutDegree(x, l) :- Edge(x, _, _), l = sum 1 : Edge(x, _, _).
+
+.decl InDegree(n:Node, l:number)
+InDegree(x, l) :- Edge(_, x, _), l = sum 1 : Edge(_, x, _).
+
+.decl HighestOutDegree(d:number)
+.output HighestOutDegree()
+HighestOutDegree(d) :- OutDegree(_, _), d = max D : OutDegree(_, D).
+
+.decl HighestInDegree(d:number)
+.output HighestInDegree()
+HighestInDegree(d) :- InDegree(_, _), d = max D : InDegree(_, D).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\highest_degree\highest_degree.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find pairs of amicable numbers up to a limit
+// A pair of numbers are amicable if the sum of their factors add up to each other
+
+// Build search range
+.decl num(x : number)
+num(1).
+num(x+1) :- num(x), x < l, lim(l).
+
+// Search limit
+.decl lim(n : number)
+.input lim
+
+// Find factors of x excluding itself
+.decl factor(x : number, f : number)
+factor(x, f) :- num(x), num(f), f <= x / 2, x % f = 0.
+
+// Compute the sum of all the factors of x
+.decl factor_sum(x : number, fs : number)
+factor_sum(x, f) :- num(x), f = sum i : factor(x, i).
+
+// Find pairs of numbers whose factors add up to each other
+.decl amicable(a : number, b : number)
+.output amicable()
+amicable(a, b) :- factor_sum(a, b), factor_sum(b, a), a < b.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\amicable\amicable.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Test Case adopted from Ocaml datalog
+
+.type Node <: symbol
+
+.decl reachable (node1:Node, node2:Node)
+.output reachable ()
+.decl same_clique (node1:Node, node2:Node)
+.output same_clique ()
+.decl edge (node1:Node, node2:Node)
+.output edge ()
+.decl leg (node1:Node, node2:Node)
+.output leg ()
+
+leg(X,Z) :- edge(X,Y), edge(Y,Z).
+
+reachable(X,Y) :- edge(X,Y).
+reachable(X,Y) :- edge(X,Z), reachable(Z,Y).
+same_clique(X,Y) :- reachable(X,Y), reachable(Y,X).
+
+edge("a", "b").
+edge("b", "c").
+edge("c", "d").
+edge("d", "a").
+
+reachable("e","f").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Node <: symbol
+.type Card <: number
+
+.decl Edge			(m:Node, n:Node)
+.input Edge
+
+Edge(m, n) :- Edge(n, m).
+
+.decl Leaf			(n:Node)
+.decl NotLeaf		(n:Node)
+
+NotLeaf(n) :- Edge(a, n), Edge(b, n), a != b.
+Leaf(n) :- Edge(_, n), !NotLeaf(n).
+
+.decl InSubtree		(m:Node, n:Node, a:Node)
+
+InSubtree(m, n, n) :- Edge(m, n).
+InSubtree(m, n, a) :- Edge(m, n), Edge(n, p), InSubtree(n, p, a), m != p.
+
+.decl TreeCard		(c:Card)
+.decl SubtreeCard	(m:Node, n:Node, c:Card)
+
+TreeCard(a + b) :- a = sum 1 : Leaf(_), b = sum 1 : NotLeaf(_).
+
+SubtreeCard(m, n, c) :- Edge(m, n), c = sum 1 : InSubtree(m, n, _).
+
+.decl Centroid		(n:Node)
+.decl NotCentroid	(n:Node)
+
+NotCentroid(n) :- TreeCard(c), SubtreeCard(n, _, d), d > c/2.
+Centroid(n) :- Edge(n, _), !NotCentroid(n).
+
+.output Centroid
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2018, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+//
+// profile_json.dl
+//
+// Example for logging in json format.
+//
+
+// The '.json' extension here is recognised, and so logging will be
+// produced in JSON format.
+.pragma "profile" "profile_json.json"
+
+.decl p(x:number, y:number)
+.input p
+
+.decl q(x:number, y:number)
+.output q
+
+q(x, y) :- p(x, y).
+q(x, z) :- p(x, y), q(y, z).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\array\array.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Array
+// Simple array data structure.
+
+// The default or NULL value for an element of the array.
+.decl default(null:number)
+.input default()
+
+// The parameters to the array, including its length.
+.decl parameters(length:number)
+.input parameters()
+
+// The values of the elements in the array, specified by index. Note that any unspecified elements will take the default value.
+.decl values(index:number, value:number)
+.input values()
+
+// The indices of the array, used as a background set to ground the index parameter of elements.
+.decl indices(index:number)
+.output indices()
+indices(0).
+indices(i+1) :- indices(i), parameters(l), i >= 0, i+1 < l.
+
+// The elements of the array, referenced by an index, and having a specified value. Note that if a value is not specified an element takes the default value.
+.decl element(index:number, value:number)
+.output element()
+element(i, NULL) :- indices(i), !values(i, _), default(NULL).
+element(i, x) :- indices(i), values(i, x).
+
+// The value of the element to the left of the element specified by the index, or the default value if it is out of the array bounds.
+.decl left(index:number, value:number)
+left(i, NULL) :- !element(i-1, _), element(i, _), default(NULL).
+left(i, x) :- element(i-1, x), element(i, _).
+
+// The value of the element to the right of the element specified by the index, or the default value if it is out of bounds.
+.decl right(index:number, value:number)
+right(i, NULL) :- !element(i+1, _), element(i, _), default(NULL).
+right(i, x) :- element(i+1, x), element(i, _).
+
+// The local neighbourhood of a specified element, giving the value of that element, and the elements surrounding it.
+.decl neighbourhood(index:number,
+  left:number, current:number, right:number)
+.output neighbourhood()
+neighbourhood(i, l, c, r) :-
+  left(i, l), element(i, c), right(i, r).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\array\array.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl ====
+// Implementation of a Turing Maching in Souffle
+
+.type Alphabet <: symbol
+.type State <: symbol
+.type Direction <: symbol
+
+//
+// Tape of the Turing Machine
+//
+// A triple (pos, symbol, step) enumerates all symbols of the
+// tape at the i-th position in the j-th computational step.
+//
+
+.decl Tape(position:number, symbol:Alphabet, step:number)
+.output Tape()
+
+// write new symbol from a successful transition.
+Tape(position, newSymbol, step + 1) :-
+   Tape(position, oldSymbol, step),
+   Configuration(position, currentState, step),
+   Transition(currentState, _, oldSymbol, newSymbol, _).
+
+// copy tape symbol from previous step at previously written
+// position, if not altered by current state transition.
+Tape(position, symbol, step + 1) :-
+   Tape(position, symbol, step),
+   Configuration(writePosition, _, step),
+   position != writePosition.
+
+// add blank symbol to the left of the tape, if the position has not been
+// written before.
+Tape(position, "b", step + 1) :-
+   Configuration(position, _, step + 1),
+   TapeLimits(step, left, _),
+   position < left.
+
+// add blank symbol to the right of the tape, if the position
+// has not been written before.
+Tape(position, "b", step + 1) :-
+   Configuration(position, _, step + 1),
+   TapeLimits(step, _, right),
+   position > right.
+
+//
+// Configuration of the Turing Machine
+//
+// The configuration defines the current tape position,
+// the current state, and the computational step.
+//
+
+.decl Configuration(position: number, state:State, step:number)
+.output Configuration()
+
+Configuration(position - 1, nextState, step + 1) :-
+   Tape(position, oldSymbol, step),
+   Configuration(position, currentState, step),
+   Transition(currentState, nextState, oldSymbol, _, "L").
+
+Configuration(position + 1, nextState, step + 1) :-
+   Tape(position, oldSymbol, step),
+   Configuration(position, currentState, step),
+   Transition(currentState, nextState, oldSymbol, _, "R").
+
+//
+// TapeLimits of Turing Machine
+//
+// The left and right-most position already written positions
+// on the tape. This relation is necessary for producing blank
+// symbols for new positions on the tape.
+//
+.decl TapeLimits(step:number, left:number, right:number)
+.output TapeLimits()
+
+// tape limit has not changed
+TapeLimits(step + 1, left, right) :-
+   TapeLimits(step, left, right),
+   Configuration(position, _, step + 1),
+   left <= position,
+   position <= right.
+
+// tape limit has changed to the left
+TapeLimits(step + 1, position, right) :-
+   TapeLimits(step, left, right),
+   Configuration(position, _, step + 1),
+   position < left.
+
+// tape limit has changed to the right
+TapeLimits(step + 1, left, position) :-
+   TapeLimits(step, left, right),
+   Configuration(position, _, step + 1),
+   right < position.
+
+//
+// Partial Transition Function of Turing Machine
+//
+// Defines the transition from one state to another,
+// the symbols that is necesary to transit, the new symbol that
+// is written, and in which direction the turing machine is moving.
+// Note that the turing machine stops if no new state can be found.
+//
+
+.decl Transition(src:State, dest:State, read:Alphabet, write:Alphabet, d:Direction)
+
+Transition("S0", "S0", "x", "y", "R").
+Transition("S0", "S1", "y", "x", "L").
+Transition("S1", "S1", "y", "x", "L").
+
+//
+// Initial State of the tape
+//
+
+// Tape: 001
+
+Tape(0, "x", 0). // first position on tape set to symbol "x"
+Tape(1, "x", 0). // second position on tape set to symbol "x"
+Tape(2, "y", 0). // third position on tape set to symbol "y"
+
+// Limits of tape for initial state
+TapeLimits(0, 0, 2).
+
+// Initial configuration of turing machine
+Configuration(0, "S0", 0).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\weighted_distances\weighted_distances.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Type Node
+.type Node <: symbol
+
+//
+// Edges non circular
+//
+
+.decl Edge        (n:Node, m:Node, w:number)
+
+Edge("0","1",3).
+Edge("1","2",5).
+Edge("2","3",1).
+Edge("1","4",-6).
+Edge("4","2",-1).
+
+//
+// Reachable
+//
+
+.decl Reachable   (n:Node, m:Node, i:number)
+.output Reachable   ()
+
+Reachable(x,y,r)  :- r=w, Edge(x,y,w).
+Reachable(x,y,d+w)  :- Edge(x,z,w), Reachable(z,y,d).
+
+
+.decl ShortestDuplicates(n:Node, m:Node, i:number)
+.output ShortestDuplicates()
+
+ShortestDuplicates(x,y,a) :- Reachable(x,y,a), Reachable(x,y,b), a<b.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\weighted_distances\weighted_distances.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find all disconnected node pairs
+.type Node <: symbol
+
+.decl Edge(n:Node, m:Node, w:number)
+.input Edge()
+
+// Find the connected nodes
+.decl Connected(n:Node, m:Node)
+Connected(n, n) :- Edge(n, _, _).
+Connected(n, n) :- Edge(_, n, _).
+Connected(n, m) :- Edge(n, m, _).
+Connected(n, m) :- Edge(n, z, _), Connected(z, m).
+
+// Find nodes without a connection
+.decl DisConnected(n:Node, m:Node)
+.output DisConnected()
+DisConnected(n, m) :- Edge(n, _, _), Edge(_, m, _), !Connected(n, m).
+DisConnected(n, m) :- Edge(n, _, _), Edge(m, _, _), !Connected(n, m).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\movies\movies.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+
+.type Text <: symbol
+
+.decl Movie(id:number,title:Text,rating:Text)
+.decl MovieActors(movieid:number,actorsid:number)
+.decl Actors(actorid:number,name:Text)
+
+Movie(1,"Movie a","2.3/10").
+Movie(2,"Movie b","9.3/10").
+Movie(3,"Movie c","8.6/10").
+
+MovieActors(1,1).
+MovieActors(1,2).
+MovieActors(1,3).
+MovieActors(2,2).
+MovieActors(2,3).
+MovieActors(2,4).
+MovieActors(3,1).
+MovieActors(3,4).
+
+Actors(1,"John Smith").
+Actors(2,"Joe Bloggs").
+Actors(3,"Francesca Allsworth").
+Actors(4,"Julia Thebest").
+
+
+
+.decl MovieActorsText(title:Text, actorname:Text)
+.output MovieActorsText()
+
+MovieActorsText(c,d) :- MovieActors(a,b), Movie(a,c,_), Actors(b,d).
+
+.decl JoeBloggsMovies(title:Text)
+.output JoeBloggsMovies()
+
+JoeBloggsMovies(a) :- MovieActorsText(a, b), match("Joe Bloggs", b).
+
+.decl ActorsRatings(name:Text, rating:Text)
+.output ActorsRatings()
+
+ActorsRatings(a,rating) :- MovieActorsText(movie,a), Movie(_,movie_b,rating), match(movie, movie_b).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\movies\movies.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+
+.comp Impl {
+    .decl R(x: number)
+    R(0). R(1). R(2).
+}
+
+.comp A<T> {
+    .init impl = T
+    .decl Base(x: number)
+    Base(x) :- impl.R(x).
+}
+
+.comp Derived<K> : A<K> {
+    .decl Deriv(x:number)
+    Deriv(42).
+    Deriv(n) :- Base(n).
+}
+
+.init d = Derived<Impl>
+.init a = A<Impl>
+
+.decl DerivedOut(x: number)
+.output DerivedOut()
+.decl AOut(x: number)
+.output AOut()
+
+DerivedOut(x) :- d.Deriv(x).
+AOut(x) :- a.Base(x).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\flights\flights.dl ====
+
+.type Node <: symbol
+.decl flight      (node1:Node, node2:Node, node3:Node)
+.decl QAflies   (node1:Node, node2:Node)
+.output QAflies   ()
+.decl VAflies   (node1:Node, node2:Node)
+.output VAflies   ()
+.decl QAonly   (node1:Node, node2:Node)
+.output QAonly   ()
+
+QAflies(X,Y) :- flight("QA",X,Y).
+QAflies(X,Y) :- flight("QA",X,Z), QAflies(Z,Y).
+
+VAflies(X,Y) :- flight("VA",X,Y).
+VAflies(X,Y) :- flight("VA",X,Z), VAflies(Z,Y).
+
+QAonly(X,Y)  :- QAflies(X,Y), ! VAflies(X,Y).
+
+flight("QA","AU","CHI").
+flight("QA","AU","JPN").
+flight("QA","JPN","DEN").
+flight("QA","JPN","CHI").
+flight("QA","AU","CHI").
+flight("VA","AU","CHI").
+flight("VA","JPN","ZA").
+flight("VA","JPN","DEN").
+flight("VA","DEN","ZA").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\flights\flights.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
+//// Hypothetical Queries
+//// Source: [Bonn99], extended and adapted
+//// Adopted from DES
+
+.type Node <: symbol
+
+.decl student (node1:Node)
+.output student ()
+.decl course (node1:Node)
+.output course ()
+.decl pre (node1:Node, node2:Node)
+.output pre ()
+.decl take (node1:Node, node2:Node)
+.output take ()
+.decl grad (node1:Node)
+.output grad ()
+
+student("adam").
+student("bob").
+student("pete").
+student("scott").
+student("tony").
+
+course("eng").
+course("his").
+course("lp").
+
+take("adam","eng").
+take("pete","his").
+take("pete","eng").
+take("scott","his").
+take("scott","lp").
+take("tony","his").
+
+pre("eng","lp").
+pre("hist","eng").
+
+pre(Pre,Post) :- pre(Pre,X), pre(X,Post).
+
+grad(S) :- take(S,"his"), take(S,"eng").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po2\po2.dl ====
+.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
+.input Check()
+.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
+.input In()
+.decl A(l:number, o:number)
+.output A()
+
+A(1,i) :- Check(_, b, c, d, e, _), In(_, b, c, d, e, _, i).
+A(2,i) :- Check(a, _, c, d, e, _), In(a, _, c, d, e, _, i).
+A(3,i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
+A(4,i) :- Check(_, _, c, d, _, _), In(_, _, c, d, _, _, i).
+A(5,i) :- Check(a, _, _, _, _, f), In(a, _, _, _, _, f, i).
+A(6,i) :- Check(_, b, c, d, _, f), In(_, b, c, d, _, f, i).
+A(7, i) :- Check(_, b, c, _, e, f), In(_, b, c, _, e, f, i).
+A(8, i) :- Check(_, b, _, d, e, f), In(_, b, _, d, e, f, i).
+A(9, i) :- Check(_, _, c, d, e, f), In(_, _, c, d, e, f, i).
+A(10, i) :- Check(_, b, c, d, _, _), In(_, b, c, d, _, _, i).
+A(11, i) :- Check(_, b, c, _, _, f), In(_, b, c, _, _, f, i).
+A(12, i) :- Check(_, b, _, _, e, f), In(_, b, _, _, e, f, i).
+A(13, i) :- Check(_, _, _, d, e, f), In(_, _, _, d, e, f, i).
+A(14, i) :- Check(_, b, c, _, _, _), In(_, b, c, _, _, _, i).
+A(15, i) :- Check(_, b, _, _, _, f), In(_, b, _, _, _, f, i).
+A(16, i) :- Check(_, _, _, _, e, f), In(_, _, _, _, e, f, i).
+A(17, i) :- Check(_, b, c, d, e, f), In(_, b, c, d, e, f, i).
+A(18, i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\po2\po2.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.decl gen(x : number)
+gen(1).
+gen(x+1) :- gen(x), !lim(x).
+
+.decl lim(x : number)
+lim(100).
+
+//factors excluding 1
+.decl factor(num : number, fc : number)
+factor(x, fc) :- gen(x), gen(fc), x % fc = 0, fc != 1.
+
+//finds if there exist two numbers which multiply to x
+.decl prod(num : number)
+prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
+
+//finds the prime factors
+.decl p_factor(x : number, fc : number)
+.output p_factor()
+p_factor(x, fc) :- factor(x, fc), !prod(fc).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl ====
+//
+// Example: data flow analysis
+//
+// This example is computing live variables.
+//
+
+
+//// --- definitions --- ////
+
+.type Node <: symbol
+
+// control flow graph (input)
+.decl cf_edge(x:Node,y:Node)
+
+
+// mark nodes in the graph using and defining variables
+.type Var <: symbol
+
+.decl use(x:Node, v:Var)
+.decl def(x:Node, v:Var)
+
+//// --- result --- ////
+
+.decl live_vars_in(x:Node, v:Var)
+.output live_vars_in()
+.decl live_vars_out(x:Node, v:Var)
+.output live_vars_out()
+
+//////////////////////////////////////////////////
+
+cf_edge("A","B").
+cf_edge("B","C").
+cf_edge("C","C").
+cf_edge("C","D").
+cf_edge("B","D").
+cf_edge("D","E").
+
+
+// use and def
+
+def("A", "x1").
+
+use("B", "x1").
+def("B", "x2").
+
+use("C", "x2").
+def("C", "x2").
+
+use("D", "x2").
+def("D", "x3").
+
+use("E", "x2").
+use("E", "x3").
+
+//////////////////////////////////////////////////
+
+live_vars_in(x,v) :- use(x,v).
+live_vars_in(x,v) :- !def(x,v), live_vars_out(x,v).
+
+live_vars_out(x,v) :- cf_edge(x,y), live_vars_in(y,v).
+
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl ====
+
