@@ -1,476 +1,650 @@
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2013-14, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+/* Conversion of non-deterministic FSA to deterministic FSA.
+ * Complex souffle example that demonstrates: components,
+ * aggregates, and string concatenation. */
+
+/* The inputs: alphabet, set of states and transition relation */
+/* By convention: state 1 is initial state, last state is the final accepting state */
+
+.type N <: number
+.type Letter <: symbol
+
+.decl state(n : N)
+.input state()
+.decl alphabet(x : Letter)
+.input alphabet()
+.decl tr(s1 : N, s2 : N, x : Letter)
+.input tr()
+
+// --------------------------------------------------------
+// --------------------------------------------------------
+// Generic common code
+
+.type NumberList = [head: N, tail: NumberList]
+.comp Vector<T, TList> {
+	// note: TList must be list of T
+
+	// input relations:
+	.decl size(l: number)	// must be one number that determines the size
+	.decl element(x: T)	// contains all valid elements for this vector
+
+	// output relations:
+	.decl len(list: TList, result: N)
+	.decl sublist(list: TList)	// is 'list' a list of given size, or any smaller?
+	.decl vector(list: TList)	// is 'list' our vector, i.e. list of given size
+	.decl member_at(list: TList, index: N, member: T)	// is 'member' at given index position, 1-based index
+
+	len(nil, 0).
+	len([h, t], l+1) :-  sublist([h, t]), len(t, l).
+
+	sublist(nil).
+	sublist([h, t]) :- element(h), sublist(t), len(t, l), size(max_size), l < max_size.
+
+	vector(list) :- sublist(list), size(max_size), len(list, max_size).
+
+
+	member_at([h, t], idx, member) :-
+		element(h), sublist(t), element(member),
+		member_at(t, idx, member).
+
+	member_at([h, t], idx, member) :-
+		element(h), sublist(t), element(member),
+		size(max_size), idx <= max_size,
+		h = member, len([h, t], idx).
+}
+
+.comp Automaton<TState, TAlpha, TWord> {
+	// note: TWord must be list of TAlpha
+
+	// input relations:
+	.decl state(s: TState)
+	.decl start_state(s: TState)
+	.decl final(s: TState)
+	.decl alphabet(x: TAlpha)
+	.decl tr(s: TState, q: TState, a: TAlpha)
+
+	.decl max_acceptance_size(n: number)
+
+	// private
+	.init Word = Vector<TAlpha, TWord>
+	Word.size(x) :- max_acceptance_size(x).
+	Word.element(x) :- alphabet(x).
+
+	// output
+	.decl accepts(w: TWord)
+	.decl accepts_from_state(w: TWord, s: TState)
+
+	accepts(w) :- Word.sublist(w), start_state(s), accepts_from_state(w, s).
+
+	accepts_from_state(nil, s) :- final(s).
+	accepts_from_state([h, t], s) :-
+		alphabet(h), state(s), Word.sublist(t),
+		tr(s, q, h), accepts_from_state(t, q).
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// Conversion NFSA -> FSA
+
+
+.type Word = [ c : Letter, r : Word ]
+.init Nfsa = Automaton<N, Letter, Word>
+Nfsa.start_state(1).
+Nfsa.state(s) :- state(s).
+Nfsa.final(fs) :- fs = max s : { state(s) }.
+Nfsa.alphabet(c) :- alphabet(c).
+Nfsa.max_acceptance_size(5).
+Nfsa.tr(s, q, c) :- tr(s, q, c).
+
+// FSA state is bitvector that represents the set of NFSA states
+.init FsaState = Vector<number, NumberList>
+FsaState.size(sz) :- Nfsa.final(sz).
+FsaState.element(0).
+FsaState.element(1).
+
+
+.decl not_fsa_start_state(s: NumberList)
+not_fsa_start_state(s) :- FsaState.member_at(s, x, 1), !Nfsa.start_state(x).
+
+.init Fsa = Automaton<NumberList, Letter, Word>
+Fsa.state(s) :- FsaState.vector(s).
+Fsa.start_state(s) :- FsaState.member_at(s, nfsa_init, 1), Nfsa.start_state(nfsa_init), !not_fsa_start_state(s).
+Fsa.final(s) :- Nfsa.final(fin), FsaState.member_at(s, fin, 1).
+Fsa.alphabet(c) :- alphabet(c).
+Fsa.max_acceptance_size(5).
+
+// the result of the conversion is this relation that
+// defines the transitions of the resulting FSA
+Fsa.tr(s, q, a) :-
+	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
+	!not_fsa_tr(s, q, a), // negation of negation helps us to get rid of quantification (for all)
+	Nfsa.tr(x, y, a),		// this is so that there is at least one transition between the two states
+	FsaState.member_at(s, x, 1), FsaState.member_at(q, y, 1). // this is so that s,q (the states) are not empty sets
+
+
+.decl has_x(s: NumberList, y: N, a: Letter) // does the list have some 'x' for which tr(x, y, a)?
+has_x(S, y, a) :- FsaState.member_at(S, x, 1), Nfsa.tr(x,y,a).
+
+.decl not_fsa_tr(s: NumberList, q: NumberList, a: Letter)
+
+// it is not fsa transition if have some x from S and tr(x,y,a) for such y that is not member of Q
+// i.e. Q is missing some target states
+not_fsa_tr(s, q, a) :-
+	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
+	Nfsa.tr(x, y, a), FsaState.member_at(s, x, 1), !FsaState.member_at(q, y, 1).
+
+// it is not fsa transition if for y from Q there is no x from S such that tr(x,y,a):
+// i.e. Q has got some more states than it should
+not_fsa_tr(s, q, a) :-
+	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
+	FsaState.member_at(q, y, 1), !has_x(s, y, a).
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// Debug output: accepted word of length <= 5 and deterministric transition relation
+
+// note: the numbering of recursive structures may differ when we
+// run the program in parallel, so relations that output recursive structures
+// cannot be used for testing purposes. For that reason, we convert the states
+// into strings, e.g. "01011" and words too.
+
+.type String <: symbol
+.decl fsa_state_to_str(state: NumberList, str: String)
+fsa_state_to_str(nil, " ").
+fsa_state_to_str([0,t], cat("0", str)) :- FsaState.sublist(t), fsa_state_to_str(t, str).
+fsa_state_to_str([1,t], cat("1", str)) :- FsaState.sublist(t), fsa_state_to_str(t, str).
+
+.decl word_to_str(word: Word, str: String)
+word_to_str(nil, " ").
+word_to_str([h,t], cat(h, str)) :- Fsa.alphabet(h), Fsa.Word.sublist(t), word_to_str(t, str).
+
+.decl fsa_accepted(w: String)
+.output fsa_accepted()
+fsa_accepted(w) :- Fsa.accepts(list), word_to_str(list, w).
+
+.decl nfsa_accepted(w: String)
+.output nfsa_accepted()
+nfsa_accepted(w) :- Nfsa.accepts(list), word_to_str(list, w).
+
+.decl fsa_tr(s: String, q: String, c: Letter)
+.output fsa_tr()
+fsa_tr(s_str, q_str, c) :- Fsa.tr(s, q, c), fsa_state_to_str(s, s_str), fsa_state_to_str(q, q_str).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-.type Text <: symbol
+// Compute the factorial function.
 
-.decl food(name:Text, carbs:number, fat:number, protein:number, per:number, measure:Text)
-.input food()
+// fact(i, n) holds iff i! = n
+.decl fact(i:number, n:number)
+.output fact()
 
-.decl recipe(index: number, name:Text, amount: number, measure: Text)
-.input recipe()
+// Calculate only up to the lowest value satisfying lim(n)
+.decl lim(n:number)
+.input lim()
 
-.decl max_index(result:number)
-.output max_index()
+fact(I+1, N*(I+1)) :- fact(I, N), !lim(I).
 
-max_index(a) :-  a = max a : recipe(a,_,_,_) .
-
-.decl totals(name:Text, amount:number, carbs:number, fat:number, protein:number, cal:number)
-.output totals()
-
-totals(name, amount, amount*a/per, amount*b/per, amount*c/per, ((4*amount*a/per)+(9*amount*b/per)+(4*amount*c/per))) :- recipe(_, name, amount, _), food(name, a,b,c,per,_).
+// Ground Fact: 0! := 1
+fact(0, 1).
 
 
-.decl calories(result:number)
-.output calories()
+// ==== END: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
 
-calories(result) :- result = sum a : totals(_,_,_,_,_,a).
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+//// Test-case for string matching
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+.decl inputData(s:symbol)
+.input inputData
+
+.decl outputData(s:symbol)
+.output outputData
+
+outputData(x) :- inputData(x), !match("a.*", x).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-.decl gen(x : number)
-gen(1).
-gen(x+1) :- gen(x), !lim(x).
+// Solves the n-queens problem
 
-.decl lim(x : number)
-lim(100).
+// Side length of the board.
+.decl size( n : number )
+.input size()
 
-//factors excluding 1
-.decl factor(num : number, fc : number)
-factor(x, fc) :- gen(x), gen(fc), x % fc = 0, fc != 1.
 
-//finds if there exist two numbers which multiply to x
-.decl prod(num : number)
-prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
+// The maximal compatible sets -- n queens.
+.decl solution( qs : QueenList )
+.printsize solution
+solution(qs) :- compatible(qs, s), size(s).
 
-//finds the prime factors
-.decl p_factor(x : number, fc : number)
-.output p_factor()
-p_factor(x, fc) :- factor(x, fc), !prod(fc).
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+// Natural numbers from 1 to the size of the board.
+.decl up_to_size( x : number )
+up_to_size(1).
+up_to_size(x + 1) :- up_to_size(x), !size(x).
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
-//// Hypothetical Queries
-//// Source: [Bonn99], extended and adapted
-//// Adopted from DES
+
+// A cartesian coordinate for a board square.
+.type Position = [ x : number, y : number ]
+
+
+// This relation holds the position of each square of the board.
+.decl on_board( p : Position )
+on_board([x, y]) :- up_to_size(x), up_to_size(y).
+
+
+// Mutually-non-attacking list of queen positions.
+.type QueenList = [ p : Position, qs : QueenList ]
+
+
+// Arguments are not on the same diagonal.
+.decl non_diagonals( p : Position, q : Position )
+non_diagonals([px, py], [qx, qy]) :- px - qx != py - qy, qx - px != py - qy, on_board([px, py]), on_board([qx, qy]).
+
+
+// Holds if p and q do not attack each other.
+.decl sympathetic( p : Position, q : Position )
+sympathetic(p, q) :- non_diagonals(p, q), px != qx, py != qy, p=[px, py], q=[qx,qy].
+
+
+// Holds if the head of qs is mutually non-attacking with its tail, which should itself be compatible.
+// Generated column by column, left to right.
+.decl compatible( qs : QueenList, n : number )
+compatible([p, nil], 1) :- on_board(p). //, p = [1,y].
+compatible([p, [head, tail]], n+1) :- sympathetic(p, head), compatible([p, tail], n), compatible([head, tail], n), p = [px, py], head = [hx, hy], px > hx.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find the shortest paths between all nodes, the slow way
+.type Node <: symbol
+
+.decl Edge(n:Node, m:Node, w:number)
+.input Edge()
+
+// Find all paths
+.decl Length   (n:Node, m:Node, l:number)
+Length(x,y,t)  :- t=l, Edge(x,y,l).
+Length(x,y,t+l)  :- Edge(x,z,l), Length(z,y,t).
+
+// Filter out the longest path
+.decl ShortestPath(n:Node, m:Node, l:number)
+.output ShortestPath()
+ShortestPath(x, y, a) :- Length(x, y, _), a = min Z : Length(x, y, Z).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\planar\planar.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Determines whether a graph is planar i.e. has no lines that intersect
+
+// Define an edge by its two x,y endpoints
+.decl edge(x1 : number, y1 : number, x2 : number, y2 : number)
+.input edge()
+
+// Check if two edges join only at an endpoint; this does not count as an intersection
+.decl sharedNode(x1 : number, y1 : number, x2 : number, y2 : number,
+	x3 : number, y3 : number, x4 : number, y4 : number)
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x3 - x1 = 0, y3 - y1 = 0.
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x4 - x1 = 0, y4 - y1 = 0.
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x3 - x2 = 0, y3 - y2 = 0.
+sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	x4 - x2 = 0, y4 - y2 = 0.
+
+// Check if there exists two intersecting lines, using the idea of orientation from computational geometry
+.decl intersect(x1 : number, y1 : number, x2 : number, y2 : number,
+	x3 : number, y3 : number, x4 : number, y4 : number)
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) > 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) < 0,
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) > 0,
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) < 0.
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) > 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) < 0, (y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) < 0, (y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) > 0.
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) < 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) > 0,
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) > 0,
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) < 0.
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) < 0,
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) > 0,
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) < 0,
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) > 0.
+// The following lines check the case if the endpoint of one line lies on the other line (other than that line's endpoints)
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) = 0,
+	x3 > min(x1, x2), x3 < max(x1, x2),
+	y3 > min(y1, y2), y3 < max(y1, y2).
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) = 0,
+	x4 > min(x1, x2), x4 < max(x1, x2),
+	y4 > min(y1, y2), y4 < max(y1, y2).
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) = 0,
+	x1 > min(x3, x4), x1 < max(x3, x4),
+	y1 > min(y3, y4), y1 < max(y3, y4).
+intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) = 0,
+	x2 > min(x3, x4), x1 < max(x3, x4),
+	y2 > min(y3, y4), y2 < max(y3, y4).
+
+// Main function checking if graph is planar
+.decl planar(x1 : number, y1 : number, x2 : number, y2 : number,
+	x3 : number, y3 : number, x4 : number, y4 : number)
+// If not planar, program outputs the pairs of lines that intersect
+.output planar()
+planar(x1, y1, x2, y2, x3, y3, x4, y4) :-
+	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
+	intersect(x1, y1, x2, y2, x3, y3, x4, y4),
+	!sharedNode(x1, y1, x2, y2, x3, y3, x4, y4),
+	x1 <= x3, y1 <= y3.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\planar\planar.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+
+.comp Impl {
+    .decl R(x: number)
+    R(0). R(1). R(2).
+}
+
+.comp A<T> {
+    .init impl = T
+    .decl Base(x: number)
+    Base(x) :- impl.R(x).
+}
+
+.comp Derived<K> : A<K> {
+    .decl Deriv(x:number)
+    Deriv(42).
+    Deriv(n) :- Base(n).
+}
+
+.init d = Derived<Impl>
+.init a = A<Impl>
+
+.decl DerivedOut(x: number)
+.output DerivedOut()
+.decl AOut(x: number)
+.output AOut()
+
+DerivedOut(x) :- d.Deriv(x).
+AOut(x) :- a.Base(x).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\sort\sort.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2018, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Sorts a list of integers using quicksort
+// Due to limitations of input format,
+// repeated values in input are not supported
+
+.type value <: number
+.type index <: number
+
+.type list = [
+    head : value,
+    tail : list
+]
+
+// Lists that must be sorted
+.decl ToSort(start : list)
+
+// Split a list into the values above and below the head value
+// Input : Split(head:tail, tail, nil, nil)
+// Output : Split(head:tail, nil, below, above)
+.decl Split(start : list, notdone : list, below : list, above : list)
+Split([p,l],l,nil,nil) :- ToSort([p,l]).
+Split([p,l],t,[h,b],a) :- Split([p,l],[h,t],b,a), h < p.
+Split([p,l],t,b,[h,a]) :- Split([p,l],[h,t],b,a), h >= p.
+
+// Recursively sort the partitions
+ToSort(l) :- Split(_,nil,l,_).
+ToSort(l) :- Split(_,nil,_,l).
+
+// Lists that need to be concatenated
+.decl ToCat(a : list, b : list)
+ToCat(t,b) :- ToCat([_,t],b).
+
+// Result of concatenation
+.decl Cat(a : list, b : list, c : list)
+Cat(nil, b, b) :- ToCat(nil, b).
+Cat([h,a], b, [h,c]) :- ToCat([h,a],b), Cat(a,b,c).
+
+// Result of sorting
+.decl Sorted(start : list, end : list)
+Sorted(nil,nil).
+Sorted([h,t],end) :-
+    ToSort([h,t]),
+    Split([h,t],nil,b,a),
+    Sorted(a,s_a),
+    Sorted(b,s_b),
+    Cat(s_b,[h,s_a],end).
+
+ToCat(s_b,[h,s_a]) :-
+    Split([h,_],nil,b,a),
+    Sorted(a,s_a),
+    Sorted(b,s_b).
+
+// -- Input -- //
+
+// Collect values from file
+.decl InputVals(x : value)
+.input InputVals
+
+// Assign each value a unique index; 0,1,2,...
+.decl Indexed(x : value, i : index)
+Indexed(x, autoinc()) :- InputVals(x).
+
+// Build the list
+.decl InList(l : list, i : index)
+InList(nil, m) :- m = min x: Indexed(_, x).
+InList([h,t], i+1) :- InList(t, i), Indexed(h, i).
+
+// Input the list to the sorting algorithm
+ToSort(l) :- InList(l, m), m > max x: Indexed(_, x).
+
+// -- Output -- //
+
+// Get the sorted list from the sorting algorithm
+.decl Result(l : list)
+Result(s) :- Sorted(l,s), InList(l,m), m > max x: Indexed(_, x).
+
+// Convert a list to a string representation (only works once)
+.decl ToString(l : list, s : symbol)
+ToString(t, to_string(h)) :- Result([h,t]).
+ToString(t, cat(cat(s, ", "), to_string(h))) :- ToString([h,t], s).
+
+// Write output to file
+.decl SortedVals(s : symbol)
+SortedVals(s) :- ToString(nil, s).
+.output SortedVals
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\sort\sort.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Andersen's points-to analysis
+
+// Define the domain of variables
+.type var <: symbol
+
+// Take addresses of other variables, i.e., y = &x;
+.decl AddressOf(y:var, x:var)
+.input AddressOf()
+
+// Assign Statements, i.e.,  y = x;
+.decl Assign(y:var, x:var)
+.input Assign()
+
+// Load Statements, i.e., y = *x;
+.decl Load(y:var, x:var)
+.input Load()
+
+// Store Statements, i.e., *y = x;
+.decl Store(y:var, x:var)
+.input Store()
+
+// PointsTo Relation, i.e., whether y may point to x
+.decl PointsTo(y:var, x:var)
+.output PointsTo()
+
+PointsTo(y, x) :-
+ AddressOf(y, x).
+
+PointsTo(y, x) :-
+ Assign(y, z),
+ PointsTo(z, x).
+
+PointsTo(y, w) :-
+ Load(y, x),
+ PointsTo(x, z),
+ PointsTo(z, w).
+
+PointsTo(z, w) :-
+ Store(y, x),
+ PointsTo(y, z),
+ PointsTo(x, w).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl ====
+
+// ==== BEGIN: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find pairs of amicable numbers up to a limit
+// A pair of numbers are amicable if the sum of their factors add up to each other
+
+// Build search range
+.decl num(x : number)
+num(1).
+num(x+1) :- num(x), x < l, lim(l).
+
+// Search limit
+.decl lim(n : number)
+.input lim
+
+// Find factors of x excluding itself
+.decl factor(x : number, f : number)
+factor(x, f) :- num(x), num(f), f <= x / 2, x % f = 0.
+
+// Compute the sum of all the factors of x
+.decl factor_sum(x : number, fs : number)
+factor_sum(x, f) :- num(x), f = sum i : factor(x, i).
+
+// Find pairs of numbers whose factors add up to each other
+.decl amicable(a : number, b : number)
+.output amicable()
+amicable(a, b) :- factor_sum(a, b), factor_sum(b, a), a < b.
+
+// ==== END: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Test Case adopted from Ocaml datalog
 
 .type Node <: symbol
 
-.decl student (node1:Node)
-.output student ()
-.decl course (node1:Node)
-.output course ()
-.decl pre (node1:Node, node2:Node)
-.output pre ()
-.decl take (node1:Node, node2:Node)
-.output take ()
-.decl grad (node1:Node)
-.output grad ()
+.decl reachable (node1:Node, node2:Node)
+.output reachable ()
+.decl same_clique (node1:Node, node2:Node)
+.output same_clique ()
+.decl edge (node1:Node, node2:Node)
+.output edge ()
+.decl leg (node1:Node, node2:Node)
+.output leg ()
 
-student("adam").
-student("bob").
-student("pete").
-student("scott").
-student("tony").
+leg(X,Z) :- edge(X,Y), edge(Y,Z).
 
-course("eng").
-course("his").
-course("lp").
+reachable(X,Y) :- edge(X,Y).
+reachable(X,Y) :- edge(X,Z), reachable(Z,Y).
+same_clique(X,Y) :- reachable(X,Y), reachable(Y,X).
 
-take("adam","eng").
-take("pete","his").
-take("pete","eng").
-take("scott","his").
-take("scott","lp").
-take("tony","his").
+edge("a", "b").
+edge("b", "c").
+edge("c", "d").
+edge("d", "a").
 
-pre("eng","lp").
-pre("hist","eng").
+reachable("e","f").
 
-pre(Pre,Post) :- pre(Pre,X), pre(X,Post).
-
-grad(S) :- take(S,"his"), take(S,"eng").
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-//             88                                   88
-//             ""                                   ""   ,d
-//                                                       88
-//   ,adPPYba, 88 8b,dPPYba,  ,adPPYba, 88       88 88 MM88MMM
-//  a8"     "" 88 88P'   "Y8 a8"     "" 88       88 88   88
-//  8b         88 88         8b         88       88 88   88
-//  "8a,   ,aa 88 88         "8a,   ,aa "8a,   ,a88 88   88,
-//   `"Ybbd8"' 88 88          `"Ybbd8"'  `"YbbdP'Y8 88   "Y888
-//
-//                                                                   88
-//                                                                   88
-//                                                                   88
-//  8b,dPPYba,  ,adPPYba,  ,adPPYba,  ,adPPYba,  8b,dPPYba,  ,adPPYb,88
-//  88P'   "Y8 a8P_____88 a8"     "" a8"     "8a 88P'   "Y8 a8"    `Y88
-//  88         8PP""""""" 8b         8b       d8 88         8b       88
-//  88         "8b,   ,aa "8a,   ,aa "8a,   ,a8" 88         "8a,   ,d88
-//  88          `"Ybbd8"'  `"Ybbd8"'  `"YbbdP"'  88          `"8bbdP"Y8
-
-// Circuit record
-// Determine the required inputs to satisfy the outputs
-// Different from circuit_sat, which encoded wire state in integers
-// i.e. limited to 32 wires.
-// This stores them in recursive records, accessed by treating
-// the list as a sort of associative list.
-//
-
-.type Wire <: symbol
-.type Wire_state = [id : Wire, val : number]
-.type Wire_list = [head : Wire_state, tail: Wire_list]
-
-.decl in(a : Wire)
-in("a").
-in("b").
-in("c").
-
-//helpers to determine ordering in the list
-.decl less(a: Wire, b: Wire)
-less(x, y) :- in(x), in(y), ord(x) < ord(y).
-
-.decl leg(a: Wire, b: Wire)
-leg(x, z) :- less(x,y), less(y,z).
-
-//element x is before el y
-.decl succ(a: Wire, b: Wire)
-succ(x, y) :- less(x, y), !leg(x,y).
-
-//el x is first in list
-.decl first(a: Wire)
-first(a) :- in(a), !less(_,a).
-
-//el x is last
-.decl last(a:Wire)
-last(a) :- in(a), !less(a,_).
-
-//boolean states
-.decl bin(a : number)
-bin(0).
-bin(1).
-
-// generate all ordered lists (including list stubs)
-.decl gen_wire_states( wl : Wire_list)
-gen_wire_states([[x, v], nil]) :-
-	first(x),
-    bin(v).
-
-gen_wire_states( [[y, v], l]) :-
-    gen_wire_states(l),
-	succ(x, y),
-    bin(v),
-    l = [[x,xv],tail].
-
-// collect full length ordered lists (i.e. ignore stubs)
-.decl final_gen_wire_states(wl : Wire_list)
-final_gen_wire_states(l) :-
-    gen_wire_states(l),
-    l = [[x,xv],tail],
-    last(x).
-
-//extract a wire's value from the array (associative array type)
-.decl get_by_key(key : Wire, val : number, rec : Wire_list, conf: Wire_list)
-get_by_key(k, v, tail, [[a,av], tail]) :-
-	in(a), bin(av), a=k, av=v, gen_wire_states([[a,av], tail]), last(a).
-get_by_key(k, v, tail, conf) :-
-	in(k), bin(v), get_by_key(_, _, [[k, v], tail], conf).
-
-.decl required_out(ws : Wire_state)
-required_out([w, v]) :- required_out_fi(w, v).
-//which wires are required to have certain values
-.decl required_out_fi(w : Wire, v : number)
-.input required_out_fi()
-
-.decl circuit_and(result : Wire, op1 : Wire, op2 : Wire)
-.input circuit_and()
-.decl circuit_or(result : Wire, op1 : Wire, op2 : Wire)
-.input circuit_or()
-.decl circuit_not(result : Wire, op1 : Wire)
-.input circuit_not()
-
-// evaluate the wire's required value from a set of inputs
-.decl evaluate(circuit_state : Wire_list, wire_state : Wire_state)
-evaluate(cs, [k, v]) :-
-	get_by_key(k,v,  _, cs).
-evaluate(cs, [k, av band bv]) :-
-	circuit_and(k, a, b),
-	evaluate(cs, [a, av]),
-	evaluate(cs, [b, bv]).
-evaluate(cs, [k, av bor bv]) :-
-	circuit_or(k, a, b),
-	evaluate(cs, [a, av]),
-	evaluate(cs, [b, bv]).
-evaluate(cs, [k, lnot av]) :-
-	circuit_not(k, a),
-	evaluate(cs, [a, av]).
-
-.decl satisfy(conf : Wire_list, ws: Wire_state)
-satisfy(conf, [var, val]) :-
-	required_out([var, val]),
-	evaluate(conf, [var, val]).
-
-// print the required inputs to reach the configuration (turned off atm, as the souffle tester cannot handle the output of records)
-.decl sat_print(var : Wire, val : number, conf : Wire_list)
-sat_print(var, val, conf) :-
-	satisfy(conf,_), get_by_key(var, val, _, conf).
-
-// print the count of total circuits configurations mul inputs
-.decl print_states(val : number)
-.output print_states()
-print_states(val) :-
-	val = count : { sat_print(_, _, _) }.
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
-// The Lehigh University Benchmark (LUBM)
-// http://swat.cse.lehigh.edu/projects/lubm/
-// ported by Anthony Potter
-//
-// Unary relations
-.decl University (a:symbol)
-.output University ()
-.input University ()
-.decl Person (a:symbol)
-.output Person ()
-.decl Employee (a:symbol)
-.output Employee ()
-.decl Faculty (a:symbol)
-.output Faculty ()
-.decl Professor (a:symbol)
-.output Professor ()
-.decl Course (a:symbol)
-.output Course ()
-.input Course ()
-.decl AssociateProfessor (a:symbol)
-.input AssociateProfessor ()
-.decl AssistantProfessor (a:symbol)
-.input AssistantProfessor ()
-.decl Organization (a:symbol)
-.output Organization ()
-.decl Chair (a:symbol)
-.output Chair ()
-.decl Work (a:symbol)
-.output Work ()
-.decl Lecturer (a:symbol)
-.output Lecturer ()
-.input Lecturer ()
-.decl Student (a:symbol)
-.output Student ()
-.decl GraduateStudent (a:symbol)
-.input GraduateStudent ()
-.decl ResearchAssistant (a:symbol)
-.input ResearchAssistant ()
-.decl GraduateCourse (a:symbol)
-.input GraduateCourse ()
-.decl UndergraduateStudent (a:symbol)
-.input UndergraduateStudent ()
-.decl ResearchGroup (a:symbol)
-.output ResearchGroup ()
-.input ResearchGroup ()
-.decl Publication (a:symbol)
-.output Publication ()
-.input Publication ()
-.decl TeachingAssistant (a:symbol)
-.output TeachingAssistant ()
-.input TeachingAssistant ()
-.decl FullProfessor (a:symbol)
-.input FullProfessor ()
-.decl Department (a:symbol)
-.input Department ()
-
-// Binary relations
-.decl hasAlumnus (a:symbol, b:symbol)
-.output hasAlumnus ()
-.decl degreeFrom (a:symbol, b:symbol)
-.output degreeFrom ()
-.decl member (a:symbol, b:symbol)
-.output member ()
-.decl teachingAssistantOf (a:symbol, b:symbol)
-.input teachingAssistantOf ()
-.decl headOf (a:symbol, b:symbol)
-.input headOf ()
-.decl teacherOf (a:symbol, b:symbol)
-.input teacherOf ()
-.decl publicationAuthor (a:symbol, b:symbol)
-.input publicationAuthor ()
-.decl doctoralDegreeFrom (a:symbol, b:symbol)
-.input doctoralDegreeFrom ()
-.decl undergraduateDegreeFrom (a:symbol, b:symbol)
-.input undergraduateDegreeFrom ()
-.decl mastersDegreeFrom (a:symbol, b:symbol)
-.input mastersDegreeFrom ()
-.decl subOrganizationOf (a:symbol, b:symbol)
-.output subOrganizationOf ()
-.input subOrganizationOf ()
-.decl takesCourse (a:symbol, b:symbol)
-.input takesCourse ()
-.decl worksFor (a:symbol, b:symbol)
-.output worksFor ()
-.input worksFor ()
-.decl memberOf (a:symbol, b:symbol)
-.output memberOf ()
-.input memberOf ()
-.decl advisor (a:symbol, b:symbol)
-.input advisor ()
-.decl emailAddress (a:symbol, b:symbol)
-.input emailAddress ()
-.decl telephone (a:symbol, b:symbol)
-.input telephone ()
-.decl name (a:symbol, b:symbol)
-.input name ()
-.decl researchInterest (a:symbol, b:symbol)
-.input researchInterest ()
-
-// Ontology
-University(Y) :- mastersDegreeFrom(_,Y) .
-degreeFrom(X,Y) :- hasAlumnus(Y,X) .
-hasAlumnus(X,Y) :- degreeFrom(Y,X) .
-Employee(X) :- Faculty(X) .
-Faculty(X) :- Professor(X) .
-Professor(X) :- AssociateProfessor(X) .
-Person(Y) :- member(_,Y) .
-Professor(X) :- AssistantProfessor(X) .
-Professor(X) :- Chair(X) .
-worksFor(X,Y) :- headOf(X,Y) .
-Person(X) :- degreeFrom(X,_) .
-University(Y) :- degreeFrom(_,Y) .
-Person(Y) :- hasAlumnus(_,Y) .
-TeachingAssistant(X) :- Person(X), teachingAssistantOf(X,Y), Course(Y) .
-Chair(X) :- Person(X), headOf(X,Y), Department(Y) .
-memberOf(X,Y) :- member(Y,X) .
-member(X,Y) :- memberOf(Y,X) .
-Course(Y) :- teacherOf(_,Y) .
-University(X) :- hasAlumnus(X,_) .
-Person(X) :- telephone(X,_) .
-Organization(Y) :- subOrganizationOf(_,Y) .
-memberOf(X,Y) :- worksFor(X,Y) .
-Person(X) :- Employee(X) .
-Person(X) :- advisor(X,_) .
-Organization(X) :- member(X,_) .
-Organization(X) :- Department(X) .
-Faculty(X) :- Lecturer(X) .
-Person(Y) :- publicationAuthor(_,Y) .
-Professor(Y) :- advisor(_,Y) .
-Work(X) :- Course(X) .
-Professor(X) :- FullProfessor(X) .
-degreeFrom(X,Y) :- doctoralDegreeFrom(X,Y) .
-TeachingAssistant(X) :- teachingAssistantOf(X,_) .
-Person(X) :- undergraduateDegreeFrom(X,_) .
-Organization(X) :- University(X) .
-Person(X) :- doctoralDegreeFrom(X,_) .
-University(Y) :- doctoralDegreeFrom(_,Y) .
-Course(Y) :- teachingAssistantOf(_,Y) .
-University(Y) :- undergraduateDegreeFrom(_,Y) .
-degreeFrom(X,Y) :- mastersDegreeFrom(X,Y) .
-Person(X) :- GraduateStudent(X) .
-Person(X) :- ResearchAssistant(X) .
-Student(X) :- UndergraduateStudent(X) .
-degreeFrom(X,Y) :- undergraduateDegreeFrom(X,Y) .
-Publication(X) :- publicationAuthor(X,_) .
-Person(X) :- mastersDegreeFrom(X,_) .
-Organization(X) :- ResearchGroup(X) .
-Faculty(X) :- teacherOf(X,_) .
-Person(X) :- Chair(X) .
-Employee(X) :- Person(X), worksFor(X,Y), Organization(Y) .
-Course(X) :- GraduateCourse(X) .
-Student(X) :- Person(X), takesCourse(X,Y), Course(Y) .
-Person(X) :- TeachingAssistant(X) .
-Organization(X) :- subOrganizationOf(X,_) .
-Person(X) :- Student(X) .
-Person(X) :- emailAddress(X,_) .
-subOrganizationOf(X,Z) :- subOrganizationOf(X,Y), subOrganizationOf(Y,Z) .
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
-
-// some subsets
-.decl A( x : number )
-.decl B( x : number )
-.decl C( x : number )
-.decl D( x : number )
-.decl E( x : number )
-
-
-// A
-A(0).
-
-// B
-B(1).
-B(2).
-B(3).
-
-// C
-C(4).
-C(5).
-C(6).
-
-// D
-D(3).
-D(4).
-
-// E
-E(6).
-E(7).
-
-// the universe
-.decl U( x : number )
-.output U()
-U(X) :- A(X) ; B(X) ; C(X) ; D(X); E(X) .
-
-// an empty set
-.decl N( x : number )
-.output N()
-N(X) :- A(X), B(X).
-
-
-.decl R1( x : number )
-.output R1()
-R1(X) :- A(X) ; B(X) , D(X) .
-
-.decl R2( x : number )
-.output R2()
-R2(X) :- U(X) , !( B(X) ; D(X) ) .
-
-.decl R3( x : number )
-.output R3()
-R3(X) :- U(X) , !( B(X) , D(X) ) .
-
-.decl R4( x : number )
-.output R4()
-R4(X) :- U(X) , !( B(X) ; D(X) ) .
-
-.decl R5( x : number )
-.output R5()
-R5(X) :- U(X) , !!!( B(X) ; D(X) ) .
-
-.decl R6( x : number )
-.output R6()
-R6(X) :- (!B(X) ; D(X)) , U(X) .
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
+// ==== END: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
 

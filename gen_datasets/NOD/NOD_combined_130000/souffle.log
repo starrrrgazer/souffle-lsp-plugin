@@ -1,18 +1,38 @@
-9月 03, 2025 5:01:36 下午 SouffleTextDocumentService countLineNum
-信息: LOC: 4939 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:36 下午 SouffleTextDocumentService countNodeNum
-信息: NOD: 128463 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:36 下午 SouffleTextDocumentService countDEFAndOCC
-信息: DEF: 1696 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:36 下午 SouffleTextDocumentService countDEFAndOCC
-信息: OCC: 9507 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:38 下午 ReferenceProvider getLocateTime
+9月 10, 2025 11:14:58 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 4757 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:14:58 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 126040 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:14:58 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 1400 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:14:58 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 8585 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:14:59 上午 ReferenceProvider getLocateTime
 信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:39 下午 ReferenceProvider getSearchTime
-信息: search: 777 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:39 下午 DefinitionProvider getDefinition
+9月 10, 2025 11:15:00 上午 ReferenceProvider getSearchTime
+信息: search: 791 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:00 上午 DefinitionProvider getDefinition
 信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:39 下午 RenameProvider getRename
-信息: rename: 4 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
-9月 03, 2025 5:01:41 下午 CompletionProvider getCompletions
-信息: completion: 10 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:00 上午 RenameProvider getRename
+信息: rename: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:02 上午 CompletionProvider getCompletions
+信息: completion: 9 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:08 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:09 上午 ReferenceProvider getSearchTime
+信息: search: 735 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:09 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:09 上午 RenameProvider getRename
+信息: rename: 3 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:13 上午 CompletionProvider getCompletions
+信息: completion: 5 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:18 上午 ReferenceProvider getLocateTime
+信息: locate: 1 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:19 上午 ReferenceProvider getSearchTime
+信息: search: 848 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:19 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:19 上午 RenameProvider getRename
+信息: rename: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl
+9月 10, 2025 11:15:21 上午 CompletionProvider getCompletions
+信息: completion: 8 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_130000/NOD_combined_130000.dl

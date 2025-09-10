@@ -2,7 +2,11 @@ import re
 from collections import defaultdict
 import csv
 import os
-
+import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.inspection import permutation_importance
+from sklearn.model_selection import KFold
+import numpy as np
 def process_log_file(log_file_path):
     document_data = defaultdict(dict)
 
@@ -65,7 +69,7 @@ def merge_logs(metric_folder, output_log):
 
 def export_multi_to_csv(all_results, output_file):
     """把四个表导出到一个 CSV 文件"""
-    fieldnames = ['document', 'compile_component', 'locate_component', 
+    fieldnames = ['document', 'compile_component', 'locate_component',
                   'search_component', 'NOD', 'DEF', 'OCC', 'LOC',
                   'gotoDefinition', 'rename', 'completion']
     with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
@@ -80,6 +84,62 @@ def export_multi_to_csv(all_results, output_file):
             for r in results:
                 writer.writerow([r[k] for k in fieldnames])
             writer.writerow([])  # 空行分隔
+
+def analyze_feature_importance(all_results, output_file="feature_importance.csv"):
+    """基于 permutation importance + KFold 计算特征重要性"""
+    features = ['LOC', 'DEF', 'OCC', 'NOD']
+    targets = ['locate_component', 'search_component',
+               'gotoDefinition', 'rename', 'completion']
+
+    # 收集所有数据
+    all_data = []
+    for metric, results in all_results.items():
+        all_data.extend(results)
+
+    
+    df = pd.DataFrame(all_data).drop_duplicates(subset=["document"])
+    X = df[features].to_numpy()
+    importance_rows = []
+
+    for target in targets:
+        y = df[target].to_numpy()
+
+        if len(np.unique(y)) <= 1:
+            print(f"[跳过] {target} 没有有效数据")
+            continue
+
+        # KFold
+        KF = KFold(n_splits=5, shuffle=True, random_state=42)
+        avg_weights = np.zeros(len(features))
+
+        for train_idx, test_idx in KF.split(X):
+            xtrain, xtest = X[train_idx], X[test_idx]
+            ytrain, ytest = y[train_idx], y[test_idx]
+
+            model = RandomForestRegressor(n_estimators=200, random_state=42)
+            model.fit(xtrain, ytrain)
+
+            result = permutation_importance(model, xtest, ytest, n_repeats=10, random_state=42)
+
+            avg_weights += result['importances_mean']
+
+        avg_weights /= KF.get_n_splits()
+
+        # 保存一行：target + 四个特征的重要性
+        row = {"target": target}
+        for f, w in zip(features, avg_weights):
+            row[f] = w
+        importance_rows.append(row)
+
+    # 写 CSV
+    fieldnames = ["target"] + features
+    with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(importance_rows)
+
+    print(f"基于 KFold 的特征重要性矩阵已保存到 {output_file}")
+
 
 
 if __name__ == "__main__":
@@ -96,4 +156,4 @@ if __name__ == "__main__":
         print(f"[{metric}] 合并完成，生成 {merged_log}")
 
     export_multi_to_csv(all_results, "results_all.csv")
-    print("\n结果已导出到 results_all.csv")
+    analyze_feature_importance(all_results, "feature_importance.csv")

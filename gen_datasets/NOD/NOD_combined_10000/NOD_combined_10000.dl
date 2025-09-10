@@ -1,604 +1,109 @@
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-// Compute the factorial function.
+// Solves the n-queens problem
 
-// fact(i, n) holds iff i! = n
-.decl fact(i:number, n:number)
-.output fact()
-
-// Calculate only up to the lowest value satisfying lim(n)
-.decl lim(n:number)
-.input lim()
-
-fact(I+1, N*(I+1)) :- fact(I, N), !lim(I).
-
-// Ground Fact: 0! := 1
-fact(0, 1).
+// Side length of the board.
+.decl size( n : number )
+.input size()
 
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
+// The maximal compatible sets -- n queens.
+.decl solution( qs : QueenList )
+.printsize solution
+solution(qs) :- compatible(qs, s), size(s).
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\graph\graph.dl ====
-//// Test Case adopted from Ocaml datalog
 
-.decl reachable  (node1:number, node2:number)
-.output reachable  ()
-.decl increasing (node1:number, node2:number)
-.output increasing ()
-.decl edge       (node1:number, node2:number)
+// Natural numbers from 1 to the size of the board.
+.decl up_to_size( x : number )
+up_to_size(1).
+up_to_size(x + 1) :- up_to_size(x), !size(x).
 
-reachable(X,Y)  :- edge(X,Y).
-reachable(X,Y)  :- edge(X,Z), reachable(Z,Y).
-increasing(X,Y) :- edge(X,Y), X < Y.
-increasing(X,Y) :- edge(X,Z), X < Z, increasing(Z,Y).
 
-edge(0, 1).
-edge(1, 2).
-edge(2, 3).
-edge(3, 4).
-edge(4, 5).
-edge(5, 6).
-edge(6, 7).
-edge(7, 8).
-edge(8, 9).
-edge(9, 10).
-edge(10, 0).
+// A cartesian coordinate for a board square.
+.type Position = [ x : number, y : number ]
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\graph\graph.dl ====
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
+// This relation holds the position of each square of the board.
+.decl on_board( p : Position )
+on_board([x, y]) :- up_to_size(x), up_to_size(y).
+
+
+// Mutually-non-attacking list of queen positions.
+.type QueenList = [ p : Position, qs : QueenList ]
+
+
+// Arguments are not on the same diagonal.
+.decl non_diagonals( p : Position, q : Position )
+non_diagonals([px, py], [qx, qy]) :- px - qx != py - qy, qx - px != py - qy, on_board([px, py]), on_board([qx, qy]).
+
+
+// Holds if p and q do not attack each other.
+.decl sympathetic( p : Position, q : Position )
+sympathetic(p, q) :- non_diagonals(p, q), px != qx, py != qy, p=[px, py], q=[qx,qy].
+
+
+// Holds if the head of qs is mutually non-attacking with its tail, which should itself be compatible.
+// Generated column by column, left to right.
+.decl compatible( qs : QueenList, n : number )
+compatible([p, nil], 1) :- on_board(p). //, p = [1,y].
+compatible([p, [head, tail]], n+1) :- sympathetic(p, head), compatible([p, tail], n), compatible([head, tail], n), p = [px, py], head = [hx, hy], px > hx.
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-// Topological Ordering
-
-// Gives a topological ordering over the vertices of an input graph. Note that is works only on input graph is acyclic.
-
-// Graph
-
-// Vertices
-.decl vertices(v:symbol)
-.input vertices()
-.decl vertex(v:symbol)
-.output vertex()
-vertex(v) :- vertices(v).
-
-// Edges
-.decl edges(v1:symbol, v2:symbol)
-.input edges()
-.decl edge(v1:symbol, v2:symbol)
-.output edge()
-edge(v1, v2) :- vertex(v1), vertex(v2), edges(v1, v2).
-
-// Tests if vertex v1 proceeds vertex v2 in the ordering.
-.decl is_before(v1:symbol, v2:symbol)
-.output is_before()
-
-// Tests if vertex v1 succeeds vertex v2 in the ordering.
-.decl is_after(v1:symbol, v2:symbol)
-.output is_after()
-
-// Gives the possible indices of the vertices in the ordering.
-.decl indices(v:symbol, i:number)
-.output indices()
-
-// Gives the exact index of the vertex in the ordering.
-.decl index(v:symbol, i:number)
-.output index()
-
-// Vertex x is before vertex y if the graph has an edge from x to y.
-is_before(x, y) :-
-    edge(x, y).
-
-// Vertex x is before vertex y if some vertex z is before x and z is before y.
-is_before(x, y) :-
-    is_before(x, z),
-    is_before(z, y).
-
-// Vertex x is after vertex y if the graph has an edge from y to x.
-is_after(x, y) :-
-    edge(y, x).
-
-// Vertex x is after vertex y if some vertex z is after x and y is after z.
-is_after(x, y) :-
-    is_after(z, x),
-    is_after(y, z).
-
-// The index of a vertex x is 0 if it has no inbound or outbound edges.
-indices(x, 0) :-
-    vertex(x),
-    !edge(_, x),
-    !edge(x, _).
-
-// The index of a vertex x is 1 if it has no inbound but only outbound edges.
-indices(x, 1) :-
-    vertex(x),
-    !edge(_, x),
-    edge(x, _).
-
-// The possible indices of a vertex x are 1 more than the index of some vertex y if that vertex y is before x but not after x.
-indices(x, i+1) :-
-    is_before(y, x),
-    !is_before(x, y),
-    is_after(x, y),
-    indices(y, i).
-
-// The exact index of a vertex is the maximum of its possible indices.
-index(x, i) :-
-    indices(x, i),
-    !indices(x, i+1).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po3\po3.dl ====
-.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
-.input Check()
-.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
-.input In()
-.decl A(l:number, o:number)
-.output A()
-
-A(1,i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
-A(2,i) :- Check(a, _, c, d, e, f), In(a, _, c, d, e, f, i).
-A(3,i) :- Check(a, _, _, d, e, f), In(a, _, _, d, e, f, i).
-A(4,i) :- Check(a, _, _, _, e, f), In(a, _, _, _, e, f, i).
-A(5,i) :- Check(a, _, _, _, _, f), In(a, _, _, _, _, f, i).
-A(6,i) :- Check(a, _, _, _, _, _), In(a, _, _, _, _, _, i).
-A(7, i) :- Check(a, b, _, d, e, f), In(a, b, _, d, e, f, i).
-A(8, i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
-A(9, i) :- Check(a, b, _, _, _, f), In(a, b, _, _, _, f, i).
-A(10, i) :- Check(a, b, _, _, _, _), In(a, b, _, _, _, _, i).
-A(11, i) :- Check(a, b, c, _, e, f), In(a, b, c, _, e, f, i).
-A(12, i) :- Check(a, b, c, _, _, f), In(a, b, c, _, _, f, i).
-A(13, i) :- Check(a, b, c, _, _, _), In(a, b, c, _, _, _, i).
-A(14, i) :- Check(a, b, c, d, _, f), In(a, b, c, d, _, f, i).
-A(15, i) :- Check(a, b, c, d, _, _), In(a, b, c, d, _, _, i).
-
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\po3\po3.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\minpath3\minpath3.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2019, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-//
-// Shortest Path Computation
-//
-
-.type Node <: symbol
-.type Distance <: number
-
-//
-// start node
-//
-.decl start(u:Node)
-.input start
-
-//
-//  edge relation of directed graph
-//
-
-.decl edge(u:Node, v:Node, dist:Distance)
-.input edge
-
-//
-// node relation
-//
-
-.decl node(u:Node)
-
-node(u) :-
-   edge(u, _, _);
-   edge(_, u, _).
-
-//
-// order predecessor nodes by ordinal Distance
-//
-
-.decl lessPred(u1:Node, u2:Node, v:Node)
-
-lessPred(u1, u2, v) :-
-   edge(u1, v, _),
-   edge(u2, v, _),
-   ord(u1) < ord(u2).
-
-//
-// compute strict transitive predecessor nodes
-//
-
-.decl transPred(u1:Node, u2:Node, v:Node)
-
-transPred(u1, u3, v) :-
-   lessPred(u1, u2, v),
-   lessPred(u2, u3, v).
-
-//
-// successor relation among predecessor node
-//
-
-.decl succPred(before:Node, after:Node, v:Node)
-succPred(u1, u2, v) :-
-   lessPred(u1, u2, v),
-   !transPred(u1, u2, v).
-
-//
-// determine first predecessor of a node
-//
-
-.decl firstPred(u:Node, v:Node)
-
-firstPred(u, v) :-
-   edge(u, v, _),
-   !succPred(_, u, v).
-
-//
-// determine last predecessor of a node
-//
-
-.decl lastPred(u:Node, v:Node)
-
-lastPred(u, v) :-
-   edge(u, v, _),
-   !succPred(u, _, v).
-
-//
-// step function that computes stepwise the shortest distance
-// of a node.
-//
-
-.decl step(i:number, u:Node, w:Distance, next:Node)
-
-/* compute shortest distance for first predecessor node
- * NB: this step is performed assuming that the computation
- * hasn't finished yet.
- */
-step(i+1, v, d1 + d2, u) :-
-   again(i),
-   shortestStepPath(i, u, d2),
-   firstPred(u, v),
-   edge(u, v, d1).
-
-/* compute shortest distance for subsequent predecessor nodes;
- * one of the previous predecessors was smaller than shortest path from
- * current predecessor.
- */
-
-step(i, v, d, u2) :-
-   step(i, v, d, u1),
-   succPred(u1, u2, v),
-   edge(u2, v, d1),
-   shortestStepPath(i-1, u2, d2),
-   d <= d1 + d2.
-
-/* compute shortest distance for subsequent predecessor nodes;
- * all previous predecessors' shortest paths are longer than the
- * shortest path of current predecessors.
- */
-
-step(i, v, d1 + d2, u2) :-
-   step(i, v, d, u1),
-   succPred(u1, u2, v),
-   edge(u2, v, d1),
-   shortestStepPath(i-1, u2, d2),
-   d1 + d2 < d.
-
-//
-// compute shortest distance of a node in the i-th step
-//
-
-.decl shortestStepPath(i:number, u:Node, d:Distance)
-
-/* initial shortest distance for start node for first step */
-shortestStepPath(i, u, 0) :-
-   again(i),
-   start(u).
-
-/* initial shortest distance for all other nodes for subsequent steps */
-shortestStepPath(0, u, largeDist) :-
-   node(u),
-   !start(u),
-   largeDist = sum d: {edge(_,_,d)}.
-
-/* shortest distance for all other steps */
-shortestStepPath(i, v, d) :-
-   step(i, v, d, u),
-   lastPred(u, v).
-
-//
-// Predicate which determines whether another step is required.
-//
-
-.decl again(i:Distance)
-
-/* at least two iterations are required */
-again(0).
-again(1).
-
-/* if we find at least one node whose result has changed in the
- * previous step, a new step is required.
- */
-
-again(i+1) :-
-   shortestStepPath(i, u, wi),
-   shortestStepPath(i-1, u, wi_1),
-   i > 0,
-   wi < wi_1.
-
-//
-// last step
-//
-
-.decl lastStep(i:number)
-
-lastStep(i) :-
-   again(i),
-   !again(i+1).
-
-//
-// shortest path
-//
-
-.decl shortestPath(u:Node, dist:Distance)
-
-shortestPath(u, d) :-
-   lastStep(i),
-   shortestStepPath(i, u, d).
-
-.output shortestPath
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\minpath3\minpath3.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\trans\trans.dl ====
-// Type declarations
-.type S <: symbol
-
-// Set output flag depending on stage
-.decl A (x:S, y:S)
-.output A ()
-
-// Transitive Closure
-A(x,z) :- A(x,y), A(y,z).
-
-// Facts
-A("a","b").
-A("b","c").
-A("c","d").
-A("d","e").
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\trans\trans.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\metro\metro.dl ====
+// Find the shortest paths between all nodes, the slow way
 .type Node <: symbol
 
-.decl link(node1:Node, node2:Node, node3:Node)
-.decl St_Reachable(node1:Node, node2:Node)
-.decl Li_Reachable(node1:Node, node2:Node)
-.decl platform2_reach(node1:Node, node2:Node)
-.output platform2_reach()
+.decl Edge(n:Node, m:Node, w:number)
+.input Edge()
+
+// Find all paths
+.decl Length   (n:Node, m:Node, l:number)
+Length(x,y,t)  :- t=l, Edge(x,y,l).
+Length(x,y,t+l)  :- Edge(x,z,l), Length(z,y,t).
+
+// Filter out the longest path
+.decl ShortestPath(n:Node, m:Node, l:number)
+.output ShortestPath()
+ShortestPath(x, y, a) :- Length(x, y, _), a = min Z : Length(x, y, Z).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\tree\tree.dl ====
+
+.type Node <: symbol
+
+.decl S      (node1:Node, node2:Node)
+.output S      ()
+.decl T      (node1:Node, node2:Node)
+.output T      ()
+.decl R      (node1:Node, node2:Node, node3:Node)
+
+S (x1, x3) :- T(x1, x2), R(x2, _, x3).
+T (x1, x4) :- R(x1, _, x2), R(x2, _, x3), T(x3, x4).
+T (x1, x3) :- R(x1, a, x2), R(x2, a, x3).
 
 
-St_Reachable(x, y) :- link(_,x,y).
-St_Reachable(x, y) :- St_Reachable(x, z), link(_, z, y).
-Li_Reachable(x, u) :- St_Reachable(x, z), link(u, z, _).
+R("1", "a", "2").
+R("2", "b", "3").
+R("3", "a", "4").
+R("4", "a", "5").
+R("5", "a", "6").
 
-platform2_reach("platform2", y) :- St_Reachable("platform2", y), link(_, _, y).
+// ==== END: d:\work24\souffle-lsp-plugin\example\tree\tree.dl ====
 
-link("4","platform1","platform2").
-link("4","platform2","platform3").
-link("4","platform3","platform4").
-link("1","platform4","platform5").
-link("1","platform5","platform6").
-link("1","platform7","platform8").
-link("9","platform8","platform9").
-link("9","platform9","platform10").
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\metro\metro.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl ====
-//
-// An example computing all palendroms of a given length.
-//
-
-.type Letter <: symbol
-
-.decl str(id:number, a:number, l:Letter, b:number)
-.decl len(id:number, l:number)
-
-
-//////////////////////////////////////////////////////////////////
-//          index range          //
-//////////////////////////////////////////////////////////////////
-
-.decl p(x:number)
-
-p(0).
-p(x) :- str(_,_,_,x).
-
-
-
-
-//////////////////////////////////////////////////////////////////
-//          palindromes          //
-//////////////////////////////////////////////////////////////////
-
-
-.decl palin_aux(s:number, a:number, b:number)
-palin_aux(s,x,x) :- str(s,_,_,_), p(x).
-palin_aux(s,x,y) :- str(s,x,_,y).
-palin_aux(s,x,y) :- str(s,x,a,t), palin_aux(s,t,r), str(s,r,a,y).
-
-.decl palindrome(s:number)
-.output palindrome()
-palindrome(s) :- palin_aux(s,0,l), len(s,l).
-
-
-
-//////////////////////////////////////////////////////////////////
-//       words to be tested      //
-//////////////////////////////////////////////////////////////////
-
-// hello
-str(0,0,"h",1).
-str(0,1,"e",2).
-str(0,2,"l",3).
-str(0,3,"l",4).
-str(0,4,"o",5).
-len(0,5).
-
-
-// racecar
-str(1,0,"r",1).
-str(1,1,"a",2).
-str(1,2,"c",3).
-str(1,3,"e",4).
-str(1,4,"c",5).
-str(1,5,"a",6).
-str(1,6,"r",7).
-len(1,7).
-
-
-// noon
-str(2,0,"n",1).
-str(2,1,"o",2).
-str(2,2,"o",3).
-str(2,3,"n",4).
-len(2,4).
-
-// never odd or even
-str(3,0,"n",1).
-str(3,1,"e",2).
-str(3,2,"v",3).
-str(3,3,"e",4).
-str(3,4,"r",5).
-str(3,5,"o",6).
-str(3,6,"d",7).
-str(3,7,"d",8).
-str(3,8,"o",9).
-str(3,9,"r",10).
-str(3,10,"e",11).
-str(3,11,"v",12).
-str(3,12,"e",13).
-str(3,13,"n",14).
-len(3,14).
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-#include "array.dl"
-
-// Cellular Automata
-// Simulation of elementary cellular automaton to a given number of generations.
-
-// The termination time, the simulation will stop after the given number of generations.
-.decl terminate(time:number)
-.input terminate()
-
-// The transition function, giving the value of a cell at time t+1 from the values of that cell and its local environment at time t.
-.decl transition(prev:number, center:number, next:number, value:number)
-.input transition()
-
-// The value of the cell to the left of the cell specified by the index at the given time, or the default value if it is out of the array bounds.
-.decl prev(time:number, index:number, value:number)
-prev(t, i, NULL) :- !element(i-1, _), cell(t, i, _), default(NULL).
-prev(t, i, x) :- cell(t, i-1, x), element(i, _).
-
-// The value of the cell to the right of the cell specified by the index at the given time, or the default value if it is out of the array bounds.
-.decl next(time:number, index:number, value:number)
-next(t, i, NULL) :- !element(i+1, _), cell(t, i, _), default(NULL).
-next(t, i, x) :- cell(t, i+1, x), element(i, _).
-
-// The cells, referenced by a time and their index in the backing array of elements, and having a value that is either 0 or 1.
-.decl cell(time:number, index:number, value:number)
-.output cell()
-
-// The value of a cell at time 0 is the value of its backing element.
-cell(0, i, x) :- element(i, x).
-
-// The value of a cell at time t+1 is given by the transition function on the value of the local environment at time t.
-cell(t+1, i, x) :- !terminate(t), environment(t, i, l, c, r), transition(l, c, r, x).
-
-// The local environment of a cell, giving the value of the specified cell at time t, as well as that of its nearest neighbours.
-.decl environment(time:number, index:number, prev:number, center:number, next:number)
-.output environment()
-environment(t, i, l, c, r) :-
-  prev(t, i, l), cell(t, i, c), next(t, i, r).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\counter\counter.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2018, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Subtracts the number of `-` from the number of `+`
-
-.type index <: number
-.type counter <: number
-.type program <: symbol
-
-.decl torun(p : program)
-.input torun
-
-.decl progress(i : index, c : counter, p : program)
-progress(0,0,p) :- torun(p).
-progress(i+1,c+1,p) :- progress(i,c,p), "+"=substr(p,i,1).
-progress(i+1,c-1,p) :- progress(i,c,p), "-"=substr(p,i,1).
-progress(i+1,c,p) :-
-    progress(i,c,p),
-    i < strlen(p),
-    "+" != substr(p,i,1),
-    "-" != substr(p,i,1).
-
-.decl result(c : counter, p : program)
-result(c,p) :- progress(strlen(p),c,p).
-.output result
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\counter\counter.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-//// Test-case for string matching
-
-.decl inputData(s:symbol)
-.input inputData
-
-.decl outputData(s:symbol)
-.output outputData
-
-outputData(x) :- inputData(x), !match("a.*", x).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+// ==== BEGIN: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
@@ -625,125 +130,501 @@ prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
 .output p_factor()
 p_factor(x, fc) :- factor(x, fc), !prod(fc).
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
+// ==== END: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl ====
-//
-// Example: data flow analysis
-//
-// This example is computing live variables.
-//
-
-
-//// --- definitions --- ////
-
-.type Node <: symbol
-
-// control flow graph (input)
-.decl cf_edge(x:Node,y:Node)
-
-
-// mark nodes in the graph using and defining variables
-.type Var <: symbol
-
-.decl use(x:Node, v:Var)
-.decl def(x:Node, v:Var)
-
-//// --- result --- ////
-
-.decl live_vars_in(x:Node, v:Var)
-.output live_vars_in()
-.decl live_vars_out(x:Node, v:Var)
-.output live_vars_out()
-
-//////////////////////////////////////////////////
-
-cf_edge("A","B").
-cf_edge("B","C").
-cf_edge("C","C").
-cf_edge("C","D").
-cf_edge("B","D").
-cf_edge("D","E").
-
-
-// use and def
-
-def("A", "x1").
-
-use("B", "x1").
-def("B", "x2").
-
-use("C", "x2").
-def("C", "x2").
-
-use("D", "x2").
-def("D", "x3").
-
-use("E", "x2").
-use("E", "x3").
-
-//////////////////////////////////////////////////
-
-live_vars_in(x,v) :- use(x,v).
-live_vars_in(x,v) :- !def(x,v), live_vars_out(x,v).
-
-live_vars_out(x,v) :- cf_edge(x,y), live_vars_in(y,v).
-
-
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_live_vars\dfa_live_vars.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl ====
 // Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Copyright (c) 2018, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-.type Letter <: symbol
-.type Pos <: number
-.type Cost <: number
+// Perform the Euclidean Algorithm to calculate the Greatest Common Divisor of Rational Polynomials
 
-.decl String1			(p:Pos, a:Letter)
-.decl String2			(p:Pos, a:Letter)
+// Integers, used in definition of Rationals
+.type int <: number
+// Indices of polynomials
+.type index <: number
 
-.input String1
-.input String2
+// Rational numbers, just hope the denominator isn't zero
+.type rational = [
+    numerator : int,
+    denominator : int
+]
 
-.decl End1				(p:Pos)
-.decl End2				(p:Pos)
-.decl NotEnd1			(p:Pos)
-.decl NotEnd2			(p:Pos)
+// Polynomials with rational coefficients, written as `constant + higher * x'
+.type poly = [
+    constant : rational,
+    higher : poly
+]
 
-NotEnd1(p) :- String1(p, _), String1(q, _), p < q.
-End1(p) :- String1(p, _), !NotEnd1(p).
-NotEnd2(p) :- String2(p, _), String2(q, _), p < q.
-End2(p) :- String2(p, _), !NotEnd2(p).
+// -- Calculating the greatest common divisor of two integers -- //
 
-.decl Match				(i:Pos, j:Pos, c:Cost)
+// Integers we should calculate the gcd of recursively
+.decl ToGcdInt(first : int, second : int)
+ToGcdInt(second,modulo) :-
+    ToGcdInt(first,second),
+    modulo = first % second,
+    modulo != 0. // Modulo = 0 is a base case, do not recurse.
 
-Match(0, 0, 0).
+// Base case of integer gcd
+.decl GcdBase(first : int)
+GcdBase(second) :-
+    ToGcdInt(first,second),
+    0 = first % second.
 
-// Match a character
-Match(i + 1, j + 1, s) :- End1(e), i < e, End2(f), j < f, Match(i, j, s), String1(i + 1, a), String2(j + 1, a).
+// Result of calculating gcd of integers
+.decl GcdInt(first : int, second : int, gcd : int)
+GcdInt(first,0,first) :- GcdBase(first).
+GcdInt(first,second,gcd) :-
+    ToGcdInt(first,second),
+    modulo = first % second,
+    GcdInt(second,modulo,gcd).
 
-// Indels
-Match(i + 1, j, s + 1) :- End1(e), i < e, End2(f), j <= f, Match(i, j, s).
-Match(i, j + 1, s + 1) :- End1(e), i <= e, End2(f), j < f, Match(i, j, s).
+// -- Simplifying coefficients and trimming tails of polynomials -- //
 
-.decl MinMatch			(i:Pos, j:Pos, c:Cost)
-.decl NotMinMatch		(i:Pos, j:Pos, c:Cost)
+// Polynomials we wish to simplify
+.decl ToSimplify(a : poly)
+ToSimplify(tail) :- ToSimplify([_,tail]).
 
-NotMinMatch(i, j, s) :- Match(i, j, s), Match(i, j, t), t < s.
-MinMatch(i, j, s) :- Match(i, j, s), !NotMinMatch(i, j, s).
-//MinMatch(i, j, s) :- s = min t : Match(i, j, t).
+// Result of simplification
+.decl Simplify(a : poly, b : poly)
+Simplify(nil,nil) :- ToSimplify(nil).
+Simplify([head,tail],nil) :- // Trim the tail of polynomials equivalent to zero
+    ToSimplify([head,tail]),
+    Simplify(tail,nil),
+    head = [0,denominator].
+Simplify([head,tail],[newHead,newTail]) :-
+    ToSimplify([head,tail]),
+    Simplify(tail,newTail),
+    head = [numerator,denominator] ,
+    (newTail != nil; numerator != 0), // make sure polynomial is non-zero
+    GcdInt(numerator,denominator,gcd),
+    newHead = [numerator/gcd,denominator/gcd]. // simplify coefficient
 
-.decl Result			(c:Cost)
+// Helper method for simplify
+ToGcdInt(numerator,denominator) :-
+    ToSimplify([head,tail]),
+    head = [numerator,denominator] ,
+    ( Simplify(tail, newTail),
+      newTail != nil
+    ; numerator != 0
+    ).
 
-Result(c) :- End1(e), End2(f), MinMatch(e, f, c).
-.output Result
+// -- Add polynomials recursively -- //
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl ====
+// Polynomials that we need to add
+.decl ToAdd(first : poly, second : poly)
+ToAdd(firstTail, secondTail) :- ToAdd([_,firstTail],[_,secondTail]).
+
+// Result of addition
+.decl Add(first : poly, second : poly, added : poly)
+Add(first,nil,first) :- ToAdd(first,nil).
+Add(nil,second,second) :- ToAdd(nil,second).
+Add([firstHead,firstTail],[secondHead,secondTail],[sumHead,sumTail]) :-
+    ToAdd([firstHead,firstTail],[secondHead,secondTail]),
+    Add(firstTail,secondTail,sumTail),
+    firstHead = [firstNumerator,firstDenominator],
+    secondHead = [secondNumerator,secondDenominator],
+    sumHead =
+        [firstNumerator*secondDenominator+firstDenominator*secondNumerator,
+            firstDenominator*secondDenominator].
+
+// -- Multiply polynomials by rational constants -- //
+
+// Constant and polynomial to be multiplied
+.decl ToMultiply(constant : rational, polynomial : poly)
+ToMultiply(constant,tail) :- ToMultiply(constant,[_,tail]).
+
+// Result of multiplication
+.decl Multiply(constant : rational, polynomial : poly, product : poly)
+Multiply(constant, nil, nil) :- ToMultiply(constant, nil).
+Multiply(constant, [head,tail], [productHead, productTail]) :-
+    ToMultiply(constant, [head,tail]),
+    Multiply(constant, tail, productTail),
+    constant = [constantNumerator, constantDenominator],
+    head = [headNumerator, headDenominator],
+    productHead =
+        [constantNumerator*headNumerator, constantDenominator*headDenominator].
+
+// -- Find the leading coefficient and index of a polynomial -- //
+// We do not assume the polynomial is simplified
+// The index of a polynomial equivalent to 0 will be 0
+// Otherwise if the leading term is a*x^n (a /= 0) we return a and n+1
+
+// Polynomials to find the leading term of
+.decl ToLeading(a : poly)
+ToLeading(tail) :- ToLeading([_,tail]).
+
+// Resulting leading terms
+.decl Leading(a : poly, coefficient : rational, i : index)
+Leading(nil, [0,1], 0) :- ToLeading(nil).
+Leading([head,tail], [0,1], 0) :- // Polynomial is equivalent to 0
+    ToLeading([head,tail]),
+    Leading(tail,[0,1],0),
+    head = [0,denominator].
+Leading([head,tail], head, 1) :- // Polynomial is equivalent to non-zero constant
+    ToLeading([head,tail]),
+    Leading(tail,[0,1],0),
+    head = [numerator,denominator], numerator!=0.
+Leading([head,tail], coefficient, i+1) :-
+    ToLeading([head,tail]),
+    Leading(tail,coefficient,i),
+    i != 0.
+
+// -- Multiply polynomials by powers of x -- //
+
+// Input is of the form Raise(start,goal,0,start)
+// Output is of the form Raise(start,goal,goal,result)
+.decl Raise(start : poly, goal : index, current : index, result : poly)
+Raise(start,goal,current+1,[[0,1],result]) :-
+    Raise(start,goal,current,result),
+    current < goal.
+
+// -- Calculate one polynomial modulo another -- //
+
+// Polynomials to calculate modulo of
+.decl ToMod(first : poly, second : poly)
+ToMod(next,second) :-
+    ToMod(first,second),
+    Leading(first,firstCoefficient,firstDegree),
+    Leading(second,secondCoefficient,secondDegree),
+    firstDegree >= secondDegree, // check we are not in a base case
+    firstCoefficient = [firstNumerator,firstDenominator],
+    secondCoefficient = [secondNumerator,secondDenominator],
+    multiplicationConstant =
+        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
+    Multiply(multiplicationConstant,second,multiplicationResult), // make the leading coefficients negatives of each other
+    Raise(multiplicationResult,firstDegree-secondDegree,
+        firstDegree-secondDegree,raiseResult), // make the leading indices the same
+    Add(first,raiseResult,nextUnsimp), // this will cancel out the leading term
+    Simplify(nextUnsimp,next). // avoid integer overflow and excessive computation
+
+// Helper methods for ToMod
+ToLeading(first) :- ToMod(first,_).
+ToLeading(second) :- ToMod(_,second).
+ToMultiply(multiplicationConstant,second) :-
+    ToMod(first,second),
+    Leading(first,firstCoefficient,firstDegree),
+    Leading(second,secondCoefficient,secondDegree),
+    firstDegree >= secondDegree,
+    firstCoefficient = [firstNumerator,firstDenominator],
+    secondCoefficient = [secondNumerator,secondDenominator],
+    multiplicationConstant =
+        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator].
+Raise(multiplicationResult,firstDegree-secondDegree,0,multiplicationResult) :-
+    ToMod(first,second),
+    Leading(first,firstCoefficient,firstDegree),
+    Leading(second,secondCoefficient,secondDegree),
+    firstDegree >= secondDegree,
+    firstCoefficient = [firstNumerator,firstDenominator],
+    secondCoefficient = [secondNumerator,secondDenominator],
+    multiplicationConstant =
+        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
+    Multiply(multiplicationConstant,second,multiplicationResult).
+ToAdd(first,raiseResult) :-
+    ToMod(first,second),
+    Leading(first,firstCoefficient,firstDegree),
+    Leading(second,secondCoefficient,secondDegree),
+    firstDegree >= secondDegree,
+    firstCoefficient = [firstNumerator,firstDenominator],
+    secondCoefficient = [secondNumerator,secondDenominator],
+    multiplicationConstant =
+        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
+    Multiply(multiplicationConstant,second,multiplicationResult),
+    Raise(multiplicationResult,firstDegree-secondDegree,
+        firstDegree-secondDegree,raiseResult).
+ToSimplify(nextUnsimp) :-
+    ToMod(first,second),
+    Leading(first,firstCoefficient,firstDegree),
+    Leading(second,secondCoefficient,secondDegree),
+    firstDegree >= secondDegree,
+    firstCoefficient = [firstNumerator,firstDenominator],
+    secondCoefficient = [secondNumerator,secondDenominator],
+    multiplicationConstant =
+        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
+    Multiply(multiplicationConstant,second,multiplicationResult),
+    Raise(multiplicationResult,firstDegree-secondDegree,
+        firstDegree-secondDegree,raiseResult),
+    Add(first,raiseResult,nextUnsimp).
+
+// The result of the modulo operation
+.decl Mod(first : poly, second : poly, modulo : poly)
+Mod(first,second,first) :-
+    ToMod(first,second),
+    Leading(first,_,firstDegree),
+    Leading(second,_,secondDegree),
+    firstDegree < secondDegree. // base case, first is smaller so return it
+Mod(first,second,modulo) :-
+    ToMod(first,second),
+    Leading(first,firstCoefficient,firstDegree),
+    Leading(second,secondCoefficient,secondDegree),
+    firstDegree >= secondDegree,
+    firstCoefficient = [firstNumerator,firstDenominator],
+    secondCoefficient = [secondNumerator,secondDenominator],
+    multiplicationConstant =
+        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
+    Multiply(multiplicationConstant,second,multiplicationResult),
+    Raise(multiplicationResult,firstDegree-secondDegree,
+        firstDegree-secondDegree,raiseResult),
+    Add(first,raiseResult,nextUnsimp),
+    Simplify(nextUnsimp,next),
+    Mod(next,second,modulo).
+
+// -- Cakculate the greatest common divisor of two polynomials -- //
+
+// Polynomials to calculate the gcd of
+.decl ToGcd(first : poly, second : poly)
+ToGcd(second,modulo) :-
+    ToGcd(first,second),
+    Leading(second,_,secondDegree),
+    secondDegree > 0, // ensure this is not a base case
+    Mod(first,second,modulo).
+
+// Helper methods for ToGcd
+ToMod(first,second) :-
+    ToGcd(first,second),
+    Leading(second,_,secondDegree),
+    secondDegree > 0.
+ToLeading(second) :- ToGcd(_,second).
+
+// Calculate the resuling gcd
+.decl Gcd(first : poly, second : poly, gcd : poly)
+Gcd(first,second,gcd) :-
+    ToGcd(first,second),
+    Leading(second,_,0), // base case, one term is zero so return the other
+    Leading(first,[firstNumerator,firstDenominator],_),
+    Multiply([firstDenominator,firstNumerator],first,multiplicationResult), // make the gcd monic
+    Simplify(multiplicationResult, gcd). // make output gcd look nicer
+Gcd(first,second,gcd) :-
+    ToGcd(first,second),
+    Leading(second,_,secondDegree),
+    secondDegree > 0,
+    Mod(first,second,modulo),
+    Gcd(second,modulo,gcd).
+
+// Helper methods for Gcd base case
+ToLeading(first) :- ToGcd(first,_).
+ToMultiply([firstDenominator,firstNumerator],first) :-
+    ToGcd(first,second),
+    Leading(second,_,0),
+    Leading(first,[firstNumerator,firstDenominator],_).
+ToSimplify(multiplicationResult) :-
+    ToGcd(first,second),
+    Leading(second,_,0),
+    Leading(first,[firstNumerator,firstDenominator],_),
+    Multiply([firstDenominator,firstNumerator],first,multiplicationResult).
+
+// -- Input -- //
+
+// Which input polynomial (FirstTerm = 1, SecondTerm = 2)
+.type inputIndex <: number
+
+.decl FirstTerm(i : index, numerator : int, denominator : int)
+.input FirstTerm
+
+.decl SecondTerm(i : index, numerator : int, denominator : int)
+.input SecondTerm
+
+// Calculate the largest index in each polynomial
+.decl Degree(n : inputIndex, i : index)
+Degree(1,i) :- i = max x : FirstTerm(x,_,_).
+Degree(2,i) :- i = max x : SecondTerm(x,_,_).
+
+// Re-format input to be in one relation, with no missing indices
+.decl Term(n : inputIndex, coefficient : rational, i : index)
+Term(1,[numerator,denominator],i) :- FirstTerm(i,numerator,denominator).
+Term(1,[0,1],i+1) :-
+    Term(1,_,i),
+    Degree(1,degree),
+    degree > i,
+    !FirstTerm(i+1,_,_). // Replace missing index with 0
+Term(2,[numerator,denominator],i) :- SecondTerm(i,numerator,denominator).
+Term(2,[0,1],i+1) :-
+    Term(2,_,i),
+    Degree(2,degree),
+    degree > i,
+    !SecondTerm(i+1,_,_). // Replace missing index with 0
+
+// Build the link-list style polynomial objects
+.decl InputPoly(n : inputIndex, i : index, polynomial : poly)
+InputPoly(n,degree+1,nil) :- Degree(n,degree).
+InputPoly(n,i-1,[head,tail]) :- InputPoly(n,i,tail), Term(n,head,i-1).
+
+ToGcd(first,second) :-
+    InputPoly(1,0,first),
+    InputPoly(2,0,second).
+
+// -- Output -- //
+
+// Find the output polynomial and its degree
+.decl OutputPoly(gcd : poly, degree : index)
+OutputPoly(gcd, degree-1) :- // subtract one because Leading added one
+    InputPoly(1,0,first),
+    InputPoly(2,0,second),
+    Gcd(first,second,gcd),
+    Leading(gcd,_,degree).
+
+ToLeading(gcd) :-
+    InputPoly(1,0,first),
+    InputPoly(2,0,second),
+    Gcd(first,second,gcd).
+
+// calculate the coefficient at each term, and keep the remaining terms on hand
+.decl OutTerm(i : index, coefficient : rational, remaining : poly)
+OutTerm(0, head, tail) :- OutputPoly([head,tail],_).
+OutTerm(0, [0,1], nil) :- OutputPoly(_,0). // handle degenerate case
+OutTerm(i+1, head, tail) :-
+    OutTerm(i, _, [head,tail]),
+    OutputPoly(_,degree),
+    i < degree.
+
+.decl Output(i : index, numerator : int, denominator : int)
+Output(i,numerator,denominator) :- OutTerm(i,[numerator,denominator],_).
+.output Output
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl ====
+
+// ==== BEGIN: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.decl gen(x : number)
+gen(1).
+gen(x+1) :- gen(x), !lim(x).
+
+.decl lim(x : number)
+lim(100).
+
+//factors excluding 1
+.decl factor(num : number, fc : number)
+factor(x, fc) :- gen(x), gen(fc), x % fc = 0, fc != 1.
+
+//finds if there exist two numbers which multiply to x
+.decl prod(num : number)
+prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
+
+//finds the prime factors
+.decl p_factor(x : number, fc : number)
+.output p_factor()
+p_factor(x, fc) :- factor(x, fc), !prod(fc).
+
+// ==== END: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2018, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Simulates a Deterministic Finite Automata to parse strings
+
+.type state <: symbol
+.type string <: symbol
+.type index <: number
+
+.decl transition(from : state, on : string, to : state)
+.input transition
+
+.decl accepting(x : state)
+.input accepting
+
+.decl start(x : state)
+.input start
+
+.decl toparse(x : string)
+.input toparse
+
+// When parsing `in` we have processed `i` characters and are at state `cur`
+.decl parse(in : string, cur : state, i : index)
+parse(in,cur,0) :- toparse(in), start(cur).
+parse(in,new,i+j) :-
+    parse(in,old,i),
+    transition(old,diff,new),
+    j=strlen(diff),
+    diff=substr(in,i,j).
+// The rule above can cause the AST translator to fail in old versions of Souffle
+
+.decl accept(in : string)
+accept(in) :- parse(in,cur,strlen(in)), accepting(cur).
+
+.decl out(s : string, result : symbol)
+out(s, "Accept") :- accept(s).
+out(s, "Reject") :- toparse(s), !accept(s).
+.output out
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
+
+// some subsets
+.decl A( x : number )
+.decl B( x : number )
+.decl C( x : number )
+.decl D( x : number )
+.decl E( x : number )
+
+
+// A
+A(0).
+
+// B
+B(1).
+B(2).
+B(3).
+
+// C
+C(4).
+C(5).
+C(6).
+
+// D
+D(3).
+D(4).
+
+// E
+E(6).
+E(7).
+
+// the universe
+.decl U( x : number )
+.output U()
+U(X) :- A(X) ; B(X) ; C(X) ; D(X); E(X) .
+
+// an empty set
+.decl N( x : number )
+.output N()
+N(X) :- A(X), B(X).
+
+
+.decl R1( x : number )
+.output R1()
+R1(X) :- A(X) ; B(X) , D(X) .
+
+.decl R2( x : number )
+.output R2()
+R2(X) :- U(X) , !( B(X) ; D(X) ) .
+
+.decl R3( x : number )
+.output R3()
+R3(X) :- U(X) , !( B(X) , D(X) ) .
+
+.decl R4( x : number )
+.output R4()
+R4(X) :- U(X) , !( B(X) ; D(X) ) .
+
+.decl R5( x : number )
+.output R5()
+R5(X) :- U(X) , !!!( B(X) ; D(X) ) .
+
+.decl R6( x : number )
+.output R6()
+R6(X) :- (!B(X) ; D(X)) , U(X) .
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
 

@@ -1,18 +1,38 @@
-9月 03, 2025 5:11:52 下午 SouffleTextDocumentService countLineNum
-信息: LOC: 8705 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:11:53 下午 SouffleTextDocumentService countNodeNum
-信息: NOD: 241593 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:11:53 下午 SouffleTextDocumentService countDEFAndOCC
-信息: DEF: 2174 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:11:53 下午 SouffleTextDocumentService countDEFAndOCC
-信息: OCC: 15730 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:12:03 下午 ReferenceProvider getLocateTime
+9月 10, 2025 11:34:52 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 8493 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:34:52 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 230728 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:34:53 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 2324 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:34:53 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 15793 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:34:54 上午 ReferenceProvider getLocateTime
 信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:12:05 下午 ReferenceProvider getSearchTime
-信息: search: 1439 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:12:05 下午 DefinitionProvider getDefinition
+9月 10, 2025 11:34:55 上午 ReferenceProvider getSearchTime
+信息: search: 1236 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:34:55 上午 DefinitionProvider getDefinition
 信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:12:05 下午 RenameProvider getRename
+9月 10, 2025 11:34:55 上午 RenameProvider getRename
 信息: rename: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
-9月 03, 2025 5:12:06 下午 CompletionProvider getCompletions
-信息: completion: 12 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:34:57 上午 CompletionProvider getCompletions
+信息: completion: 11 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:04 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:06 上午 ReferenceProvider getSearchTime
+信息: search: 1713 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:06 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:06 上午 RenameProvider getRename
+信息: rename: 3 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:08 上午 CompletionProvider getCompletions
+信息: completion: 8 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:17 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:18 上午 ReferenceProvider getSearchTime
+信息: search: 1732 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:18 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:18 上午 RenameProvider getRename
+信息: rename: 3 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+9月 10, 2025 11:35:21 上午 CompletionProvider getCompletions
+信息: completion: 8 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
