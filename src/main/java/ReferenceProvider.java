@@ -76,19 +76,41 @@ public class ReferenceProvider {
 //        LOG.info("OCC: "+ OCC + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 //        LOG.info("DEF: "+ DEF.size() + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 
+
+        int subContextNum = 1;
+
+
+        if (documentContext.getSubContext() != null) {
+            for (SouffleContext ruleContext : documentContext.getSubContext().values()) {
+                if ((documentContext.getKind() == SouffleContextType.COMPONENT || ruleContext.getKind() != SouffleContextType.COMPONENT)){
+                    subContextNum = subContextNum + 1;
+                }
+            }
+        }
+
         Random random = new Random();
+        ArrayList<SouffleSymbol> randomSymbols = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            randomSymbols.add(souffleSymbols.get(random.nextInt(souffleSymbols.size())));
+        }
+
+
+
         var started = Instant.now();
         for (int i = 0; i < 10000; i++) {
-            SouffleSymbol symbol = souffleSymbols.get(random.nextInt(souffleSymbols.size()));
+            SouffleSymbol symbol = randomSymbols.get(i);
             documentContext.getSymbols(symbol.getName());
             if(documentContext.getSubContext() != null){
                 for (SouffleContext ruleContext : documentContext.getSubContext().values()) {
-                    ruleContext.getSymbols(symbol.getName());
+                    if ((documentContext.getKind() == SouffleContextType.COMPONENT || ruleContext.getKind() != SouffleContextType.COMPONENT)){
+                        ruleContext.getSymbols(symbol.getName());
+                    }
                 }
             }
         }
         var elapsedMs = Duration.between(started, Instant.now()).toMillis();
         LOG.info("search: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+        LOG.info("subcontextNum: "+ subContextNum + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
     }
 
 }

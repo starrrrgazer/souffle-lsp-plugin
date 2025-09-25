@@ -1,904 +1,1180 @@
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
 // Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-.decl Relation(a:symbol, b:symbol, step:number,turn:symbol)
-Relation(a, c, step+1,c) :-
-			Relation(a, b, step, a),
-			Relation(b, c, step, a),
-    			a!=c.
+.decl gen(x : number)
+gen(1).
+gen(x+1) :- gen(x), !lim(x).
 
-Relation(d, e, step+1,c) :-
-			Relation(a, b, step, a),
-			Relation(b, c, step, a),
-			Relation(d, e, step, a),
-    			a!=c,
-			d!=a,
-			d!=b.
+.decl lim(x : number)
+lim(100).
 
+//factors excluding 1
+.decl factor(num : number, fc : number)
+factor(x, fc) :- gen(x), gen(fc), x % fc = 0, fc != 1.
 
+//finds if there exist two numbers which multiply to x
+.decl prod(num : number)
+prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
 
-.output Relation
+//finds the prime factors
+.decl p_factor(x : number, fc : number)
+.output p_factor()
+p_factor(x, fc) :- factor(x, fc), !prod(fc).
 
-Relation("a","b",0,"a").
-Relation("b","c",0,"a").
-Relation("c","d",0,"a").
-Relation("d","e",0,"a").
-Relation("e","f",0,"a").
-Relation("f","a",0,"a").
+// ==== END: d:\work24\souffle-lsp-plugin\example\factoring\factoring.dl ====
 
-
-/*
- // Small test case:
-Relation("a","b",0,"a").
-Relation("b","c",0,"a").
-Relation("c","a",0,"a").
-*/
-
-.decl Josephus(a:symbol)
-Josephus(a) :-
-			Relation(a, b, step, a),
-			Relation(b, a, step, a).
-.output Josephus
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\clique\clique.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\array\array.dl ====
 // Souffle - A Datalog Compiler
-// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
+// Array
+// Simple array data structure.
+
+// The default or NULL value for an element of the array.
+.decl default(null:number)
+.input default()
+
+// The parameters to the array, including its length.
+.decl parameters(length:number)
+.input parameters()
+
+// The values of the elements in the array, specified by index. Note that any unspecified elements will take the default value.
+.decl values(index:number, value:number)
+.input values()
+
+// The indices of the array, used as a background set to ground the index parameter of elements.
+.decl indices(index:number)
+.output indices()
+indices(0).
+indices(i+1) :- indices(i), parameters(l), i >= 0, i+1 < l.
+
+// The elements of the array, referenced by an index, and having a specified value. Note that if a value is not specified an element takes the default value.
+.decl element(index:number, value:number)
+.output element()
+element(i, NULL) :- indices(i), !values(i, _), default(NULL).
+element(i, x) :- indices(i), values(i, x).
+
+// The value of the element to the left of the element specified by the index, or the default value if it is out of the array bounds.
+.decl left(index:number, value:number)
+left(i, NULL) :- !element(i-1, _), element(i, _), default(NULL).
+left(i, x) :- element(i-1, x), element(i, _).
+
+// The value of the element to the right of the element specified by the index, or the default value if it is out of bounds.
+.decl right(index:number, value:number)
+right(i, NULL) :- !element(i+1, _), element(i, _), default(NULL).
+right(i, x) :- element(i+1, x), element(i, _).
+
+// The local neighbourhood of a specified element, giving the value of that element, and the elements surrounding it.
+.decl neighbourhood(index:number,
+  left:number, current:number, right:number)
+.output neighbourhood()
+neighbourhood(i, l, c, r) :-
+  left(i, l), element(i, c), right(i, r).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\array\array.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\graph\graph.dl ====
 //// Test Case adopted from Ocaml datalog
 
-.type Node <: symbol
+.decl reachable  (node1:number, node2:number)
+.output reachable  ()
+.decl increasing (node1:number, node2:number)
+.output increasing ()
+.decl edge       (node1:number, node2:number)
 
-.decl reachable   (node1:Node, node2:Node)
-.output reachable   ()
-.decl same_clique (node1:Node, node2:Node)
-.output same_clique ()
-.decl edge        (node1:Node, node2:Node)
-.output edge        ()
+reachable(X,Y)  :- edge(X,Y).
+reachable(X,Y)  :- edge(X,Z), reachable(Z,Y).
+increasing(X,Y) :- edge(X,Y), X < Y.
+increasing(X,Y) :- edge(X,Z), X < Z, increasing(Z,Y).
 
-reachable(X,Y)   :- edge(X,Y).
-reachable(X,Y)   :- edge(X,Z), reachable(Z,Y).
-same_clique(X,Y) :- reachable(X,Y), reachable(Y,X).
+edge(0, 1).
+edge(1, 2).
+edge(2, 3).
+edge(3, 4).
+edge(4, 5).
+edge(5, 6).
+edge(6, 7).
+edge(7, 8).
+edge(8, 9).
+edge(9, 10).
+edge(10, 0).
 
-edge("0", "1").
-edge("1", "2").
-edge("2", "3").
-edge("3", "4").
-edge("4", "5").
-edge("5", "0").
-edge("5", "6").
-edge("6", "7").
-edge("7", "8").
-edge("8", "9").
-edge("9", "10").
-edge("10", "7").
+// ==== END: d:\work24\souffle-lsp-plugin\example\graph\graph.dl ====
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\clique\clique.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
-// The Lehigh University Benchmark (LUBM)
-// http://swat.cse.lehigh.edu/projects/lubm/
-// ported by Anthony Potter
-//
-// Unary relations
-.decl University (a:symbol)
-.output University ()
-.input University ()
-.decl Person (a:symbol)
-.output Person ()
-.decl Employee (a:symbol)
-.output Employee ()
-.decl Faculty (a:symbol)
-.output Faculty ()
-.decl Professor (a:symbol)
-.output Professor ()
-.decl Course (a:symbol)
-.output Course ()
-.input Course ()
-.decl AssociateProfessor (a:symbol)
-.input AssociateProfessor ()
-.decl AssistantProfessor (a:symbol)
-.input AssistantProfessor ()
-.decl Organization (a:symbol)
-.output Organization ()
-.decl Chair (a:symbol)
-.output Chair ()
-.decl Work (a:symbol)
-.output Work ()
-.decl Lecturer (a:symbol)
-.output Lecturer ()
-.input Lecturer ()
-.decl Student (a:symbol)
-.output Student ()
-.decl GraduateStudent (a:symbol)
-.input GraduateStudent ()
-.decl ResearchAssistant (a:symbol)
-.input ResearchAssistant ()
-.decl GraduateCourse (a:symbol)
-.input GraduateCourse ()
-.decl UndergraduateStudent (a:symbol)
-.input UndergraduateStudent ()
-.decl ResearchGroup (a:symbol)
-.output ResearchGroup ()
-.input ResearchGroup ()
-.decl Publication (a:symbol)
-.output Publication ()
-.input Publication ()
-.decl TeachingAssistant (a:symbol)
-.output TeachingAssistant ()
-.input TeachingAssistant ()
-.decl FullProfessor (a:symbol)
-.input FullProfessor ()
-.decl Department (a:symbol)
-.input Department ()
-
-// Binary relations
-.decl hasAlumnus (a:symbol, b:symbol)
-.output hasAlumnus ()
-.decl degreeFrom (a:symbol, b:symbol)
-.output degreeFrom ()
-.decl member (a:symbol, b:symbol)
-.output member ()
-.decl teachingAssistantOf (a:symbol, b:symbol)
-.input teachingAssistantOf ()
-.decl headOf (a:symbol, b:symbol)
-.input headOf ()
-.decl teacherOf (a:symbol, b:symbol)
-.input teacherOf ()
-.decl publicationAuthor (a:symbol, b:symbol)
-.input publicationAuthor ()
-.decl doctoralDegreeFrom (a:symbol, b:symbol)
-.input doctoralDegreeFrom ()
-.decl undergraduateDegreeFrom (a:symbol, b:symbol)
-.input undergraduateDegreeFrom ()
-.decl mastersDegreeFrom (a:symbol, b:symbol)
-.input mastersDegreeFrom ()
-.decl subOrganizationOf (a:symbol, b:symbol)
-.output subOrganizationOf ()
-.input subOrganizationOf ()
-.decl takesCourse (a:symbol, b:symbol)
-.input takesCourse ()
-.decl worksFor (a:symbol, b:symbol)
-.output worksFor ()
-.input worksFor ()
-.decl memberOf (a:symbol, b:symbol)
-.output memberOf ()
-.input memberOf ()
-.decl advisor (a:symbol, b:symbol)
-.input advisor ()
-.decl emailAddress (a:symbol, b:symbol)
-.input emailAddress ()
-.decl telephone (a:symbol, b:symbol)
-.input telephone ()
-.decl name (a:symbol, b:symbol)
-.input name ()
-.decl researchInterest (a:symbol, b:symbol)
-.input researchInterest ()
-
-// Ontology
-University(Y) :- mastersDegreeFrom(_,Y) .
-degreeFrom(X,Y) :- hasAlumnus(Y,X) .
-hasAlumnus(X,Y) :- degreeFrom(Y,X) .
-Employee(X) :- Faculty(X) .
-Faculty(X) :- Professor(X) .
-Professor(X) :- AssociateProfessor(X) .
-Person(Y) :- member(_,Y) .
-Professor(X) :- AssistantProfessor(X) .
-Professor(X) :- Chair(X) .
-worksFor(X,Y) :- headOf(X,Y) .
-Person(X) :- degreeFrom(X,_) .
-University(Y) :- degreeFrom(_,Y) .
-Person(Y) :- hasAlumnus(_,Y) .
-TeachingAssistant(X) :- Person(X), teachingAssistantOf(X,Y), Course(Y) .
-Chair(X) :- Person(X), headOf(X,Y), Department(Y) .
-memberOf(X,Y) :- member(Y,X) .
-member(X,Y) :- memberOf(Y,X) .
-Course(Y) :- teacherOf(_,Y) .
-University(X) :- hasAlumnus(X,_) .
-Person(X) :- telephone(X,_) .
-Organization(Y) :- subOrganizationOf(_,Y) .
-memberOf(X,Y) :- worksFor(X,Y) .
-Person(X) :- Employee(X) .
-Person(X) :- advisor(X,_) .
-Organization(X) :- member(X,_) .
-Organization(X) :- Department(X) .
-Faculty(X) :- Lecturer(X) .
-Person(Y) :- publicationAuthor(_,Y) .
-Professor(Y) :- advisor(_,Y) .
-Work(X) :- Course(X) .
-Professor(X) :- FullProfessor(X) .
-degreeFrom(X,Y) :- doctoralDegreeFrom(X,Y) .
-TeachingAssistant(X) :- teachingAssistantOf(X,_) .
-Person(X) :- undergraduateDegreeFrom(X,_) .
-Organization(X) :- University(X) .
-Person(X) :- doctoralDegreeFrom(X,_) .
-University(Y) :- doctoralDegreeFrom(_,Y) .
-Course(Y) :- teachingAssistantOf(_,Y) .
-University(Y) :- undergraduateDegreeFrom(_,Y) .
-degreeFrom(X,Y) :- mastersDegreeFrom(X,Y) .
-Person(X) :- GraduateStudent(X) .
-Person(X) :- ResearchAssistant(X) .
-Student(X) :- UndergraduateStudent(X) .
-degreeFrom(X,Y) :- undergraduateDegreeFrom(X,Y) .
-Publication(X) :- publicationAuthor(X,_) .
-Person(X) :- mastersDegreeFrom(X,_) .
-Organization(X) :- ResearchGroup(X) .
-Faculty(X) :- teacherOf(X,_) .
-Person(X) :- Chair(X) .
-Employee(X) :- Person(X), worksFor(X,Y), Organization(Y) .
-Course(X) :- GraduateCourse(X) .
-Student(X) :- Person(X), takesCourse(X,Y), Course(Y) .
-Person(X) :- TeachingAssistant(X) .
-Organization(X) :- subOrganizationOf(X,_) .
-Person(X) :- Student(X) .
-Person(X) :- emailAddress(X,_) .
-subOrganizationOf(X,Z) :- subOrganizationOf(X,Y), subOrganizationOf(Y,Z) .
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl ====
-//
-// An example computing all palendroms of a given length.
-//
-
-.type Letter <: symbol
-
-.decl str(id:number, a:number, l:Letter, b:number)
-.decl len(id:number, l:number)
-
-
-//////////////////////////////////////////////////////////////////
-//          index range          //
-//////////////////////////////////////////////////////////////////
-
-.decl p(x:number)
-
-p(0).
-p(x) :- str(_,_,_,x).
-
-
-
-
-//////////////////////////////////////////////////////////////////
-//          palindromes          //
-//////////////////////////////////////////////////////////////////
-
-
-.decl palin_aux(s:number, a:number, b:number)
-palin_aux(s,x,x) :- str(s,_,_,_), p(x).
-palin_aux(s,x,y) :- str(s,x,_,y).
-palin_aux(s,x,y) :- str(s,x,a,t), palin_aux(s,t,r), str(s,r,a,y).
-
-.decl palindrome(s:number)
-.output palindrome()
-palindrome(s) :- palin_aux(s,0,l), len(s,l).
-
-
-
-//////////////////////////////////////////////////////////////////
-//       words to be tested      //
-//////////////////////////////////////////////////////////////////
-
-// hello
-str(0,0,"h",1).
-str(0,1,"e",2).
-str(0,2,"l",3).
-str(0,3,"l",4).
-str(0,4,"o",5).
-len(0,5).
-
-
-// racecar
-str(1,0,"r",1).
-str(1,1,"a",2).
-str(1,2,"c",3).
-str(1,3,"e",4).
-str(1,4,"c",5).
-str(1,5,"a",6).
-str(1,6,"r",7).
-len(1,7).
-
-
-// noon
-str(2,0,"n",1).
-str(2,1,"o",2).
-str(2,2,"o",3).
-str(2,3,"n",4).
-len(2,4).
-
-// never odd or even
-str(3,0,"n",1).
-str(3,1,"e",2).
-str(3,2,"v",3).
-str(3,3,"e",4).
-str(3,4,"r",5).
-str(3,5,"o",6).
-str(3,6,"d",7).
-str(3,7,"d",8).
-str(3,8,"o",9).
-str(3,9,"r",10).
-str(3,10,"e",11).
-str(3,11,"v",12).
-str(3,12,"e",13).
-str(3,13,"n",14).
-len(3,14).
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\palindrome\palindrome.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-.decl Edge(vertex1:symbol,vertex2:symbol,weight:number)
-Edge(a,b,w) :-
-  Edge(b,a,w).
-
-Edge("a","a",1).
-Edge("a","b",1).
-Edge("a","c",2).
-Edge("b","d",2).
-Edge("b","e",3).
-Edge("c","d",3).
-Edge("c","e",4).
-Edge("d","f",1).
-Edge("e","f",6).
-
-.decl Limit(weight:number)
-Limit(h) :- h = sum w : Edge(_,_,w).
-
-.decl Path(source:symbol,destination:symbol,path:number)
-Path(a,c,w) :- Edge(a,c,w).
-Path(a,c,w1+w2) :-
-  Limit(h),
-  Edge(a,b,w1),
-  Path(b,c,w2),
-    w2 < h-w1.
-
-.decl FindingShorterPath(source:symbol,destination:symbol,weight:number)
-FindingShorterPath(a,b,w1) :-
-  Path(a,b,w1),
-  Path(a,b,w2),
-  w2<w1.
-
-.decl ShortestPath(source:symbol,destination:symbol,weight:number)
-ShortestPath(a,b,w) :-
-  Path(a,b,w),
-  !FindingShorterPath(a,b,w).
-
-.output ShortestPath
-
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\ship\ship.dl ====
-//// Test Case adopted from Ocaml datalog
-
-.type Node <: symbol
-
-.decl ship_to       (node1:Node, node2:Node)
-.output ship_to       ()
-.decl customer_city (node1:Node, node2:Node)
-.output customer_city ()
-.decl has_ordered   (node1:Node, node2:Node)
-.output has_ordered   ()
-.decl product_name  (node1:Node, node2:Node)
-.output product_name  ()
-
-ship_to(ProdName, City) :- has_ordered(CustNo, ProdNo), customer_city(CustNo, City), product_name(ProdNo, ProdName).
-
-customer_city("1", "london").
-customer_city("2", "paris").
-customer_city("3", "San Francisco").
-customer_city("4", "munich").
-customer_city("5", "seoul").
-
-has_ordered("1", "1").
-has_ordered("2", "2").
-has_ordered("3", "3").
-has_ordered("4", "4").
-has_ordered("5", "5").
-
-product_name("1", "tea").
-product_name("2", "bread").
-product_name("3", "flowers").
-product_name("4", "sausage").
-product_name("5", "horse").
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\ship\ship.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\access-policy\access-policy.dl ====
-// Example adapted (hacked) from Olson, Gunter, Madhusudan CCS'08, Data is random
-
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\func\func.dl ====
 .type String <: symbol
 
-.decl view_employee(x : String, p:String, ssn:String, s:number, e:String, d:String, pos:String, bday:number)
-.output view_employee()
-.decl view_cwPriv(n : String, person :String, bank1Priv :number, bank2Priv : number)
-.input view_cwPriv()
-.decl view_bank1(n :String, Data1 :number, Data2 :number)
-.input view_bank1()
-.decl view_bank2(n :String, Data1 : number, Data2:number)
-.input view_bank2()
+.decl f(v:String, f:String)
+.decl succ (v:String, f:String)
+.decl arg (v:String, i:String, a:String)
+.decl args (a:String, b:String, c:String)
+.decl eq  (a:String, b:String)
+.output eq  ()
 
-.decl employee(person : String, ssn:String, salary : number, email: String, dept : String, pos : String, bday : number)
-.input employee()
 
-.decl inslogtable(user :String, person :String, day : number)
-.input inslogtable()
+succ("1", "2").
+succ("2", "3").
+succ("3", "4").
 
-.decl insurance(user : String)
-.input insurance()
+f("x", "g").
+f("y", "f").
 
-.decl bank1(d:number, d2:number)
-.input bank1()
-.decl bank2(d:number, d2:number)
-.input bank2()
+arg("x", "1", "A").
+arg("x", "2", "B").
+arg("x", "3", "Z").
 
-.decl inscwPriv(user : String, x:number, y:number)
-.input inscwPriv()
-.decl delcwPriv(user:String, x:number, y:number)
-.input delcwPriv()
-.decl cwPriv(person:String, bank1Priv : number, Bank2Privi : number)
-.input cwPriv()
+arg("y", "1", "C").
+arg("y", "2", "D").
+arg("y", "3", "W").
 
+eq(a, b) :- f(v, a), f(w, b), args(v, w, "3").
 
-view_employee("Alice", Person, SSN, Salary, Email, Dept, Position, Bday) :-
-  employee(Person, SSN, Salary, Email, Dept, Position, Bday).
+args(v, w, i) :- succ(p, i), arg(v, i, k), arg(w, i, k), args(v, w, p).
+args(v, w, "1") :- arg(v, "1", _), arg(w, "1", _).
 
-view_employee(User, Person, SSN, Salary, Email, Dept, Position, Bday) :-
-  User=Person, view_employee("alice", Person, SSN, Salary, Email, Dept, Position, Bday).
+// ==== END: d:\work24\souffle-lsp-plugin\example\func\func.dl ====
 
-view_employee(User, Person, SSN, Salary, Email, Dept, Position, Bday) :-
-  view_employee("Alice", User, _, _, _, Dept,"Manager", _),
-  view_employee("Alice", Person, SSN, Salary, Email, Dept, Position, Bday).
-
-view_employee(User, Person, "0", 0, Email, Dept, Position, Bday) :-
-  view_employee("Alice", User, _, _, _, _, _, _),
-  view_employee("Alice", Person, _, _, Email, Dept, Position, Bday).
-
-view_employee(User, Person, "0", 0, " ", " ", " ", Bday) :-
-  insurance(User),
-  view_employee("Alice", Person, _, _, _, _, _, Bday),
-  inslogtable(User, Person, 92311).
-
-view_cwPriv("Bob", Person, Bank1Priv, Bank2Priv) :-
-  cwPriv(Person, Bank1Priv, Bank2Priv).
-
-view_bank1("Bob", Data1, Data2) :-
-  bank1(Data1, Data2).
-
-view_bank1(User, Data1, Data2) :-
-  view_cwPriv("Bob", User, 1, _),
-  delcwPriv(User, 1, _), inscwPriv(User, 1, 0),
-  view_bank1("Bob", Data1, Data2).
-
-view_bank2("Bob", Data1, Data2) :-
-  bank2(Data1, Data2).
-
-view_bank2(User, Data1, Data2) :-
-  view_cwPriv("Bob", User, _, 1),
-  delcwPriv(User, _, 1),
-  inscwPriv(User, 0, 1),
-  view_bank2("Bob", Data1, Data2).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\access-policy\access-policy.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl ====
-//
-// Tests various properties of a tic-tac-toe gameboard
-//
-
-.type Mark <: symbol
-
-.decl player(x:Mark)
-
-player("X").
-player("O").
-
-.decl cell(x:Mark)
-cell(" ").
-cell("X").
-cell("O").
-
-.decl other(a:Mark,b:Mark)
-other("X","O").
-other("O","X").
-
-
-// cross product of all possible states (not considering whether they actually can be reached)
-
-.decl all_states(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark,
-
-	p:Mark
-)
-
-all_states( a1,b1,c1,a2,b2,c2,a3,b3,c3, p ) :-
-	cell(a1), cell(b1), cell(c1),
-	cell(a2), cell(b2), cell(c2),
-	cell(a3), cell(b3), cell(c3),
-	player(p).
-
-
-
-// list of states actually reachable through valid moves
-
-.decl reachable_state(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark,
-
-	p:Mark
-)
-
-.decl state_succ(
-	aa1:Mark, aa2:Mark, aa3:Mark,
-	ab1:Mark, ab2:Mark, ab3:Mark,
-	ac1:Mark, ac2:Mark, ac3:Mark,
-	a:Mark,
-
-	ba1:Mark, ba2:Mark, ba3:Mark,
-	bb1:Mark, bb2:Mark, bb3:Mark,
-	bc1:Mark, bc2:Mark, bc3:Mark,
-	b:Mark
-)
-
-// -- rules for all states --
-
-// initial state (X or O starts)
-reachable_state( " ", " ", " ",  " ", " ", " ",  " ", " ", " ",  "X").
-reachable_state( " ", " ", " ",  " ", " ", " ",  " ", " ", " ",  "0").
-
-// all reachable states
-reachable_state( a1,b1,c1,a2,b2,c2,a3,b3,c3, p ) :- state_succ( _,_,_, _,_,_, _,_,_, _,   a1,b1,c1, a2,b2,c2, a3,b3,c3, p ).
-
-
-// -- rules for successor states --
-
-// some utilitiy definitions
-
-.decl row1( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-.decl row2( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-.decl row3( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-
-.decl col1( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-.decl col2( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-.decl col3( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-
-.decl dig1( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-.decl dig2( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
-
-
-row1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a1,b1,c1 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-row2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a2,b2,c2 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-row3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a3,b3,c3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-
-col1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a1,a2,a3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-col2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  b1,b2,b3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-col3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  c1,c2,c3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-
-dig1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a1,b2,c3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-dig2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  c1,b2,a3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
-
-
-// ------------------------------------
-
-.decl has_won(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark,
-
-	x:Mark
-)
-
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- row1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- row2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- row3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- col1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- col2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- col3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- dig1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- dig2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
-
-
-// test whether a game is won (by eather side):
-
-.decl won(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark
-)
-
-won( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- has_won(a1,b1,c1,a2,b2,c2,a3,b3,c3,"X").
-won( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- has_won(a1,b1,c1,a2,b2,c2,a3,b3,c3,"O").
-
-
-// test whether a game is a draw
-
-.decl draw(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark
-)
-
-draw( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :-
-	all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_),
-	!won(a1,b1,c1,a2,b2,c2,a3,b3,c3),
-	a1 != " ", b1 != " ", c1 != " ",
-	a2 != " ", b2 != " ", c2 != " ",
-	a3 != " ", b3 != " ", c3 != " ".
-
-
-// test whether a game is finished
-
-.decl finished(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark
-)
-
-finished( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- won(a1,b1,c1,a2,b2,c2,a3,b3,c3).
-finished( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- draw(a1,b1,c1,a2,b2,c2,a3,b3,c3).
-
-
-// successor relation
-
-
-.decl valid_move(
-	aa1:Mark, aa2:Mark, aa3:Mark,
-	ab1:Mark, ab2:Mark, ab3:Mark,
-	ac1:Mark, ac2:Mark, ac3:Mark,
-	a:Mark,
-
-	ba1:Mark, ba2:Mark, ba3:Mark,
-	bb1:Mark, bb2:Mark, bb3:Mark,
-	bc1:Mark, bc2:Mark, bc3:Mark
-)
-
-valid_move( " ",ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3,  a,   a ,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(" ",ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a).
-valid_move( aa1," ",ac1,aa2,ab2,ac2,aa3,ab3,ac3,  a,  aa1, a ,ac1,aa2,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1," ",ac1,aa2,ab2,ac2,aa3,ab3,ac3, a).
-valid_move( aa1,ab1," ",aa2,ab2,ac2,aa3,ab3,ac3,  a,  aa1,ab1, a ,aa2,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1," ",aa2,ab2,ac2,aa3,ab3,ac3, a).
-valid_move( aa1,ab1,ac1," ",ab2,ac2,aa3,ab3,ac3,  a,  aa1,ab1,ac1, a ,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1," ",ab2,ac2,aa3,ab3,ac3, a).
-valid_move( aa1,ab1,ac1,aa2," ",ac2,aa3,ab3,ac3,  a,  aa1,ab1,ac1,aa2, a ,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2," ",ac2,aa3,ab3,ac3, a).
-valid_move( aa1,ab1,ac1,aa2,ab2," ",aa3,ab3,ac3,  a,  aa1,ab1,ac1,aa2,ab2, a ,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2,ab2," ",aa3,ab3,ac3, a).
-valid_move( aa1,ab1,ac1,aa2,ab2,ac2," ",ab3,ac3,  a,  aa1,ab1,ac1,aa2,ab2,ac2, a ,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2,ab2,ac2," ",ab3,ac3, a).
-valid_move( aa1,ab1,ac1,aa2,ab2,ac2,aa3," ",ac3,  a,  aa1,ab1,ac1,aa2,ab2,ac2,aa3, a ,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2,ab2,ac2,aa3," ",ac3, a).
-valid_move( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3," ",  a,  aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3, a  ) :- reachable_state(aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3," ", a).
-
-
-//
-// Note: the finished clause is ignored due to the recursive evaluation order.
-//	already finished games are not filtered properly
-//
-state_succ(  aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a,  ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3, b )
-	:- reachable_state( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a ), other(a,b), !finished( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3 ),
-	   valid_move( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a,  ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3 ).
-
-
-// now search for states that are not finished games but in any way one of the players has already won
-
-// mapping a state to a potential winner
-.decl possible_results(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark,
-
-	p:Mark,
-
-	w:Mark
-)
-
-
-possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, p, "X") :- reachable_state(a1,b1,c1,a2,b2,c2,a3,b3,c3, p), has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X" ).
-possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, p, "O") :- reachable_state(a1,b1,c1,a2,b2,c2,a3,b3,c3, p), has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O" ).
-
-
-possible_results( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, ap, x) :- state_succ( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, ap, ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3, bp ),
-							possible_results( ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3, bp, x).
-
-
-// search for game states where only one player can win any more but not within a single step
-
-.decl decided_games(
-	a1:Mark, a2:Mark, a3:Mark,
-	b1:Mark, b2:Mark, b3:Mark,
-	c1:Mark, c2:Mark, c3:Mark,
-
-	p:Mark,
-
-	w:Mark
-)
-.output decided_games()
-
-decided_games( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O", "X" ) :-
-	!won(a1,b1,c1,a2,b2,c2,a3,b3,c3),
-	possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O", "X" ),
-	!possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O", "O" ).
-
-
-decided_games( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X", "O" ) :-
-	!won(a1,b1,c1,a2,b2,c2,a3,b3,c3),
-	possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X", "O" ),
-	!possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X", "X" ).
-
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Compute the factorial function.
-
-// fact(i, n) holds iff i! = n
-.decl fact(i:number, n:number)
-.output fact()
-
-// Calculate only up to the lowest value satisfying lim(n)
-.decl lim(n:number)
-.input lim()
-
-fact(I+1, N*(I+1)) :- fact(I, N), !lim(I).
-
-// Ground Fact: 0! := 1
-fact(0, 1).
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\magic_prime2\magic_prime2.dl ====
-// A copy of the `prime2' test, this time using
-// the magic set transformation
-.pragma "magic-transform" "*"
-
-// Computes all prime numbers between 2 and 500
-
-//// ----- declarations -----
-
-// the search range
-.decl nat(x:number)
-
-// the primes within the range
-.decl prime(x:number)
-.output prime()
-
-
-// -- auxiliary relations --
-.decl succ(a:number,b:number)
-.decl add(a:number,b:number,r:number)
-.decl mul(a:number,b:number,r:number)
-
-.decl candidate(x:number)
-.decl prod(x:number)
-
-
-////////////////////////////////////////////////////
-
-// build up search range
-nat(0).
-nat(x+1) :- nat(x), x<500.
-
-//// --- basic operations ---
-
-// build successor relation
-succ(a,b) :- nat(a), nat(b), b=a+1.
-
-// build addition relation
-add(a,0,a) :- nat(a).
-add(a,b,r) :- succ(pb,b), add(a,pb,pr), succ(pr,r).
-
-// build multiplication relation
-mul(a,0,0) :- nat(a).
-mul(a,b,r) :- succ(pb,b), mul(a,pb,pr), add(a,pr,r).
-
-
-
-// --- compute prime numbers ---
-
-candidate(x) :- nat(x), x!=0, x!=1.
-
-// build list of products
-prod(x) :- candidate(a), candidate(b), mul(a,b,x).
-
-// define prime numbers
-prime(x) :- candidate(x), !prod(x).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\magic_prime2\magic_prime2.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-//triangle
-
-.type Text <: symbol
-
-.decl addrecurse(b:number, result:Text, level:number)
-
-addrecurse(b,cat(cat("*",result),"*"),level+1) :- addrecurse(b,result,level), level!=b.
-
-addrecurse(12,"*",0).
-
-
-.decl out(result:Text)
-.output out()
-
-out(result) :- addrecurse(_,result,_).
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\triangle\triangle.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\mmult\mmult.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\k-permutations\k-permutations.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2017, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-.decl Mat1(row:number,column:number,value:number)
+.decl S(s:symbol)
+.decl P(s:symbol)
 
-Mat1(1,1,2).
-Mat1(1,2,4).
-Mat1(2,1,3).
-Mat1(2,2,5).
+.input S
 
-.output Mat1()
+P(x) :- S(x).
+P(cat(x, cat(",", y))) :- S(x), P(y), !contains(x, y).
+
+.output P
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\k-permutations\k-permutations.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type State <: number
+.type Letter <: symbol
+
+.decl Q				(q:State)
+.decl Init			(q:State)
+.decl Final			(q:State)
+.decl Tr			(q:State, a:Letter, r:State)
+
+.input Final
+.input Tr
+
+Init(0).
+
+Q(q) :- Tr(q, _, _).
+
+.decl Dis			(q:State, r:State)
+
+Dis(q, r) :- Q(q), Q(r), Final(q), !Final(r).
+Dis(q, r) :- Tr(q, a, s), Tr(r, a, t), Dis(s, t).
+Dis(q, r) :- Dis(r, q).
+
+.decl Equiv		(q:State, r:State)
+
+Equiv(q, r) :- Q(q), Q(r), !Dis(q, r).
+
+.decl NotMinEquiv	(q:State, r:State)
+.decl MinEquiv		(q:State, r:State)
+
+NotMinEquiv(q, r) :- Equiv(q, r), Equiv(q, s), s < r.
+MinEquiv(q, r) :- Equiv(q, r), !NotMinEquiv(q, r).
+
+.output MinEquiv
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\array\array.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Array
+// Simple array data structure.
+
+// The default or NULL value for an element of the array.
+.decl default(null:number)
+.input default()
+
+// The parameters to the array, including its length.
+.decl parameters(length:number)
+.input parameters()
+
+// The values of the elements in the array, specified by index. Note that any unspecified elements will take the default value.
+.decl values(index:number, value:number)
+.input values()
+
+// The indices of the array, used as a background set to ground the index parameter of elements.
+.decl indices(index:number)
+.output indices()
+indices(0).
+indices(i+1) :- indices(i), parameters(l), i >= 0, i+1 < l.
+
+// The elements of the array, referenced by an index, and having a specified value. Note that if a value is not specified an element takes the default value.
+.decl element(index:number, value:number)
+.output element()
+element(i, NULL) :- indices(i), !values(i, _), default(NULL).
+element(i, x) :- indices(i), values(i, x).
+
+// The value of the element to the left of the element specified by the index, or the default value if it is out of the array bounds.
+.decl left(index:number, value:number)
+left(i, NULL) :- !element(i-1, _), element(i, _), default(NULL).
+left(i, x) :- element(i-1, x), element(i, _).
+
+// The value of the element to the right of the element specified by the index, or the default value if it is out of bounds.
+.decl right(index:number, value:number)
+right(i, NULL) :- !element(i+1, _), element(i, _), default(NULL).
+right(i, x) :- element(i+1, x), element(i, _).
+
+// The local neighbourhood of a specified element, giving the value of that element, and the elements surrounding it.
+.decl neighbourhood(index:number,
+  left:number, current:number, right:number)
+.output neighbourhood()
+neighbourhood(i, l, c, r) :-
+  left(i, l), element(i, c), right(i, r).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\array\array.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po1\po1.dl ====
+.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
+.input Check()
+.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
+.input In()
+.decl A(l:number, o:number)
+.output A()
+
+A(1,i) :- Check(_, b, c, d, e, f), In(_, b, c, d, e, f, i).
+A(2,i) :- Check(a, _, c, d, e, f), In(a, _, c, d, e, f, i).
+A(3,i) :- Check(a, b, _, d, e, f), In(a, b, _, d, e, f, i).
+A(4,i) :- Check(a, b, c, _, e, f), In(a, b, c, _, e, f, i).
+A(5,i) :- Check(a, b, c, d, _, f), In(a, b, c, d, _, f, i).
+A(6,i) :- Check(a, b, c, d, e, _), In(a, b, c, d, e, _, i).
+
+A(7, i) :- Check(_, _, c, d, e, f), In(_, _, c, d, e, f, i).
+A(8, i) :- Check(a, _, _, d, e, f), In(a, _, _, d, e, f, i).
+A(9, i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
+A(10, i) :- Check(a, b, c, _, _, f), In(a, b, c, _, _, f, i).
+A(11, i) :- Check(a, b, c, d, _, _), In(a, b, c, d, _, _, i).
+
+A(12, i) :- Check(_, _, _, d, e, f), In(_, _, _, d, e, f, i).
+A(13, i) :- Check(a, _, _, _, e, f), In(a, _, _, _, e, f, i).
+A(14, i) :- Check(a, b, _, _, _, f), In(a, b, _, _, _, f, i).
+A(15, i) :- Check(a, b, c, _, _, _), In(a, b, c, _, _, _, i).
+
+A(16, i) :- Check(_, _, _, _, e, f), In(_, _, _, _, e, f, i).
+A(17, i) :- Check(a, _, _, _, _, f), In(a, _, _, _, _, f, i).
+A(18, i) :- Check(a, b, _, _, _, _), In(a, b, _, _, _, _, i).
+
+A(19, i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
 
 
-.decl Mat2(row:number,column:number, value:number)
-
-Mat2(1,1,2).
-Mat2(1,2,4).
-Mat2(1,3,4).
-Mat2(2,1,3).
-Mat2(2,2,5).
-Mat2(2,3,6).
-
-.output Mat2()
 
 
-.decl Product(i:number,j:number, k:number, value:number)
+// ==== END: d:\work24\souffle-lsp-plugin\example\po1\po1.dl ====
 
-Product(i,j,k,value1*value2) :-
-	Mat1(i,k,value1),Mat2(k,j,value2).
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find all disconnected node pairs
+.type Node <: symbol
+
+.decl Edge(n:Node, m:Node, w:number)
+.input Edge()
+
+// Find the connected nodes
+.decl Connected(n:Node, m:Node)
+Connected(n, n) :- Edge(n, _, _).
+Connected(n, n) :- Edge(_, n, _).
+Connected(n, m) :- Edge(n, m, _).
+Connected(n, m) :- Edge(n, z, _), Connected(z, m).
+
+// Find nodes without a connection
+.decl DisConnected(n:Node, m:Node)
+.output DisConnected()
+DisConnected(n, m) :- Edge(n, _, _), Edge(_, m, _), !Connected(n, m).
+DisConnected(n, m) :- Edge(n, _, _), Edge(m, _, _), !Connected(n, m).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl ====
+
+.type node = number
+
+// defines the interface and some basic properties
+.comp Closure {
+    .decl edge(a:node,b:node)
+    .decl link(a:node,b:node)
+.output link()
+
+    link(X,Y) :- edge(X,Y).
+}
+
+// strategy A
+.comp LeftRecursive : Closure {
+    link(X,Z) :- link(X,Y), edge(Y,Z).
+}
+
+// strategy B
+.comp RightRecursive : Closure {
+    link(X,Z) :- edge(X,Y), link(Y,Z).
+}
+
+// strategy C
+.comp QuadraticRecursive : Closure {
+    link(X,Z) :- link(X,Y), link(Y,Z).
+}
 
 
-.decl Mat3(row:number,column:number, value:number)
+// get input data
+.decl less(a:node,b:node)
+less(1,2).
+less(2,3).
+less(3,4).
+less(4,5).
+less(5,6).
 
-Mat3(i,j, value) :-
-	Mat1(i,_,_), Mat2(_,j,_), value = sum x : Product(i,j,_,x).
 
-.output Mat3()
+// init strategies
+.init A = LeftRecursive
+.init B = RightRecursive
+.init C = QuadraticRecursive
+
+// wire in input data
+A.edge(X,Y) :- less(X,Y).
+B.edge(X,Y) :- less(X,Y).
+C.edge(X,Y) :- less(X,Y).
 
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\mmult\mmult.dl ====
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+//             88                                   88
+//             ""                                   ""   ,d
+//                                                       88
+//   ,adPPYba, 88 8b,dPPYba,  ,adPPYba, 88       88 88 MM88MMM
+//  a8"     "" 88 88P'   "Y8 a8"     "" 88       88 88   88
+//  8b         88 88         8b         88       88 88   88
+//  "8a,   ,aa 88 88         "8a,   ,aa "8a,   ,a88 88   88,
+//   `"Ybbd8"' 88 88          `"Ybbd8"'  `"YbbdP'Y8 88   "Y888
+//
+//                                                                   88
+//                                                                   88
+//                                                                   88
+//  8b,dPPYba,  ,adPPYba,  ,adPPYba,  ,adPPYba,  8b,dPPYba,  ,adPPYb,88
+//  88P'   "Y8 a8P_____88 a8"     "" a8"     "8a 88P'   "Y8 a8"    `Y88
+//  88         8PP""""""" 8b         8b       d8 88         8b       88
+//  88         "8b,   ,aa "8a,   ,aa "8a,   ,a8" 88         "8a,   ,d88
+//  88          `"Ybbd8"'  `"Ybbd8"'  `"YbbdP"'  88          `"8bbdP"Y8
+
+// Circuit record
+// Determine the required inputs to satisfy the outputs
+// Different from circuit_sat, which encoded wire state in integers
+// i.e. limited to 32 wires.
+// This stores them in recursive records, accessed by treating
+// the list as a sort of associative list.
+//
+
+.type Wire <: symbol
+.type Wire_state = [id : Wire, val : number]
+.type Wire_list = [head : Wire_state, tail: Wire_list]
+
+.decl in(a : Wire)
+in("a").
+in("b").
+in("c").
+
+//helpers to determine ordering in the list
+.decl less(a: Wire, b: Wire)
+less(x, y) :- in(x), in(y), ord(x) < ord(y).
+
+.decl leg(a: Wire, b: Wire)
+leg(x, z) :- less(x,y), less(y,z).
+
+//element x is before el y
+.decl succ(a: Wire, b: Wire)
+succ(x, y) :- less(x, y), !leg(x,y).
+
+//el x is first in list
+.decl first(a: Wire)
+first(a) :- in(a), !less(_,a).
+
+//el x is last
+.decl last(a:Wire)
+last(a) :- in(a), !less(a,_).
+
+//boolean states
+.decl bin(a : number)
+bin(0).
+bin(1).
+
+// generate all ordered lists (including list stubs)
+.decl gen_wire_states( wl : Wire_list)
+gen_wire_states([[x, v], nil]) :-
+	first(x),
+    bin(v).
+
+gen_wire_states( [[y, v], l]) :-
+    gen_wire_states(l),
+	succ(x, y),
+    bin(v),
+    l = [[x,xv],tail].
+
+// collect full length ordered lists (i.e. ignore stubs)
+.decl final_gen_wire_states(wl : Wire_list)
+final_gen_wire_states(l) :-
+    gen_wire_states(l),
+    l = [[x,xv],tail],
+    last(x).
+
+//extract a wire's value from the array (associative array type)
+.decl get_by_key(key : Wire, val : number, rec : Wire_list, conf: Wire_list)
+get_by_key(k, v, tail, [[a,av], tail]) :-
+	in(a), bin(av), a=k, av=v, gen_wire_states([[a,av], tail]), last(a).
+get_by_key(k, v, tail, conf) :-
+	in(k), bin(v), get_by_key(_, _, [[k, v], tail], conf).
+
+.decl required_out(ws : Wire_state)
+required_out([w, v]) :- required_out_fi(w, v).
+//which wires are required to have certain values
+.decl required_out_fi(w : Wire, v : number)
+.input required_out_fi()
+
+.decl circuit_and(result : Wire, op1 : Wire, op2 : Wire)
+.input circuit_and()
+.decl circuit_or(result : Wire, op1 : Wire, op2 : Wire)
+.input circuit_or()
+.decl circuit_not(result : Wire, op1 : Wire)
+.input circuit_not()
+
+// evaluate the wire's required value from a set of inputs
+.decl evaluate(circuit_state : Wire_list, wire_state : Wire_state)
+evaluate(cs, [k, v]) :-
+	get_by_key(k,v,  _, cs).
+evaluate(cs, [k, av band bv]) :-
+	circuit_and(k, a, b),
+	evaluate(cs, [a, av]),
+	evaluate(cs, [b, bv]).
+evaluate(cs, [k, av bor bv]) :-
+	circuit_or(k, a, b),
+	evaluate(cs, [a, av]),
+	evaluate(cs, [b, bv]).
+evaluate(cs, [k, lnot av]) :-
+	circuit_not(k, a),
+	evaluate(cs, [a, av]).
+
+.decl satisfy(conf : Wire_list, ws: Wire_state)
+satisfy(conf, [var, val]) :-
+	required_out([var, val]),
+	evaluate(conf, [var, val]).
+
+// print the required inputs to reach the configuration (turned off atm, as the souffle tester cannot handle the output of records)
+.decl sat_print(var : Wire, val : number, conf : Wire_list)
+sat_print(var, val, conf) :-
+	satisfy(conf,_), get_by_key(var, val, _, conf).
+
+// print the count of total circuits configurations mul inputs
+.decl print_states(val : number)
+.output print_states()
+print_states(val) :-
+	val = count : { sat_print(_, _, _) }.
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\circuit_records\circuit_records.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\minesweeper\minesweeper.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+#include "grid.dl"
+
+// Minesweeper
+// Generates minesweeper boards, a cell containing a mine takes the value -1, while all other cells take the value of the number of mines in their local neighbourhood (i.e. in the eight cells to which they are adjacent.
+
+// A mine count for a given cell is valid if it is between 0 and 8 inclusive.
+.decl is_valid(x:number)
+is_valid(0).
+is_valid(x+1) :- is_valid(x), x < 8.
+
+// The cells of the game board, taking the value -1 if the backing grid contains a value for the cell at the specified row and column, of the number of surrounding mines otherwise.
+.decl cell(row:number, column:number, variable:number)
+.output cell()
+cell(i, j, -1) :- x != 0, element(i, j, x).
+cell(i, j, x) :-
+  x = tl + tc + tr + ml + mr + bl + bc + br,
+  is_valid(x),
+  neighbourhood(i, j, tl, tc, tr, ml, 0, mr, bl, bc, br).
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\minesweeper\minesweeper.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po2\po2.dl ====
+.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
+.input Check()
+.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
+.input In()
+.decl A(l:number, o:number)
+.output A()
+
+A(1,i) :- Check(_, b, c, d, e, _), In(_, b, c, d, e, _, i).
+A(2,i) :- Check(a, _, c, d, e, _), In(a, _, c, d, e, _, i).
+A(3,i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
+A(4,i) :- Check(_, _, c, d, _, _), In(_, _, c, d, _, _, i).
+A(5,i) :- Check(a, _, _, _, _, f), In(a, _, _, _, _, f, i).
+A(6,i) :- Check(_, b, c, d, _, f), In(_, b, c, d, _, f, i).
+A(7, i) :- Check(_, b, c, _, e, f), In(_, b, c, _, e, f, i).
+A(8, i) :- Check(_, b, _, d, e, f), In(_, b, _, d, e, f, i).
+A(9, i) :- Check(_, _, c, d, e, f), In(_, _, c, d, e, f, i).
+A(10, i) :- Check(_, b, c, d, _, _), In(_, b, c, d, _, _, i).
+A(11, i) :- Check(_, b, c, _, _, f), In(_, b, c, _, _, f, i).
+A(12, i) :- Check(_, b, _, _, e, f), In(_, b, _, _, e, f, i).
+A(13, i) :- Check(_, _, _, d, e, f), In(_, _, _, d, e, f, i).
+A(14, i) :- Check(_, b, c, _, _, _), In(_, b, c, _, _, _, i).
+A(15, i) :- Check(_, b, _, _, _, f), In(_, b, _, _, _, f, i).
+A(16, i) :- Check(_, _, _, _, e, f), In(_, _, _, _, e, f, i).
+A(17, i) :- Check(_, b, c, d, e, f), In(_, b, c, d, e, f, i).
+A(18, i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\po2\po2.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\peano_arithmetic\peano_arithmetic.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2021, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// S-Expression
+// An S-Expression constitutes an arithmetic term in Peano's axiomtic
+// approach for numbers.
+.type SExpr = Zero {} |
+              Succ {arg:SExpr} |
+              Add {left:SExpr, right:SExpr} |
+              Mul {left:SExpr, right:SExpr}
+
+// Input expression(s)
+.decl A(x:SExpr)
+
+// this represents the expression 2 * (1 + 1)
+A($Mul($Succ($Succ($Zero())), $Add($Succ($Zero()),$Succ($Zero())))).
+
+// Represents the symmetric reflexive transitive closure of the
+// reduction relation usign an equivalence relation in Souffle.
+.decl S(e1:SExpr, e2:SExpr) eqrel
+
+// Populate input
+S(e, e) :-
+   A(e).
+
+// Deconstruct S-Expression into its sub-expressions and put
+// each sub-expression into its own class.
+
+// a <-*> a if s(a) in dom(S)
+S(a, a) :-
+   term = $Succ(a),
+   S(term, term).
+
+// a <-*> a, b <-*> b if a + b in dom(S)
+S(a, a), S(b, b) :-
+   term = $Add(a, b),
+   S(term, term).
+
+// a <-*> a, b <-*> b if a * b in dom(S)
+S(a, a), S(b, b) :-
+   term = $Mul(a, b),
+   S(term, term).
+
+// Peano's arithmetic axioms
+
+// a + 0 => a
+S(pattern, a) :-
+  pattern = $Add(a, $Zero()),
+  S(pattern, pattern).
+
+// a + s(b) => sa + b
+S(pattern, $Succ($Add(a, b))) :-
+  pattern = $Add(a, $Succ(b)),
+  S(pattern, pattern).
+
+// a * s(b) => a + (a * b)
+S(pattern, $Add(a, $Mul(a,b))) :-
+  pattern = $Mul(a, $Succ(b)),
+  S(pattern, pattern).
+
+// a * 0 => 0
+S(pattern, $Zero()) :-
+  pattern = $Mul(_a, $Zero()),
+  S(pattern, pattern).
+
+// Reconstruct S-Expression using natural numbers only
+// It is important to reconstruct with normalized sub-terms
+// only; otherwise we will have a non-terminating program.
+
+//  s(a) => s(a'), if a <-*> a' and a' is a number.
+S($Succ(ap), x) :-
+  S($Succ(a), x),
+  S(a, ap),
+  isNormalform(ap).
+
+// a + b => a' + b', if a <-*> a', a <-*> b', a' and b' are numbers.
+S($Add(ap,bp), x) :-
+  S($Add(a,b), x),
+  S(a, ap),
+  S(b, bp),
+  isNormalform(ap),
+  isNormalform(bp).
+
+//  a * b => a' * b', if a <-*> a', b <-*> b', a' and b' are numbers.
+S($Mul(na,nb), x) :-
+  S($Mul(a,b), x),
+  S(a, na),
+  S(b, nb),
+  isNormalform(na),
+  isNormalform(nb).
+
+// Set of all normalized terms in the domain of S
+.decl isNormalform(s:SExpr)
+isNormalform($Zero()).
+isNormalform($Succ(a)) :-
+  pattern = $Succ(a),
+  S(pattern, pattern),
+  isNormalform(a).
+
+// Retrieve output
+.decl Result(x:SExpr, y:SExpr)
+Result(x,y) :-
+   A(x),
+   S(x,y),
+   isNormalform(y).
+
+.output Result
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\peano_arithmetic\peano_arithmetic.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\circuit_eval\circuit_eval.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+//
+//	Forward circuit evaluation
+// 	Yield the value of each wire, given the input wire assignments
+//
+
+
+.type Var <: symbol
+.type Bool <: symbol
+
+//bitwise gates
+.decl g_and(res : Var, o1 : Var, o2 : Var)
+.input g_and()
+.decl g_or(res : Var, o1 : Var, o2 : Var)
+.input g_or()
+.decl g_not(res : Var, o1 : Var)
+.input g_not()
+
+//the input values for wires
+.decl set_input(x : Var, y : Bool)
+.input set_input()
+//querying a wire's value
+.decl g_assignment(x : Var, y : Bool)
+.output g_assignment()
+
+g_assignment(x, "true") :-
+	set_input(x, "true");
+	g_and(x, o1, o2), g_assignment(o1, "true"), g_assignment(o2, "true");
+	g_or(x, o1, _), g_assignment(o1, "true");
+	g_or(x, _, o2), g_assignment(o2, "true");
+ 	g_not(x, o1), g_assignment(o1, "false").
+
+g_assignment(x, "false") :-
+	set_input(x, "false");
+	g_and(x, o1, _), g_assignment(o1, "false");
+ 	g_and(x, _, o2), g_assignment(o2, "false");
+	g_or(x, o1, o2), g_assignment(o1, "false"), g_assignment(o2, "false"),
+	g_not(x, o1), g_assignment(o1, "true").
+
+//same as g_assignment, however only outputs non-inputs
+.decl yield_outs(x : Var, val : Bool)
+.output yield_outs()
+yield_outs(x, val) :-
+	!set_input(x, _), g_assignment(x, val).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\circuit_eval\circuit_eval.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\fib\fib.dl ====
+.type Integer <: symbol
+
+.decl plus_mod (x:Integer, y:Integer, r:Integer)
+.decl succ (a:Integer, b:Integer)
+.decl f(x:Integer, y:Integer)
+.output f()
+
+f("0", "0").
+f("1", "1").
+f(i, r) :- succ(prev, i), succ(pprev, prev),f(prev, x), f(pprev, y), plus_mod(x, y, r).
+
+
+plus_mod("0", "0", "0").
+plus_mod("0", "1", "1").
+plus_mod("1", "0", "1").
+plus_mod("1", "1", "2").
+plus_mod("0", "2", "2").
+plus_mod("2", "0", "2").
+plus_mod("2", "1", "0").
+plus_mod("1", "2", "0").
+plus_mod("2", "2", "1").
+
+
+succ("0", "1").
+succ("1", "2").
+succ("2", "3").
+succ("3", "4").
+succ("4", "5").
+succ("5", "6").
+succ("6", "7").
+succ("7", "8").
+succ("8", "9").
+succ("9", "10").
+succ("10", "11").
+succ("11", "12").
+succ("12", "13").
+succ("13", "14").
+succ("14", "15").
+succ("15", "16").
+succ("16", "17").
+succ("17", "18").
+succ("18", "19").
+succ("19", "20").
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\fib\fib.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Letter <: symbol
+.type Pos <: number
+.type Cost <: number
+
+.decl String1			(p:Pos, a:Letter)
+.decl String2			(p:Pos, a:Letter)
+
+.input String1
+.input String2
+
+.decl End1				(p:Pos)
+.decl End2				(p:Pos)
+.decl NotEnd1			(p:Pos)
+.decl NotEnd2			(p:Pos)
+
+NotEnd1(p) :- String1(p, _), String1(q, _), p < q.
+End1(p) :- String1(p, _), !NotEnd1(p).
+NotEnd2(p) :- String2(p, _), String2(q, _), p < q.
+End2(p) :- String2(p, _), !NotEnd2(p).
+
+.decl Match				(i:Pos, j:Pos, c:Cost)
+
+Match(0, 0, 0).
+
+// Match a character
+Match(i + 1, j + 1, s) :- End1(e), i < e, End2(f), j < f, Match(i, j, s), String1(i + 1, a), String2(j + 1, a).
+
+// Indels
+Match(i + 1, j, s + 1) :- End1(e), i < e, End2(f), j <= f, Match(i, j, s).
+Match(i, j + 1, s + 1) :- End1(e), i <= e, End2(f), j < f, Match(i, j, s).
+
+.decl MinMatch			(i:Pos, j:Pos, c:Cost)
+.decl NotMinMatch		(i:Pos, j:Pos, c:Cost)
+
+NotMinMatch(i, j, s) :- Match(i, j, s), Match(i, j, t), t < s.
+MinMatch(i, j, s) :- Match(i, j, s), !NotMinMatch(i, j, s).
+//MinMatch(i, j, s) :- s = min t : Match(i, j, t).
+
+.decl Result			(c:Cost)
+
+Result(c) :- End1(e), End2(f), MinMatch(e, f, c).
+.output Result
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\edit_distance\edit_distance.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\equal\equal.dl ====
+.type Integer <: symbol
+
+.decl succ (a:Integer, b:Integer)
+.decl equal(x:Integer, y:Integer, r:Integer)
+.output equal()
+.decl isEqual(r:Integer)
+.output isEqual()
+
+equal("0", "0", "1").
+equal(m, n, r) :- succ(pm, m) , succ(pn, n), equal(pm, pn, r).
+
+isEqual(r) :- equal("5", "7", r).
+
+succ("0", "1").
+succ("1", "2").
+succ("2", "3").
+succ("3", "4").
+succ("4", "5").
+succ("5", "6").
+succ("6", "7").
+succ("7", "8").
+succ("8", "9").
+succ("9", "10").
+succ("10", "11").
+succ("11", "12").
+succ("12", "13").
+succ("13", "14").
+succ("14", "15").
+succ("15", "16").
+succ("16", "17").
+succ("17", "18").
+succ("18", "19").
+succ("19", "20").
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\equal\equal.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_summary_function\dfa_summary_function.dl ====
+//
+// Souffle - A Datalog Compiler
+// Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+//
+// Computes the summary flow functions (Fsgen and Fskill) using the following equation:
+
+// out[s] = Fsgen[S] \/ (initial[start] - Fskill[S]), start is the start node
+//
+// Fskill[S] = Fskill[P] \/ kill[S], P is predecessor of S
+//
+// Fsgen[S] = [ Fsgen[P] - Fskill[p] ] \/ gen[S],  P is predecessor of S
+//
+
+
+.comp Graph<Node>{
+
+      //
+      // input relations
+      //
+
+      //
+      // Set of edges
+      //
+      .decl edge(src:Node,des:Node)
+
+      //
+      // Start node
+      //
+      .decl start(node:Node)
+
+
+      //
+      // intermediate relations
+      //
+
+      //
+      // Set of nodes
+      //
+      .decl node(node:Node)
+
+      node(node) :- edge(node,_).
+      node(node) :- edge(_,node).
+
+}
+
+.comp Gen_Kill_Summary<Node,InfoLattice>{
+
+      //
+      // input relations
+      //
+
+      //
+      // Gen function
+      //
+      .decl gen(node:Node,inf:InfoLattice)
+
+      //
+      // Kill function
+      //
+      .decl kill(node:Node,inf:InfoLattice)
+
+      //
+      // start node value
+      //
+      .decl startvalue(inf:InfoLattice)
+
+
+      //
+      // output relations
+      //
+
+      //
+      // Out
+      //
+      .decl out(node:Node,inf:InfoLattice)
+
+}
+
+.comp Gen_Kill_Union_Summary<Node,InfoLattice> : Gen_Kill_Summary<Node,InfoLattice>, Graph<Node>{
+
+     //
+     // Kill summary function
+     //
+     .decl fs_kill(node:Node,inf:InfoLattice)
+
+     //
+     // Gen summary function
+     //
+     .decl fs_gen(node:Node,inf:InfoLattice)
+
+     //
+     // Rules for fs_gen
+     //
+     fs_gen(node,inf) :- gen(node,inf).
+     fs_gen(node,inf) :- fs_gen(pred,inf), !kill(node,inf), edge(pred,node).
+
+
+     //
+     // Rules for fs_kill
+     //
+     fs_kill(node,inf) :- kill(node,inf).
+     fs_kill(node,inf) :- fs_kill(pred,inf), edge(pred,node).
+
+
+     //
+     // output relations
+     //
+
+     out(node,inf) :- fs_gen(node,inf).
+     out(node,inf) :- node(node), startvalue(inf), !fs_kill(node,inf).
+
+}
+
+
+.comp Gen_Kill_Intersection_Summary<Node,InfoLattice> : Gen_Kill_Summary<Node,InfoLattice>, Graph<Node>{
+
+
+      .init   gen_kill_union = Gen_Kill_Union_Summary<Node,InfoLattice>
+
+      gen_kill_union.start(n) :- start(n).
+
+      gen_kill_union.edge(x,y) :- edge(x,y).
+
+      gen_kill_union.gen(node,inf) :- kill(node,inf), !gen(node,inf).
+
+      gen_kill_union.kill(node,inf) :- gen(node,inf).
+
+      gen_kill_union.startvalue(inf) :- startvalue(inf).
+
+
+      //
+      // output relations
+      //
+      out(node,inf) :- node(node), universe(inf), !gen_kill_union.out(node,inf).
+}
+
+
+.comp Gen_Kill_Union_Summary_Backward<Node,InfoLattice> : Gen_Kill_Summary<Node,InfoLattice>, Graph<Node>{
+
+
+      .init gen_kill_union = Gen_Kill_Union_Summary<Node,InfoLattice>
+
+
+      //
+      //  in
+      //
+
+      gen_kill_union.start(n) :- start(n).
+
+      gen_kill_union.edge(src,des) :- edge(des,src).
+
+      gen_kill_union.gen(node,inf) :- gen(node,inf).
+
+      gen_kill_union.kill(node,inf) :- kill(node,inf).
+
+      gen_kill_union.startvalue(inf) :- startvalue(inf).
+
+      //
+      // output relations
+      //
+
+      out(node,inf) :- gen_kill_union.out(node,inf).
+}
+
+.comp Gen_Kill_Intersection_Summary_Backward<Node,InfoLattice> : Gen_Kill_Summary<Node,InfoLattice>, Graph<Node>{
+
+
+      //
+      // input relations
+      //
+
+
+      .init gen_kill_intersection = Gen_Kill_Intersection_Summary<Node,InfoLattice>
+
+
+      //
+      //  in
+      //
+      gen_kill_intersection.start(n) :- start(n).
+
+      gen_kill_intersection.edge(src,des) :- edge(des,src).
+
+      gen_kill_intersection.gen(node,inf) :- gen(node,inf).
+
+      gen_kill_intersection.kill(node,inf) :- kill(node,inf).
+
+      gen_kill_intersection.startvalue(inf) :- startvalue(inf).
+
+      //
+      // output relations
+      //
+
+      out(node,inf) :- gen_kill_intersection.out(node,inf).
+
+}
+
+
+//
+// Set of Edge
+//
+
+.decl edge(x:number, y:number)
+.input edge()
+
+//
+// Gen sets
+//
+
+.decl gen(x:number, i:symbol)
+.input gen()
+
+//
+// Use sets
+//
+
+.decl use(x:number, i:symbol)
+.input use()
+
+//
+// Kill sets
+//
+
+.decl kill(x:number, i:symbol)
+.input kill()
+
+
+//
+// Universe  Lattice
+//
+.decl universe(inf:symbol)
+universe(inf) :- gen(_,inf).
+universe(inf) :- kill(_,inf).
+
+
+//
+// Instantiates data flow analysis  components and tests example 2.5 in
+// "Data Flow Analysis" book authored by P.Khedker et al.
+//
+
+.init Available_Expressions = Gen_Kill_Intersection_Summary<number,symbol>
+
+Available_Expressions.edge(x,y) :- edge(x,y).
+Available_Expressions.gen(x,i) :- gen(x,i).
+Available_Expressions.kill(x,i) :- kill(x,i).
+//Available_Expressions.startvalue(i) :- gen(1,i), !kill(1,i).
+Available_Expressions.startvalue(inf) :-  universe(inf),!kill(1,inf).
+Available_Expressions.start(1).
+
+
+
+.init Reaching_Definitions = Gen_Kill_Union_Summary<number,symbol>
+
+Reaching_Definitions.edge(x,y) :- edge(x,y).
+Reaching_Definitions.gen(x,i) :- gen(x,i).
+Reaching_Definitions.kill(x,i) :- kill(x,i).
+Reaching_Definitions.startvalue(i) :- gen(1,i), !kill(1,i).
+Reaching_Definitions.start(1).
+
+
+
+
+.init Live_Variables = Gen_Kill_Union_Summary_Backward<number,symbol>
+
+Live_Variables.edge(x,y) :- edge(x,y).
+Live_Variables.gen(x,i) :- use(x,i).
+Live_Variables.kill(x,i) :- kill(x,i).
+Live_Variables.startvalue(i) :- use(8,i), !kill(8,i).
+Live_Variables.start(8).
+
+
+//
+// Output
+//
+
+.decl available_expressions(n:number, i:symbol)
+.output available_expressions()
+available_expressions(x,i) :- Available_Expressions.out(x,i).
+
+
+.decl reaching_definitions(n:number, i:symbol)
+.output reaching_definitions()
+reaching_definitions(x,i) :- Reaching_Definitions.out(x,i).
+
+
+.decl live_variables(n:number, i:symbol)
+.output live_variables()
+live_variables(x,i) :- Live_Variables.out(x,i).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_summary_function\dfa_summary_function.dl ====
 
 // ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl ====
 // Souffle - A Datalog Compiler
@@ -1025,795 +1301,49 @@ ctrl_var( i, v ) :- app( _, a, b ), ctrl_term( a, f ), abs( f, i, _), ctrl_term(
 
 // ==== END: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl ====
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po4\po4.dl ====
-.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
-.input Check()
-.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
-.input In()
-.decl A(l:number, o:number)
-.output A()
-
-A(1,i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
-A(2,i) :- Check(a, b, c, d, _, _), In(a, b, c, d, _, _, i).
-A(3,i) :- Check(a, _, c, d, _, _), In(a, _, c, d, _, _, i).
-A(4,i) :- Check(a, b, _, d, _, _), In(a, b, _, d, _, _, i).
-A(5,i) :- Check(a, b, c, _, _, _), In(a, b, c, _, _, _, i).
-A(6,i) :- Check(_, _, c, d, _, _), In(_, _, c, d, _, _, i).
-A(7, i) :- Check(a, b, _, _, _, _), In(a, b, _, _, _, _, i).
-A(8, i) :- Check(a, _, _, _, _, _), In(a, _, _, _, _, _, i).
-A(9, i) :- Check(_, b, _, _, _, _), In(_, b, _, _, _, _, i).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\po4\po4.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl ====
-// Orbits of cosmological objects
-// Rafael Caballero-Rold\'an, 2007
-// Adopted from DES
-
-.type D <: symbol
-
-.decl star    (x:D)
-.output star    ()
-.decl orbits  (x:D,y:D)
-.output orbits  ()
-.decl planet  (x:D)
-.output planet  ()
-.decl intermediate (x:D,y:D)
-.output intermediate ()
-
-star("sun").
-orbits("earth", "sun").
-orbits("moon", "earth").
-
-orbits(X,Y) :-
-  orbits(X,Z),
-  orbits(Z,Y).
-
-planet(X) :-
-  orbits(X,Y),
-  star(Y),
-  !intermediate(X,Y).
-
-intermediate(X,Y) :-
-  orbits(X,Y),
-  orbits(_,Y).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl ====
-
-// ==== BEGIN: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl ====
 // Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Copyright (c) 2021, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-.type Var <: symbol
-.type Neg <: symbol
-.type Val <: symbol
-.type Card <: number
-.type Ans <: symbol
-
-.decl Clause		(m:Neg, u:Var, n:Neg, v:Var)
-.input Clause
-
-.decl Not			(m:Neg, n:Neg)
-
-Not("Pos", "Neg").
-Not("Neg", "Pos").
-
-.decl Impl			(m:Neg, u:Var, n:Neg, v:Var)
-
-// Translate clauses into implications, (x V y) becomes (not x => y) and (not y => x)
-Impl(m, u, n, v) :- Not(m, p), Clause(p, u, n, v).
-Impl(m, u, n, v) :- Not(m, p), Clause(n, v, p, u).
-
-// Closure under transitivity of implication
-Impl(m, u, n, v) :- Impl(m, u, p, w), Impl(p, w, n, v).
-
-.decl Incon			(u:Var)
-
-// Any inconsistencies?
-Incon(u) :- Impl("Pos", u, "Neg", u), Impl("Neg", u, "Pos", u).
-
-.decl Satisfiable	(s:Ans)
-
-Satisfiable("Yes") :- !Incon(_).
-Satisfiable("No") :- Incon(_).
-
-.output Satisfiable
-
-// ==== END: d:/work24/souffle-lsp-plugin/example/2sat/2sat.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-.decl Edge(vertex1:symbol,vertex2:symbol,weight:number)
-Edge(a,b,w) :-
-  Edge(b,a,w).
-
-Edge("a","a",1).
-Edge("a","b",1).
-Edge("a","c",2).
-Edge("b","d",2).
-Edge("b","e",3).
-Edge("c","d",3).
-Edge("c","e",4).
-Edge("d","f",1).
-Edge("e","f",6).
-
-.decl Limit(weight:number)
-Limit(h) :- h = sum w : Edge(_,_,w).
-
-.decl Path(source:symbol,destination:symbol,path:number)
-Path(a,c,w) :- Edge(a,c,w).
-Path(a,c,w1+w2) :-
-  Limit(h),
-  Edge(a,b,w1),
-  Path(b,c,w2),
-    w2 < h-w1.
-
-.decl FindingShorterPath(source:symbol,destination:symbol,weight:number)
-FindingShorterPath(a,b,w1) :-
-  Path(a,b,w1),
-  Path(a,b,w2),
-  w2<w1.
-
-.decl ShortestPath(source:symbol,destination:symbol,weight:number)
-ShortestPath(a,b,w) :-
-  Path(a,b,w),
-  !FindingShorterPath(a,b,w).
-
-.output ShortestPath
-
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Find all disconnected node pairs
-.type Node <: symbol
-
-.decl Edge(n:Node, m:Node, w:number)
-.input Edge()
-
-// Find the connected nodes
-.decl Connected(n:Node, m:Node)
-Connected(n, n) :- Edge(n, _, _).
-Connected(n, n) :- Edge(_, n, _).
-Connected(n, m) :- Edge(n, m, _).
-Connected(n, m) :- Edge(n, z, _), Connected(z, m).
-
-// Find nodes without a connection
-.decl DisConnected(n:Node, m:Node)
-.output DisConnected()
-DisConnected(n, m) :- Edge(n, _, _), Edge(_, m, _), !Connected(n, m).
-DisConnected(n, m) :- Edge(n, _, _), Edge(m, _, _), !Connected(n, m).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\disconnected\disconnected.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-.decl Relation(a:symbol, b:symbol, step:number,turn:symbol)
-Relation(a, c, step+1,c) :-
-			Relation(a, b, step, a),
-			Relation(b, c, step, a),
-    			a!=c.
-
-Relation(d, e, step+1,c) :-
-			Relation(a, b, step, a),
-			Relation(b, c, step, a),
-			Relation(d, e, step, a),
-    			a!=c,
-			d!=a,
-			d!=b.
-
-
-
-.output Relation
-
-Relation("a","b",0,"a").
-Relation("b","c",0,"a").
-Relation("c","d",0,"a").
-Relation("d","e",0,"a").
-Relation("e","f",0,"a").
-Relation("f","a",0,"a").
-
-
-/*
- // Small test case:
-Relation("a","b",0,"a").
-Relation("b","c",0,"a").
-Relation("c","a",0,"a").
-*/
-
-.decl Josephus(a:symbol)
-Josephus(a) :-
-			Relation(a, b, step, a),
-			Relation(b, a, step, a).
-.output Josephus
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\josephus\josephus.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\small\small.dl ====
-//// Test Case adopted from Ocaml datalog
-
-.type Node <: symbol
-
-.decl mother   (node1:Node, node2:Node)
-.output mother   ()
-.decl father   (node1:Node, node2:Node)
-.output father   ()
-.decl parent   (node1:Node, node2:Node)
-.output parent   ()
-.decl ancestor (node1:Node, node2:Node)
-.output ancestor ()
-
-parent(X,Y) :- mother(X,Y).
-parent(X,Y) :- father(X,Y).
-ancestor(X,Y) :- parent(X,Y).
-ancestor(X,Y) :- parent(X,Z), ancestor(Z,Y).
-
-mother("claudette", "ann").
-mother("jeannette", "bill").
-mother("mireille", "john").
-father("john", "ann").
-father("john", "bill").
-father("jean-jacques", "alphonse").
-father("alphonse", "mireille").
-father("brad", "john").
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\small\small.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2013-14, Oracle and/or its affiliates. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-/* Conversion of non-deterministic FSA to deterministic FSA.
- * Complex souffle example that demonstrates: components,
- * aggregates, and string concatenation. */
-
-/* The inputs: alphabet, set of states and transition relation */
-/* By convention: state 1 is initial state, last state is the final accepting state */
-
-.type N <: number
-.type Letter <: symbol
-
-.decl state(n : N)
-.input state()
-.decl alphabet(x : Letter)
-.input alphabet()
-.decl tr(s1 : N, s2 : N, x : Letter)
-.input tr()
-
-// --------------------------------------------------------
-// --------------------------------------------------------
-// Generic common code
-
-.type NumberList = [head: N, tail: NumberList]
-.comp Vector<T, TList> {
-	// note: TList must be list of T
-
-	// input relations:
-	.decl size(l: number)	// must be one number that determines the size
-	.decl element(x: T)	// contains all valid elements for this vector
-
-	// output relations:
-	.decl len(list: TList, result: N)
-	.decl sublist(list: TList)	// is 'list' a list of given size, or any smaller?
-	.decl vector(list: TList)	// is 'list' our vector, i.e. list of given size
-	.decl member_at(list: TList, index: N, member: T)	// is 'member' at given index position, 1-based index
-
-	len(nil, 0).
-	len([h, t], l+1) :-  sublist([h, t]), len(t, l).
-
-	sublist(nil).
-	sublist([h, t]) :- element(h), sublist(t), len(t, l), size(max_size), l < max_size.
-
-	vector(list) :- sublist(list), size(max_size), len(list, max_size).
-
-
-	member_at([h, t], idx, member) :-
-		element(h), sublist(t), element(member),
-		member_at(t, idx, member).
-
-	member_at([h, t], idx, member) :-
-		element(h), sublist(t), element(member),
-		size(max_size), idx <= max_size,
-		h = member, len([h, t], idx).
-}
-
-.comp Automaton<TState, TAlpha, TWord> {
-	// note: TWord must be list of TAlpha
-
-	// input relations:
-	.decl state(s: TState)
-	.decl start_state(s: TState)
-	.decl final(s: TState)
-	.decl alphabet(x: TAlpha)
-	.decl tr(s: TState, q: TState, a: TAlpha)
-
-	.decl max_acceptance_size(n: number)
-
-	// private
-	.init Word = Vector<TAlpha, TWord>
-	Word.size(x) :- max_acceptance_size(x).
-	Word.element(x) :- alphabet(x).
-
-	// output
-	.decl accepts(w: TWord)
-	.decl accepts_from_state(w: TWord, s: TState)
-
-	accepts(w) :- Word.sublist(w), start_state(s), accepts_from_state(w, s).
-
-	accepts_from_state(nil, s) :- final(s).
-	accepts_from_state([h, t], s) :-
-		alphabet(h), state(s), Word.sublist(t),
-		tr(s, q, h), accepts_from_state(t, q).
-}
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
-// Conversion NFSA -> FSA
-
-
-.type Word = [ c : Letter, r : Word ]
-.init Nfsa = Automaton<N, Letter, Word>
-Nfsa.start_state(1).
-Nfsa.state(s) :- state(s).
-Nfsa.final(fs) :- fs = max s : { state(s) }.
-Nfsa.alphabet(c) :- alphabet(c).
-Nfsa.max_acceptance_size(5).
-Nfsa.tr(s, q, c) :- tr(s, q, c).
-
-// FSA state is bitvector that represents the set of NFSA states
-.init FsaState = Vector<number, NumberList>
-FsaState.size(sz) :- Nfsa.final(sz).
-FsaState.element(0).
-FsaState.element(1).
-
-
-.decl not_fsa_start_state(s: NumberList)
-not_fsa_start_state(s) :- FsaState.member_at(s, x, 1), !Nfsa.start_state(x).
-
-.init Fsa = Automaton<NumberList, Letter, Word>
-Fsa.state(s) :- FsaState.vector(s).
-Fsa.start_state(s) :- FsaState.member_at(s, nfsa_init, 1), Nfsa.start_state(nfsa_init), !not_fsa_start_state(s).
-Fsa.final(s) :- Nfsa.final(fin), FsaState.member_at(s, fin, 1).
-Fsa.alphabet(c) :- alphabet(c).
-Fsa.max_acceptance_size(5).
-
-// the result of the conversion is this relation that
-// defines the transitions of the resulting FSA
-Fsa.tr(s, q, a) :-
-	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
-	!not_fsa_tr(s, q, a), // negation of negation helps us to get rid of quantification (for all)
-	Nfsa.tr(x, y, a),		// this is so that there is at least one transition between the two states
-	FsaState.member_at(s, x, 1), FsaState.member_at(q, y, 1). // this is so that s,q (the states) are not empty sets
-
-
-.decl has_x(s: NumberList, y: N, a: Letter) // does the list have some 'x' for which tr(x, y, a)?
-has_x(S, y, a) :- FsaState.member_at(S, x, 1), Nfsa.tr(x,y,a).
-
-.decl not_fsa_tr(s: NumberList, q: NumberList, a: Letter)
-
-// it is not fsa transition if have some x from S and tr(x,y,a) for such y that is not member of Q
-// i.e. Q is missing some target states
-not_fsa_tr(s, q, a) :-
-	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
-	Nfsa.tr(x, y, a), FsaState.member_at(s, x, 1), !FsaState.member_at(q, y, 1).
-
-// it is not fsa transition if for y from Q there is no x from S such that tr(x,y,a):
-// i.e. Q has got some more states than it should
-not_fsa_tr(s, q, a) :-
-	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
-	FsaState.member_at(q, y, 1), !has_x(s, y, a).
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
-// Debug output: accepted word of length <= 5 and deterministric transition relation
-
-// note: the numbering of recursive structures may differ when we
-// run the program in parallel, so relations that output recursive structures
-// cannot be used for testing purposes. For that reason, we convert the states
-// into strings, e.g. "01011" and words too.
-
-.type String <: symbol
-.decl fsa_state_to_str(state: NumberList, str: String)
-fsa_state_to_str(nil, " ").
-fsa_state_to_str([0,t], cat("0", str)) :- FsaState.sublist(t), fsa_state_to_str(t, str).
-fsa_state_to_str([1,t], cat("1", str)) :- FsaState.sublist(t), fsa_state_to_str(t, str).
-
-.decl word_to_str(word: Word, str: String)
-word_to_str(nil, " ").
-word_to_str([h,t], cat(h, str)) :- Fsa.alphabet(h), Fsa.Word.sublist(t), word_to_str(t, str).
-
-.decl fsa_accepted(w: String)
-.output fsa_accepted()
-fsa_accepted(w) :- Fsa.accepts(list), word_to_str(list, w).
-
-.decl nfsa_accepted(w: String)
-.output nfsa_accepted()
-nfsa_accepted(w) :- Nfsa.accepts(list), word_to_str(list, w).
-
-.decl fsa_tr(s: String, q: String, c: Letter)
-.output fsa_tr()
-fsa_tr(s_str, q_str, c) :- Fsa.tr(s, q, c), fsa_state_to_str(s, s_str), fsa_state_to_str(q, q_str).
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\java-pointsto\java-pointsto.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2013, Oracle and/or its affiliates. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-///////////
-// Types //
-///////////
-
-.type Type <: symbol
-.type VarRef <: symbol
-.type InvocationRef <: symbol
-.type HeapAllocationRef <: symbol
-.type FieldSignatureRef <: symbol
-.type MethodSignatureRef <: symbol
-.type MethodDescriptorRef <: symbol
-.type Int <: symbol
-
-
-/////////
-// EDB //
-/////////
-
-.decl DirectFieldIndexSignature(class:Type, index:FieldSignatureRef, field:FieldSignatureRef)
-.input DirectFieldIndexSignature()
-.decl DirectSuperclass(subclass:Type, superclass:Type)
-.input DirectSuperclass()
-.decl DirectSuperinterface(type:Type, superinterface:Type)
-.input DirectSuperinterface()
-.decl HeapAllocationType(heapAllocation:HeapAllocationRef, allocationType:Type)
-.input HeapAllocationType()
-.decl ThisVar(method:MethodSignatureRef, thisVariable:VarRef)
-.input ThisVar()
-.decl ReturnVar(returnVariable:VarRef, method:MethodSignatureRef)
-.input ReturnVar()
-.decl SpecialMethodInvocationSignature(callsite:InvocationRef, calledMethod:MethodSignatureRef)
-.input SpecialMethodInvocationSignature()
-.decl SpecialMethodInvocationBase(callsite:InvocationRef, instanceVariable:VarRef)
-.input SpecialMethodInvocationBase()
-.decl StaticMethodInvocationSignature(callsite:InvocationRef, calledMethod:MethodSignatureRef)
-.input StaticMethodInvocationSignature()
-.decl VirtualMethodInvocationSignature(callsite:InvocationRef, calledMethod:MethodSignatureRef)
-.input VirtualMethodInvocationSignature()
-.decl VirtualMethodInvocationBase(callsite:InvocationRef, instanceVariable:VarRef)
-.input VirtualMethodInvocationBase()
-.decl VarType(variable:VarRef, type:Type)
-.input VarType()
-.decl FormalParam(index:Int, containingMethod:MethodSignatureRef, variable:VarRef)
-.input FormalParam()
-.decl ActualParam(index:Int, callsite:InvocationRef, actualVariable:VarRef)
-.input ActualParam()
-.decl AssignReturnValue(callsite:InvocationRef, variableAssignedTo:VarRef)
-.input AssignReturnValue()
-.decl AssignCast(castType:Type, variableCast:VarRef, variableAssignedTp:VarRef, containingMethod:MethodSignatureRef)
-.input AssignCast()
-.decl AssignLocal(variableAssigned:VarRef, variableAssignedTo:VarRef, containingMethod:MethodSignatureRef)
-.input AssignLocal()
-.decl AssignHeapAllocation(heapAllocation:HeapAllocationRef, variableAssignedTo:VarRef, containingMethod:MethodSignatureRef)
-.input AssignHeapAllocation()
-.decl LoadInstanceFieldIndex(instanceVariable:VarRef, field:FieldSignatureRef, variableAssignedTo:VarRef, containingMethod:MethodSignatureRef)
-.input LoadInstanceFieldIndex()
-.decl StoreInstanceFieldIndex(storedVariable:VarRef, instanceVariable:VarRef, field:FieldSignatureRef, containingMethod:MethodSignatureRef)
-.input StoreInstanceFieldIndex()
-
-
-.decl InstanceVar(instanceVariable:VarRef)
-InstanceVar(var) :- LoadInstanceFieldIndex(var, _, _, _).
-InstanceVar(var) :- StoreInstanceFieldIndex(_, var, _, _).
-
-.decl Superclass(subclass:Type, superclass:Type)
-Superclass(sub, super) :- DirectSuperclass(sub, super).
-Superclass(sub, super) :- Superclass(sub, x), DirectSuperclass(x, super).
-
-.decl Supertype(subtype:Type, supertype:Type)
-Supertype(sub, super) :- Superclass(sub, super).
-Supertype(type, interface) :- DirectSuperinterface(type, interface).
-
-.decl Invocation(callsite:InvocationRef, calledMethod:MethodSignatureRef)
-Invocation(callsite, calledMethod) :- SpecialMethodInvocationSignature(callsite, calledMethod).
-Invocation(callsite, calledMethod) :- StaticMethodInvocationSignature(callsite, calledMethod).
-Invocation(callsite, calledMethod) :- VirtualMethodInvocationSignature(callsite, calledMethod).
-
-.decl InvocationBase(callsite:InvocationRef, instanceVariable:VarRef)
-InvocationBase(callsite, var) :- VirtualMethodInvocationBase(callsite, var).
-InvocationBase(callsite, var) :- SpecialMethodInvocationBase(callsite, var).
-
-.decl InstanceVarType(variable:VarRef, type:Type)
-InstanceVarType(var, type) :-
-  VarType(var, type),
-  InstanceVar(var).
-
-.decl InstanceTypes(type:Type)
-InstanceTypes(x) :-
-  Supertype(x, _),
-  InstanceVarType(_, x).
-
-InstanceTypes(x) :-
-  Supertype(_, x),
-  InstanceVarType(_, x).
-
-.decl IsInstanceTypeCompatible(subclass:Type, superclass:Type)
-IsInstanceTypeCompatible(sub, super) :-
-  Supertype(sub, super).
-
-IsInstanceTypeCompatible(t, t) :-
-  InstanceTypes(t).
-
-.decl InstanceTypeComparable(subclass:Type, superclass:Type)
-InstanceTypeComparable(type1, type2) :-
-  IsInstanceTypeCompatible(type1, type2).
-
-InstanceTypeComparable(type1, type2) :-
-  IsInstanceTypeCompatible(type2, type1).
-
-.decl ComparableInstanceVar(variable:VarRef, variable2:VarRef)
-ComparableInstanceVar(var1, var2) :-
- InstanceVarType(var1, type1),
- InstanceVarType(var2, type2),
- InstanceTypeComparable(type1, type2).
-
-.decl Assign(varAssigned:VarRef, varAssignedTo:VarRef)
-Assign(localVarAssigned, localVarAssignedTo) :- AssignLocal(localVarAssigned, localVarAssignedTo, _).
-Assign(actualParam, formalParam) :- Invocation(callsite, method), FormalParam(index, method, formalParam), ActualParam(index, callsite, actualParam).
-Assign(returnVar, localVar) :- ReturnVar(returnVar, method), Invocation(callsite, method), AssignReturnValue(callsite, localVar).
-Assign(base, this) :- InvocationBase(callsite, base), Invocation(callsite, method), ThisVar(method, this).
-
-.decl VarPointsTo(variable:VarRef, heapAllocation:HeapAllocationRef)
-.output VarPointsTo()
-VarPointsTo(var, heap)  :-
-  AssignHeapAllocation(heap, var, _).
-
-VarPointsTo(var1, heap) :-
-  Assign(var2, var1),
-  VarPointsTo(var2, heap).
-
-VarPointsTo(var1, heap) :-
-  AssignCast(type, var2, var1, _),
-  VarPointsTo(var2, heap),
-  HeapAllocationType(heap, type).
-
-VarPointsTo(var1, heap) :-
-  AssignCast(varType, var2, var1, _),
-  VarPointsTo(var2, heap),
-  HeapAllocationType(heap, heapType),
-  Supertype(heapType, varType).
-
-.decl InstanceVarPointsTo(variable:VarRef, heapAllocation:HeapAllocationRef)
-InstanceVarPointsTo(var1, var2) :-
-  InstanceVar(var1),
-  VarPointsTo(var1, var2).
-
-.decl LoadInstanceVarPointsTo(variable:VarRef, heapAllocation:HeapAllocationRef)
-LoadInstanceVarPointsTo(var, heap)  :-
-  InstanceVarPointsTo(var, heap),
-  LoadInstanceFieldIndex(var, _, _, _).
-
-.decl StoreInstanceVarPointsTo(variable:VarRef, heapAllocation:HeapAllocationRef)
-StoreInstanceVarPointsTo(var, heap) :-
-  InstanceVarPointsTo(var, heap),
-  StoreInstanceFieldIndex(_, var, _, _).
-
-.decl Alias(v1:VarRef, v2:VarRef)
-Alias(v1, v2) :-
-  LoadInstanceVarPointsTo(v1, h),
-  StoreInstanceVarPointsTo(v2, h),
-  InstanceVarType(v1, t1),
-  InstanceVarType(v2, t2),
-  InstanceTypeComparable(t1, t2).
-
-Assign(storedVar, varAssignedTo) :-
-  Alias(iLoadVar, iStoreVar),
-  StoreInstanceFieldIndex(storedVar, iStoreVar, field, _),
-  LoadInstanceFieldIndex(iLoadVar, field, varAssignedTo, _).
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\java-pointsto\java-pointsto.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-.decl Edge(vertex1:symbol,vertex2:symbol,weight:number)
-Edge(a,b,w) :-
-  Edge(b,a,w).
-
-Edge("a","a",1).
-Edge("a","b",1).
-Edge("a","c",2).
-Edge("b","d",2).
-Edge("b","e",3).
-Edge("c","d",3).
-Edge("c","e",4).
-Edge("d","f",1).
-Edge("e","f",6).
-
-.decl Limit(weight:number)
-Limit(h) :- h = sum w : Edge(_,_,w).
-
-.decl Path(source:symbol,destination:symbol,path:number)
-Path(a,c,w) :- Edge(a,c,w).
-Path(a,c,w1+w2) :-
-  Limit(h),
-  Edge(a,b,w1),
-  Path(b,c,w2),
-    w2 < h-w1.
-
-.decl FindingShorterPath(source:symbol,destination:symbol,weight:number)
-FindingShorterPath(a,b,w1) :-
-  Path(a,b,w1),
-  Path(a,b,w2),
-  w2<w1.
-
-.decl ShortestPath(source:symbol,destination:symbol,weight:number)
-ShortestPath(a,b,w) :-
-  Path(a,b,w),
-  !FindingShorterPath(a,b,w).
-
-.output ShortestPath
-
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\minpath1\minpath1.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-
-.comp Impl {
-    .decl R(x: number)
-    R(0). R(1). R(2).
-}
-
-.comp A<T> {
-    .init impl = T
-    .decl Base(x: number)
-    Base(x) :- impl.R(x).
-}
-
-.comp Derived<K> : A<K> {
-    .decl Deriv(x:number)
-    Deriv(42).
-    Deriv(n) :- Base(n).
-}
-
-.init d = Derived<Impl>
-.init a = A<Impl>
-
-.decl DerivedOut(x: number)
-.output DerivedOut()
-.decl AOut(x: number)
-.output AOut()
-
-DerivedOut(x) :- d.Deriv(x).
-AOut(x) :- a.Base(x).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-#include "array.dl"
-
-// Cellular Automata
-// Simulation of elementary cellular automaton to a given number of generations.
-
-// The termination time, the simulation will stop after the given number of generations.
-.decl terminate(time:number)
-.input terminate()
-
-// The transition function, giving the value of a cell at time t+1 from the values of that cell and its local environment at time t.
-.decl transition(prev:number, center:number, next:number, value:number)
-.input transition()
-
-// The value of the cell to the left of the cell specified by the index at the given time, or the default value if it is out of the array bounds.
-.decl prev(time:number, index:number, value:number)
-prev(t, i, NULL) :- !element(i-1, _), cell(t, i, _), default(NULL).
-prev(t, i, x) :- cell(t, i-1, x), element(i, _).
-
-// The value of the cell to the right of the cell specified by the index at the given time, or the default value if it is out of the array bounds.
-.decl next(time:number, index:number, value:number)
-next(t, i, NULL) :- !element(i+1, _), cell(t, i, _), default(NULL).
-next(t, i, x) :- cell(t, i+1, x), element(i, _).
-
-// The cells, referenced by a time and their index in the backing array of elements, and having a value that is either 0 or 1.
-.decl cell(time:number, index:number, value:number)
-.output cell()
-
-// The value of a cell at time 0 is the value of its backing element.
-cell(0, i, x) :- element(i, x).
-
-// The value of a cell at time t+1 is given by the transition function on the value of the local environment at time t.
-cell(t+1, i, x) :- !terminate(t), environment(t, i, l, c, r), transition(l, c, r, x).
-
-// The local environment of a cell, giving the value of the specified cell at time t, as well as that of its nearest neighbours.
-.decl environment(time:number, index:number, prev:number, center:number, next:number)
-.output environment()
-environment(t, i, l, c, r) :-
-  prev(t, i, l), cell(t, i, c), next(t, i, r).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po1\po1.dl ====
-.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
-.input Check()
-.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
-.input In()
-.decl A(l:number, o:number)
-.output A()
-
-A(1,i) :- Check(_, b, c, d, e, f), In(_, b, c, d, e, f, i).
-A(2,i) :- Check(a, _, c, d, e, f), In(a, _, c, d, e, f, i).
-A(3,i) :- Check(a, b, _, d, e, f), In(a, b, _, d, e, f, i).
-A(4,i) :- Check(a, b, c, _, e, f), In(a, b, c, _, e, f, i).
-A(5,i) :- Check(a, b, c, d, _, f), In(a, b, c, d, _, f, i).
-A(6,i) :- Check(a, b, c, d, e, _), In(a, b, c, d, e, _, i).
-
-A(7, i) :- Check(_, _, c, d, e, f), In(_, _, c, d, e, f, i).
-A(8, i) :- Check(a, _, _, d, e, f), In(a, _, _, d, e, f, i).
-A(9, i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
-A(10, i) :- Check(a, b, c, _, _, f), In(a, b, c, _, _, f, i).
-A(11, i) :- Check(a, b, c, d, _, _), In(a, b, c, d, _, _, i).
-
-A(12, i) :- Check(_, _, _, d, e, f), In(_, _, _, d, e, f, i).
-A(13, i) :- Check(a, _, _, _, e, f), In(a, _, _, _, e, f, i).
-A(14, i) :- Check(a, b, _, _, _, f), In(a, b, _, _, _, f, i).
-A(15, i) :- Check(a, b, c, _, _, _), In(a, b, c, _, _, _, i).
-
-A(16, i) :- Check(_, _, _, _, e, f), In(_, _, _, _, e, f, i).
-A(17, i) :- Check(a, _, _, _, _, f), In(a, _, _, _, _, f, i).
-A(18, i) :- Check(a, b, _, _, _, _), In(a, b, _, _, _, _, i).
-
-A(19, i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
-
-
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\po1\po1.dl ====
+// define edge relation of a directed graph
+.decl e(x:number, y:number, c:number)
+
+e(1,2,1).
+e(2,2,1).
+e(2,3,1).
+e(3,4,1).
+e(1,4,100).
+
+// define shortest path relation
+.decl sp(x:number, y:number, c:number) btree_delete
+
+//
+// subsumption
+//
+// A longer path is subsumed by a shorter path, i.e.,
+// the longer path is discarded from the relation.
+sp(x,y,c1) <= sp(x,y, c2) :-
+  c2 <= c1.
+
+//
+// base case
+//
+sp(x,y,c) :-
+  e(x,y,c).
+
+//
+// inductive case
+//
+sp(x,z,c1 + c2) :-
+  sp(x,y,c1),
+  e(y,z,c2).
+
+.output sp
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl ====
 
 // ==== BEGIN: d:\work24\souffle-lsp-plugin\example\comp-parametrized-multilvl\comp-parametrized-multilvl.dl ====
 // Souffle - A Datalog Compiler
@@ -1861,51 +1391,890 @@ A(19, i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
 
 // ==== END: d:\work24\souffle-lsp-plugin\example\comp-parametrized-multilvl\comp-parametrized-multilvl.dl ====
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-#include "array.dl"
+// Compute a Lucas Sequence.
 
-// Cellular Automata
-// Simulation of elementary cellular automaton to a given number of generations.
+// Maximum sequence element.
+.decl lim(l:number)
+.input lim()
 
-// The termination time, the simulation will stop after the given number of generations.
-.decl terminate(time:number)
-.input terminate()
+// Coefficients for the sequence.
+.decl pq(p:number, q:number)
+.input pq()
 
-// The transition function, giving the value of a cell at time t+1 from the values of that cell and its local environment at time t.
-.decl transition(prev:number, center:number, next:number, value:number)
-.input transition()
+// Relation composing the i'th element of this sequence.
+// Base cases given in the .facts file.
+.decl lucas(i:number, n:number)
+.output lucas()
+.input lucas()
 
-// The value of the cell to the left of the cell specified by the index at the given time, or the default value if it is out of the array bounds.
-.decl prev(time:number, index:number, value:number)
-prev(t, i, NULL) :- !element(i-1, _), cell(t, i, _), default(NULL).
-prev(t, i, x) :- cell(t, i-1, x), element(i, _).
+lucas(I+1, P*N - Q*M) :- lucas(I, N), lucas(I-1, M), pq(P, Q), !lim(I).
 
-// The value of the cell to the right of the cell specified by the index at the given time, or the default value if it is out of the array bounds.
-.decl next(time:number, index:number, value:number)
-next(t, i, NULL) :- !element(i+1, _), cell(t, i, _), default(NULL).
-next(t, i, x) :- cell(t, i+1, x), element(i, _).
+// ==== END: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl ====
 
-// The cells, referenced by a time and their index in the backing array of elements, and having a value that is either 0 or 1.
-.decl cell(time:number, index:number, value:number)
-.output cell()
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\sequences\sequences.dl ====
+//
+// Examples of handling sequences over a given alphabet.
+//
 
-// The value of a cell at time 0 is the value of its backing element.
-cell(0, i, x) :- element(i, x).
+.type Letter <: symbol
 
-// The value of a cell at time t+1 is given by the transition function on the value of the local environment at time t.
-cell(t+1, i, x) :- !terminate(t), environment(t, i, l, c, r), transition(l, c, r, x).
 
-// The local environment of a cell, giving the value of the specified cell at time t, as well as that of its nearest neighbours.
-.decl environment(time:number, index:number, prev:number, center:number, next:number)
-.output environment()
-environment(t, i, l, c, r) :-
-  prev(t, i, l), cell(t, i, c), next(t, i, r).
+// given: an alphabet
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\cellular_automata\cellular_automata.dl ====
+.decl num_letters(l:number)
+num_letters(3).
+
+.decl a(l:Letter)
+
+a("a").
+a("b").
+a("c").
+
+
+// produces a list of all strings up to a certain length
+
+// define finite number range (120 - enough space for all words up to lenght 4)
+.decl n(x:number)
+n(0).
+n(x+1) :- n(x), x < 120.
+
+// define successor function
+.decl s(x:number,y:number)
+s(x,x+1) :- n(x).
+
+// define addition
+.decl op_add(x:number,y:number,r:number)
+op_add(x,0,x) :- n(x).
+op_add(x,y,r) :- s(py,y), op_add(x,py,pr), s(pr,r).
+
+// define multiplication
+.decl op_mul(x:number,y:number,r:number)
+op_mul(x,0,0) :- n(x).
+op_mul(x,y,r) :- s(py,y), op_mul(x,py,pr), op_add(pr,x,r).
+
+
+// define exponent
+.decl op_exp(x:number,y:number,r:number)
+op_exp(x,0,1) :- n(x).
+op_exp(x,y,r) :- s(py,y), op_exp(x,py,pr), op_mul(pr,x,r).
+
+
+// compute logarithm
+.decl op_log(x:number,b:number,r:number)
+op_log(x,b,r) :- op_exp(b,r,y), s(r,sr), op_exp(b,sr,y2), n(x), y <= x, x < y2.
+
+
+// define integer div
+.decl op_div(x:number, y:number, r:number)
+op_div(x,y,r) :- op_mul(r,y,a), op_add(a,z,x), 0<=z, z<y.
+
+// define modular
+.decl op_mod(x:number, y:number, r:number)
+op_mod(x,y,r) :- op_mul(y,_,z), op_add(z,r,x), 0<=r, r<y.
+
+
+// index letters
+.decl idx(i:number,a:Letter)
+//idx($,a) :- a(a).
+idx(0,"a").
+idx(1,"b").
+idx(2,"c").
+
+
+//////////////////// TRIE ////////////////////////
+
+.decl trie_letter(i:number,a:Letter)
+trie_letter(i,a) :- s(x,i), num_letters(n), op_mod(x,n,r), idx(r,a).
+
+.decl trie_level_end(l:number,i:number)
+trie_level_end(0,0).
+trie_level_end(l,i) :- num_letters(n), s(pl,l), trie_level_end(pl,b), op_exp(n,l,p), op_add(b,p,i).
+
+.decl trie_level_start(l:number,i:number)
+trie_level_start(0,0).
+trie_level_start(l,i) :- s(pl,l), trie_level_end(pl,b), op_add(b,1,i).
+
+
+.decl trie_level(i:number,l:number)
+trie_level(0,0).
+trie_level(i,b) :- n(i), s(a,b), trie_level_end(a,low), trie_level_end(b,high), low<i, i<=high.
+
+.decl trie_parent(i:number,p:number)
+trie_parent(i,p) :- num_letters(n), trie_level(i,l), s(pl,l), trie_level_start(l,b), op_add(b,x,i), op_div(x,n,o), trie_level_start(pl,c), op_add(c,o,p).
+
+.decl trie_root(x:number)
+trie_root(0).
+
+.decl trie(x:number)
+trie(x) :- trie_letter(x,_).
+
+
+////////////// all strings over the alphabeth ////////////////
+
+.decl str(x:number)
+str(x) :- trie(x).
+
+.decl str_len(id:number, l:number)
+str_len(id,l) :- trie_level(id, l).
+
+.decl str_chain(id:number,parents:number)
+str_chain(id,id) :- trie(id).
+str_chain(id,p) :- str_chain(id,x), trie_parent(x,p).
+
+.decl str_letter_at(id:number, pos:number, l:Letter)
+str_letter_at(id,pos,l) :- str_chain(id,p), trie_level(p,pos), trie_letter(p,l).
+
+
+
+////////////// example sequences ////////////////////
+
+
+
+// search all palindrome
+
+.decl palin_aux(s:number, a:number, b:number)
+palin_aux(s,x,x) :- str(s), n(x), str_len(s,l), x<=l.
+palin_aux(s,x,x+1) :- str_letter_at(s,x,_).
+palin_aux(s,x,sy) :- str_letter_at(s,x,a), s(x,sx), palin_aux(s,sx,y), str_letter_at(s,y,a), s(y,sy).
+
+.decl palindrome(s:number)
+.output palindrome()
+palindrome(s) :- str_len(s,0).
+palindrome(s) :- palin_aux(s,1,sl), str_len(s,l), s(l,sl).
+
+
+.decl debug_str(x:number)
+debug_str(96).
+
+.decl read(x:number,y:Letter)
+.output read()
+read(x,y) :- debug_str(s), str_letter_at(s,x,y).
+
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\sequences\sequences.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\hmmer\hmmer.dl ====
+//
+// Preliminary Version of a points-to analysis for C
+//
+
+.type Var <: symbol
+.type Obj <: symbol
+
+.decl DirectFlow(v:Var,w:Var)
+.input DirectFlow()
+.decl Load(v:Var,w:Var)
+.input Load()
+.decl Store(v:Var,w:Var)
+.input Store()
+.decl ExtReturn(v:Var,w:Var)
+.input ExtReturn()
+.decl EscapePtr(v:Var)
+.input EscapePtr()
+.decl HeapAlloc(v:Var,o:Obj)
+.input HeapAlloc()
+.decl StackAlloc(v:Var,o:Obj)
+.input StackAlloc()
+.decl Function(v:Var,o:Obj)
+.input Function()
+.decl Global(v:Var,o:Obj)
+.input Global()
+
+.decl LptrVar (v:Var)
+.decl IsPtr (v:Var,o:Obj)
+.decl Memory(o1:Obj,o2:Obj)
+.decl IsReachable(v:Var,o:Obj)
+.decl CFormat(o:Obj)
+.decl CPtrLoad(v1:Var,v2:Var)
+.output CPtrLoad()
+.decl CPtrStore(v1:Var,v2:Var)
+.output CPtrStore()
+
+LptrVar(v) :- StackAlloc(v,_).
+LptrVar(v) :- HeapAlloc(v,_).
+LptrVar(v) :- Load(_,v).
+LptrVar(v) :- Store(_,v).
+LptrVar(v) :- DirectFlow(v,w), LptrVar(w).
+LptrVar(v) :- DirectFlow(w,v), LptrVar(w).
+
+
+IsPtr(v,o) :- HeapAlloc(v,o).
+IsPtr(v,o) :- StackAlloc(v,o).
+IsPtr(dest,o) :- DirectFlow(src,dest), IsPtr(src,o).
+IsPtr(dest,o) :- Load(dest, addr), IsPtr(addr, o1), Memory(o1,o).
+IsPtr(v,o) :- ExtReturn(arg,v), IsReachable(arg,o).
+
+IsPtr(v,o) :- Global(v, o).
+
+Memory(o1,o2) :- Store(src,addr), IsPtr(src,o2), IsPtr(addr, o1).
+
+IsReachable(v,o) :- IsPtr(v,o).
+IsReachable(v,o) :- Memory(o1,o), IsReachable(v,o1).
+
+CFormat(o) :- EscapePtr(v), IsReachable(v,o).
+
+
+IsPtr(v,"ttt_obj") :- ExtReturn(_,v).
+
+CFormat("ttt_obj") :- ExtReturn(_,_).
+Memory("ttt_obj", "ttt_obj") :- ExtReturn(_,_).
+
+
+CPtrLoad(dest, addr) :- Load(dest, addr), IsPtr(addr, o), CFormat(o), LptrVar(dest).
+CPtrStore(src, addr) :- Store(src, addr), IsPtr(addr, o), CFormat(o), LptrVar(src).
+
+CFormat(o) :- CPtrLoad(_,v), IsPtr(v,o).
+CFormat(o) :- CPtrStore(_,v), IsPtr(v,o).
+
+CFormat(o) :- Load(v,addr), IsPtr(addr,o), !LptrVar(v).
+CFormat(o) :- Store(v,addr), IsPtr(addr,o), !LptrVar(v).
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\hmmer\hmmer.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\rewrite\rewrite.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2020, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// This example shows a simple rewrite system using records
+// and equivalence relations. An expression is expressed via
+// recursively defined records. Each sub-tree in the expression
+// can be rewritten. Equivalent terms are put into the same
+// equivalence class.
+
+// Expression
+.type Expr=[
+   op:symbol,   // operand: +,-,*,+, <=, !, >=, <, >
+   left:Expr,   // left operand (if needed)
+   right:Expr,  // right operand (if needed)
+   nval:number, // number if op is "num"; otherwise not used
+   var:symbol   // variable symbol if op is "var"; otherwise not used
+]
+
+// Input expressions
+.decl A(e:Expr)
+A(
+   ["!",
+      ["<",
+       ["+",["num",nil,nil,10,""],["B",nil,nil,20,""],0, ""],
+       ["+",["num",nil,nil,30,""],["B",nil,nil,40,""],0, ""], 0,""],
+      nil,
+      0,""]).
+
+// Term-Rewriter
+.decl S(e1:Expr, e2:Expr) eqrel
+
+// Populate input
+S(e, e) :-
+   A(e).
+
+// Put sub-expression into equivalence class
+S(right,right) :-
+   S([_,_,right,_,_],_).
+
+S(left,left) :-
+   S([_,left,_,_,_],_).
+
+// Recombine sub-expressions from equivalence classes
+S([op, newLeft, newRight, num, sym], x) :-
+  S([op, left, right, num, sym], x),
+  S(left, newLeft),
+  S(right, newRight).
+
+// Rewrite rules (examples)
+
+// rewrite rule num1 + num2 => num3 where num3 is num1+num2
+S(["num", nil, nil, a+b, ""],x) :-
+   S(["+", ["num", _, _, a, _],
+           ["num", _, _, b, _], _, _], x).
+
+// rewrite rule !(a < b) => a >= b
+S([">=", a, b, 0, ""],x) :-
+   S(["!", ["<", a, b, _, _], nil, _, _],x).
+
+// compute size of each expression
+.decl ExprSize(x:Expr, m:number)
+ExprSize(nil, 0).
+ExprSize([op, left, right, num, sym], d1 + d2 + 1) :-
+   S([op, left, right, num, sym], _),
+   ExprSize(left, d1),
+   ExprSize(right, d2).
+
+// find smallest expression for each input
+// the solution might not be unique.
+.decl B(e1:Expr, e2:Expr)
+B(e1, e2) :-
+   A(e1),
+   min_d = min d: {S(e1, e2), ExprSize(e2, d)},
+   S(e1,e2),
+   ExprSize(e2, min_d).
+
+.output B
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\rewrite\rewrite.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\minpath2\minpath2.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.decl Edge(vertex1:symbol,vertex2:symbol,weight:number)
+Edge(a,b,w) :-
+  Edge(b,a,w).
+
+Edge("a","a",1).
+Edge("a","b",1).
+Edge("a","c",2).
+Edge("b","d",2).
+Edge("b","e",3).
+Edge("c","d",3).
+Edge("c","e",4).
+Edge("d","f",1).
+Edge("e","f",6).
+
+.decl Path(source:symbol,destination:symbol,path:number)
+
+Path(a,c,w) :-
+  Edge(a,c,w).
+
+Path(a,c,w1+w2) :-
+  Path(a,b,w1),
+  Edge(b,c,w2),
+  h = sum w :Edge(_,_,w),
+  (w1+w2) < h.
+
+.decl ConnectedNodes(source:symbol,destination:symbol)
+
+ConnectedNodes(a,b) :-
+  Path(a,b,_).
+
+.decl ShortestPath(source:symbol,destination:symbol,weight:number)
+
+ShortestPath(a,b,w1) :-
+  ConnectedNodes(a,b),
+  w1 = min w2 : Path(a,b,w2).
+
+.output ShortestPath
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\minpath2\minpath2.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl ====
+// Orbits of cosmological objects
+// Rafael Caballero-Rold\'an, 2007
+// Adopted from DES
+
+.type D <: symbol
+
+.decl star    (x:D)
+.output star    ()
+.decl orbits  (x:D,y:D)
+.output orbits  ()
+.decl planet  (x:D)
+.output planet  ()
+.decl intermediate (x:D,y:D)
+.output intermediate ()
+
+star("sun").
+orbits("earth", "sun").
+orbits("moon", "earth").
+
+orbits(X,Y) :-
+  orbits(X,Z),
+  orbits(Z,Y).
+
+planet(X) :-
+  orbits(X,Y),
+  star(Y),
+  !intermediate(X,Y).
+
+intermediate(X,Y) :-
+  orbits(X,Y),
+  orbits(_,Y).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\orbits1\orbits1.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_edges\shortest_edges.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find the shortest outward edge for every Node
+.type Node <: symbol
+
+.decl Edge(n:Node, m:Node, w:number)
+.input Edge()
+
+.decl ShortestEdgeFromN(n:Node, l:number)
+.output ShortestEdgeFromN()
+
+ShortestEdgeFromN(x, l) :- Edge(x, _, _), l = min Z : Edge(x, _, Z).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_edges\shortest_edges.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Find the shortest paths between all nodes, the slow way
+.type Node <: symbol
+
+.decl Edge(n:Node, m:Node, w:number)
+.input Edge()
+
+// Find all paths
+.decl Length   (n:Node, m:Node, l:number)
+Length(x,y,t)  :- t=l, Edge(x,y,l).
+Length(x,y,t+l)  :- Edge(x,z,l), Length(z,y,t).
+
+// Filter out the longest path
+.decl ShortestPath(n:Node, m:Node, l:number)
+.output ShortestPath()
+ShortestPath(x, y, a) :- Length(x, y, _), a = min Z : Length(x, y, Z).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Node <: symbol
+.type Card <: number
+
+.decl Edge			(m:Node, n:Node)
+.input Edge
+
+Edge(m, n) :- Edge(n, m).
+
+.decl Leaf			(n:Node)
+.decl NotLeaf		(n:Node)
+
+NotLeaf(n) :- Edge(a, n), Edge(b, n), a != b.
+Leaf(n) :- Edge(_, n), !NotLeaf(n).
+
+.decl InSubtree		(m:Node, n:Node, a:Node)
+
+InSubtree(m, n, n) :- Edge(m, n).
+InSubtree(m, n, a) :- Edge(m, n), Edge(n, p), InSubtree(n, p, a), m != p.
+
+.decl TreeCard		(c:Card)
+.decl SubtreeCard	(m:Node, n:Node, c:Card)
+
+TreeCard(a + b) :- a = sum 1 : Leaf(_), b = sum 1 : NotLeaf(_).
+
+SubtreeCard(m, n, c) :- Edge(m, n), c = sum 1 : InSubtree(m, n, _).
+
+.decl Centroid		(n:Node)
+.decl NotCentroid	(n:Node)
+
+NotCentroid(n) :- TreeCard(c), SubtreeCard(n, _, d), d > c/2.
+Centroid(n) :- Edge(n, _), !NotCentroid(n).
+
+.output Centroid
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\centroids\centroids.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
+//// Hypothetical Queries
+//// Source: [Bonn99], extended and adapted
+//// Adopted from DES
+
+.type Node <: symbol
+
+.decl student (node1:Node)
+.output student ()
+.decl course (node1:Node)
+.output course ()
+.decl pre (node1:Node, node2:Node)
+.output pre ()
+.decl take (node1:Node, node2:Node)
+.output take ()
+.decl grad (node1:Node)
+.output grad ()
+
+student("adam").
+student("bob").
+student("pete").
+student("scott").
+student("tony").
+
+course("eng").
+course("his").
+course("lp").
+
+take("adam","eng").
+take("pete","his").
+take("pete","eng").
+take("scott","his").
+take("scott","lp").
+take("tony","his").
+
+pre("eng","lp").
+pre("hist","eng").
+
+pre(Pre,Post) :- pre(Pre,X), pre(X,Post).
+
+grad(S) :- take(S,"his"), take(S,"eng").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\grad\grad.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Text <: symbol
+
+.decl food(name:Text, carbs:number, fat:number, protein:number, per:number, measure:Text)
+.input food()
+
+.decl recipe(index: number, name:Text, amount: number, measure: Text)
+.input recipe()
+
+.decl max_index(result:number)
+.output max_index()
+
+max_index(a) :-  a = max a : recipe(a,_,_,_) .
+
+.decl totals(name:Text, amount:number, carbs:number, fat:number, protein:number, cal:number)
+.output totals()
+
+totals(name, amount, amount*a/per, amount*b/per, amount*c/per, ((4*amount*a/per)+(9*amount*b/per)+(4*amount*c/per))) :- recipe(_, name, amount, _), food(name, a,b,c,per,_).
+
+
+.decl calories(result:number)
+.output calories()
+
+calories(result) :- result = sum a : totals(_,_,_,_,_,a).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\ranpo\ranpo.dl ====
+.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
+.input Check()
+.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
+.input In()
+.decl A(l:number, o:number)
+.output A()
+
+A(1,i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
+A(2,i) :- Check(a, b, c, _, e, _), In(a, b, c, _, e, _, i).
+A(3,i) :- Check(a, _, c, d, e, f), In(a, _, c, d, e, f, i).
+A(4,i) :- Check(a, b, c, d, _, _), In(a, b, c, d, _, _, i).
+A(5,i) :- Check(a, b, _, d, e, f), In(a, b, _, d, e, f, i).
+A(6,i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
+A(7, i) :- Check(_,_, c, d, e, f), In(_, _, c, d, e, f, i).
+A(8, i) :- Check(_, b, _, d, _, f), In(_, b, _, d, _, f, i).
+A(9, i) :- Check(a, b, _, d, _, f), In(a, b, _, d, _, f, i).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\ranpo\ranpo.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Compute the factorial function.
+
+// fact(i, n) holds iff i! = n
+.decl fact(i:number, n:number)
+.output fact()
+
+// Calculate only up to the lowest value satisfying lim(n)
+.decl lim(n:number)
+.input lim()
+
+fact(I+1, N*(I+1)) :- fact(I, N), !lim(I).
+
+// Ground Fact: 0! := 1
+fact(0, 1).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Text <: symbol
+
+.decl food(name:Text, carbs:number, fat:number, protein:number, per:number, measure:Text)
+.input food()
+
+.decl recipe(index: number, name:Text, amount: number, measure: Text)
+.input recipe()
+
+.decl max_index(result:number)
+.output max_index()
+
+max_index(a) :-  a = max a : recipe(a,_,_,_) .
+
+.decl totals(name:Text, amount:number, carbs:number, fat:number, protein:number, cal:number)
+.output totals()
+
+totals(name, amount, amount*a/per, amount*b/per, amount*c/per, ((4*amount*a/per)+(9*amount*b/per)+(4*amount*c/per))) :- recipe(_, name, amount, _), food(name, a,b,c,per,_).
+
+
+.decl calories(result:number)
+.output calories()
+
+calories(result) :- result = sum a : totals(_,_,_,_,_,a).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\recipes\recipes.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2021, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Item=[x:float,y:float]
+.type List=[head:Item,amount:float,rest:List]
+
+.decl capacity(value:float)
+.input capacity
+
+.decl item(value:float, weight:float)
+.input item
+
+.decl item_ratio(ratio:float, value:float, weight:float)
+item_ratio(value/weight, value, weight) :- item(value, weight).
+
+.decl first(value:float, weight:float)
+
+.decl last(value:float, weight:float)
+
+.decl next(value1:float, weight1:float, value2:float, weight2:float)
+.decl next_candidate(value1:float, weight1:float, value2:float, weight2:float)
+
+// first item has no prev
+first(value,weight) :- item(value,weight), !next(_,_,value,weight).
+
+// last item has no next
+last(value,weight) :- item(value,weight), !next(value,weight,_,_).
+
+next_candidate(v1,w1,v2,w2) :- item_ratio(r1,v1,w1), w2 = min w : { item_ratio(r,_,w), r = r1, w > w1 }, item_ratio(r1,v2,w2).
+
+// next item in lexicographical ordering
+next(v1,w1,v2,w2) :- item_ratio(r1,v1,w1),
+		     r2 = min r : { item_ratio(r,_,_), r > r1 },
+		     w2 = min w : { item_ratio(r,_,w), r = r2, w >= 0 },
+	             item_ratio(r2,v2,w2), !next_candidate(v1,w1,_,_).
+
+next(v1,w1,v2,w2) :- next_candidate(v1,w1,v2,w2).
+
+
+.decl item_array(index:number, p:Item)
+item_array(0,[v,w]) :- first(v,w).
+item_array(i+1,[v2,w2]) :- item_array(i,[v1,w1]), next(v1,w1,v2,w2).
+
+
+.decl knapsack_iteration(knapsack:List, index:number, weight:float, value:float)
+knapsack_iteration(nil, count : item_array(_,_) - 1, cap, 0) :- capacity(cap).
+
+// skip over iteration if we have exhausted capacity
+knapsack_iteration(list, index-1, 0, value) :- knapsack_iteration(list, index, 0, value), index >= 0.
+
+// otherwise exhaust the item and decrement
+knapsack_iteration([[val,weight],amount,rest],index-1,remaining_cap, value+(val/weight)*amount) :-
+	knapsack_iteration(rest, index, cap, value),
+	item_array(index, [val,weight]),
+	index >= 0,
+	amount = min(cap,weight),
+	remaining_cap = cap - amount,
+	cap > 0.
+
+
+.decl fractional_knapsack(val:float)
+.output fractional_knapsack
+
+fractional_knapsack(val) :- knapsack_iteration(_,-1,_,val).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\fractional_knapsack\fractional_knapsack.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// Topological Ordering
+
+// Gives a topological ordering over the vertices of an input graph. Note that is works only on input graph is acyclic.
+
+// Graph
+
+// Vertices
+.decl vertices(v:symbol)
+.input vertices()
+.decl vertex(v:symbol)
+.output vertex()
+vertex(v) :- vertices(v).
+
+// Edges
+.decl edges(v1:symbol, v2:symbol)
+.input edges()
+.decl edge(v1:symbol, v2:symbol)
+.output edge()
+edge(v1, v2) :- vertex(v1), vertex(v2), edges(v1, v2).
+
+// Tests if vertex v1 proceeds vertex v2 in the ordering.
+.decl is_before(v1:symbol, v2:symbol)
+.output is_before()
+
+// Tests if vertex v1 succeeds vertex v2 in the ordering.
+.decl is_after(v1:symbol, v2:symbol)
+.output is_after()
+
+// Gives the possible indices of the vertices in the ordering.
+.decl indices(v:symbol, i:number)
+.output indices()
+
+// Gives the exact index of the vertex in the ordering.
+.decl index(v:symbol, i:number)
+.output index()
+
+// Vertex x is before vertex y if the graph has an edge from x to y.
+is_before(x, y) :-
+    edge(x, y).
+
+// Vertex x is before vertex y if some vertex z is before x and z is before y.
+is_before(x, y) :-
+    is_before(x, z),
+    is_before(z, y).
+
+// Vertex x is after vertex y if the graph has an edge from y to x.
+is_after(x, y) :-
+    edge(y, x).
+
+// Vertex x is after vertex y if some vertex z is after x and y is after z.
+is_after(x, y) :-
+    is_after(z, x),
+    is_after(y, z).
+
+// The index of a vertex x is 0 if it has no inbound or outbound edges.
+indices(x, 0) :-
+    vertex(x),
+    !edge(_, x),
+    !edge(x, _).
+
+// The index of a vertex x is 1 if it has no inbound but only outbound edges.
+indices(x, 1) :-
+    vertex(x),
+    !edge(_, x),
+    edge(x, _).
+
+// The possible indices of a vertex x are 1 more than the index of some vertex y if that vertex y is before x but not after x.
+indices(x, i+1) :-
+    is_before(y, x),
+    !is_before(x, y),
+    is_after(x, y),
+    indices(y, i).
+
+// The exact index of a vertex is the maximum of its possible indices.
+index(x, i) :-
+    indices(x, i),
+    !indices(x, i+1).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\topological_ordering\topological_ordering.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\equal\equal.dl ====
+.type Integer <: symbol
+
+.decl succ (a:Integer, b:Integer)
+.decl equal(x:Integer, y:Integer, r:Integer)
+.output equal()
+.decl isEqual(r:Integer)
+.output isEqual()
+
+equal("0", "0", "1").
+equal(m, n, r) :- succ(pm, m) , succ(pn, n), equal(pm, pn, r).
+
+isEqual(r) :- equal("5", "7", r).
+
+succ("0", "1").
+succ("1", "2").
+succ("2", "3").
+succ("3", "4").
+succ("4", "5").
+succ("5", "6").
+succ("6", "7").
+succ("7", "8").
+succ("8", "9").
+succ("9", "10").
+succ("10", "11").
+succ("11", "12").
+succ("12", "13").
+succ("13", "14").
+succ("14", "15").
+succ("15", "16").
+succ("16", "17").
+succ("17", "18").
+succ("18", "19").
+succ("19", "20").
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\equal\equal.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\metro\metro.dl ====
+.type Node <: symbol
+
+.decl link(node1:Node, node2:Node, node3:Node)
+.decl St_Reachable(node1:Node, node2:Node)
+.decl Li_Reachable(node1:Node, node2:Node)
+.decl platform2_reach(node1:Node, node2:Node)
+.output platform2_reach()
+
+
+St_Reachable(x, y) :- link(_,x,y).
+St_Reachable(x, y) :- St_Reachable(x, z), link(_, z, y).
+Li_Reachable(x, u) :- St_Reachable(x, z), link(u, z, _).
+
+platform2_reach("platform2", y) :- St_Reachable("platform2", y), link(_, _, y).
+
+link("4","platform1","platform2").
+link("4","platform2","platform3").
+link("4","platform3","platform4").
+link("1","platform4","platform5").
+link("1","platform5","platform6").
+link("1","platform7","platform8").
+link("9","platform8","platform9").
+link("9","platform9","platform10").
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\metro\metro.dl ====
 

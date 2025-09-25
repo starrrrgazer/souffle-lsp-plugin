@@ -104,6 +104,7 @@ public class RenameProvider {
                     case COMPONENT_DECL:
                     case TYPE_USE:
                     case RELATION_USE:
+                    case ATTRIBUTE:
                     case RULE:
                         //对引用的地方进行修改。这个函数是定位 + 搜索
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
@@ -118,21 +119,23 @@ public class RenameProvider {
 //                                System.err.println(reference);
 //                        }
                         break;
-                    case ATTRIBUTE:
-                        // 搜索，获取所有同名符号进行修改
-                        textEdits.put(params.getTextDocument().getUri(), new ArrayList<TextEdit>());
-                        List<SouffleSymbol> vars = context.getSymbols(currentSymbol.getName())
-                                .stream()
-                                .filter(symbol -> symbol.getKind() == SouffleSymbolType.ATTRIBUTE)
-                                .collect(Collectors.toList());
+
+//                    case ATTRIBUTE:
+//                        // 搜索，获取所有同名符号进行修改
+//                        textEdits.put(params.getTextDocument().getUri(), new ArrayList<TextEdit>());
+//                        List<SouffleSymbol> vars = context.getSymbols(currentSymbol.getName())
+//                                .stream()
+//                                .filter(symbol -> symbol.getKind() == SouffleSymbolType.ATTRIBUTE)
+//                                .collect(Collectors.toList());
 //                        for (SouffleSymbol var : vars) {
 //                            TextEdit textEdit = new TextEdit();
 //                            textEdit.setRange(var.getRange());
 //                            textEdit.setNewText("renameTest");
 //                            textEdits.get(params.getTextDocument().getUri()).add(textEdit);
 //                        }
+//
+//                        break;
 
-                        break;
 //                    case TYPE_USE:
 //                    case RELATION_USE:
 //                    case RULE:

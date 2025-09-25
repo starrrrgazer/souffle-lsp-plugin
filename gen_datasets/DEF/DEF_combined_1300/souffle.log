@@ -1,38 +1,44 @@
-9月 10, 2025 2:06:04 下午 SouffleTextDocumentService countLineNum
-信息: LOC: 4106 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:04 下午 SouffleTextDocumentService countNodeNum
-信息: NOD: 109549 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:04 下午 SouffleTextDocumentService countDEFAndOCC
-信息: DEF: 1272 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:04 下午 SouffleTextDocumentService countDEFAndOCC
-信息: OCC: 7571 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:13 下午 ReferenceProvider getLocateTime
+9月 18, 2025 9:47:56 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 3780 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:47:56 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 96762 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:47:56 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 1268 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:47:56 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 7079 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:47:57 上午 ReferenceProvider getLocateTime
 信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:13 下午 ReferenceProvider getSearchTime
-信息: search: 530 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:13 下午 DefinitionProvider getDefinition
+9月 18, 2025 9:47:58 上午 ReferenceProvider getSearchTime
+信息: search: 549 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:47:58 上午 ReferenceProvider getSearchTime
+信息: subcontextNum: 3158 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:47:58 上午 DefinitionProvider getDefinition
 信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:13 下午 RenameProvider getRename
+9月 18, 2025 9:47:58 上午 RenameProvider getRename
 信息: rename: 3 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:16 下午 CompletionProvider getCompletions
+9月 18, 2025 9:48:00 上午 CompletionProvider getCompletions
 信息: completion: 7 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:22 下午 ReferenceProvider getLocateTime
+9月 18, 2025 9:48:06 上午 ReferenceProvider getLocateTime
 信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:23 下午 ReferenceProvider getSearchTime
-信息: search: 646 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:23 下午 DefinitionProvider getDefinition
+9月 18, 2025 9:48:06 上午 ReferenceProvider getSearchTime
+信息: search: 561 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:06 上午 ReferenceProvider getSearchTime
+信息: subcontextNum: 3158 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:06 上午 DefinitionProvider getDefinition
 信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:23 下午 RenameProvider getRename
-信息: rename: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:25 下午 CompletionProvider getCompletions
-信息: completion: 5 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:36 下午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:37 下午 ReferenceProvider getSearchTime
-信息: search: 616 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:37 下午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:37 下午 RenameProvider getRename
+9月 18, 2025 9:48:06 上午 RenameProvider getRename
 信息: rename: 1 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
-9月 10, 2025 2:06:39 下午 CompletionProvider getCompletions
-信息: completion: 5 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:09 上午 CompletionProvider getCompletions
+信息: completion: 4 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:17 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:18 上午 ReferenceProvider getSearchTime
+信息: search: 532 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:18 上午 ReferenceProvider getSearchTime
+信息: subcontextNum: 3158 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:18 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:18 上午 RenameProvider getRename
+信息: rename: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+9月 18, 2025 9:48:20 上午 CompletionProvider getCompletions
+信息: completion: 4 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl

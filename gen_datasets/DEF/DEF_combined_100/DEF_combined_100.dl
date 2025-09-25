@@ -1,650 +1,696 @@
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2013-14, Oracle and/or its affiliates. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl ====
+//
+// Tests various properties of a tic-tac-toe gameboard
+//
 
-/* Conversion of non-deterministic FSA to deterministic FSA.
- * Complex souffle example that demonstrates: components,
- * aggregates, and string concatenation. */
+.type Mark <: symbol
 
-/* The inputs: alphabet, set of states and transition relation */
-/* By convention: state 1 is initial state, last state is the final accepting state */
+.decl player(x:Mark)
 
-.type N <: number
-.type Letter <: symbol
+player("X").
+player("O").
 
-.decl state(n : N)
-.input state()
-.decl alphabet(x : Letter)
-.input alphabet()
-.decl tr(s1 : N, s2 : N, x : Letter)
-.input tr()
+.decl cell(x:Mark)
+cell(" ").
+cell("X").
+cell("O").
 
-// --------------------------------------------------------
-// --------------------------------------------------------
-// Generic common code
-
-.type NumberList = [head: N, tail: NumberList]
-.comp Vector<T, TList> {
-	// note: TList must be list of T
-
-	// input relations:
-	.decl size(l: number)	// must be one number that determines the size
-	.decl element(x: T)	// contains all valid elements for this vector
-
-	// output relations:
-	.decl len(list: TList, result: N)
-	.decl sublist(list: TList)	// is 'list' a list of given size, or any smaller?
-	.decl vector(list: TList)	// is 'list' our vector, i.e. list of given size
-	.decl member_at(list: TList, index: N, member: T)	// is 'member' at given index position, 1-based index
-
-	len(nil, 0).
-	len([h, t], l+1) :-  sublist([h, t]), len(t, l).
-
-	sublist(nil).
-	sublist([h, t]) :- element(h), sublist(t), len(t, l), size(max_size), l < max_size.
-
-	vector(list) :- sublist(list), size(max_size), len(list, max_size).
+.decl other(a:Mark,b:Mark)
+other("X","O").
+other("O","X").
 
 
-	member_at([h, t], idx, member) :-
-		element(h), sublist(t), element(member),
-		member_at(t, idx, member).
+// cross product of all possible states (not considering whether they actually can be reached)
 
-	member_at([h, t], idx, member) :-
-		element(h), sublist(t), element(member),
-		size(max_size), idx <= max_size,
-		h = member, len([h, t], idx).
+.decl all_states(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark,
+
+	p:Mark
+)
+
+all_states( a1,b1,c1,a2,b2,c2,a3,b3,c3, p ) :-
+	cell(a1), cell(b1), cell(c1),
+	cell(a2), cell(b2), cell(c2),
+	cell(a3), cell(b3), cell(c3),
+	player(p).
+
+
+
+// list of states actually reachable through valid moves
+
+.decl reachable_state(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark,
+
+	p:Mark
+)
+
+.decl state_succ(
+	aa1:Mark, aa2:Mark, aa3:Mark,
+	ab1:Mark, ab2:Mark, ab3:Mark,
+	ac1:Mark, ac2:Mark, ac3:Mark,
+	a:Mark,
+
+	ba1:Mark, ba2:Mark, ba3:Mark,
+	bb1:Mark, bb2:Mark, bb3:Mark,
+	bc1:Mark, bc2:Mark, bc3:Mark,
+	b:Mark
+)
+
+// -- rules for all states --
+
+// initial state (X or O starts)
+reachable_state( " ", " ", " ",  " ", " ", " ",  " ", " ", " ",  "X").
+reachable_state( " ", " ", " ",  " ", " ", " ",  " ", " ", " ",  "0").
+
+// all reachable states
+reachable_state( a1,b1,c1,a2,b2,c2,a3,b3,c3, p ) :- state_succ( _,_,_, _,_,_, _,_,_, _,   a1,b1,c1, a2,b2,c2, a3,b3,c3, p ).
+
+
+// -- rules for successor states --
+
+// some utilitiy definitions
+
+.decl row1( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+.decl row2( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+.decl row3( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+
+.decl col1( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+.decl col2( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+.decl col3( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+
+.decl dig1( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+.decl dig2( a1:Mark, a2:Mark, a3:Mark, b1:Mark, b2:Mark, b3:Mark, c1:Mark, c2:Mark, c3:Mark,    a:Mark, b:Mark, c:Mark )
+
+
+row1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a1,b1,c1 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+row2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a2,b2,c2 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+row3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a3,b3,c3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+
+col1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a1,a2,a3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+col2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  b1,b2,b3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+col3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  c1,c2,c3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+
+dig1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  a1,b2,c3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+dig2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  c1,b2,a3 ) :- all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_).
+
+
+// ------------------------------------
+
+.decl has_won(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark,
+
+	x:Mark
+)
+
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- row1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- row2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- row3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- col1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- col2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- col3( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- dig1( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, x ) :- dig2( a1,b1,c1,a2,b2,c2,a3,b3,c3,  x,x,x ).
+
+
+// test whether a game is won (by eather side):
+
+.decl won(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark
+)
+
+won( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- has_won(a1,b1,c1,a2,b2,c2,a3,b3,c3,"X").
+won( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- has_won(a1,b1,c1,a2,b2,c2,a3,b3,c3,"O").
+
+
+// test whether a game is a draw
+
+.decl draw(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark
+)
+
+draw( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :-
+	all_states(a1,b1,c1,a2,b2,c2,a3,b3,c3,_),
+	!won(a1,b1,c1,a2,b2,c2,a3,b3,c3),
+	a1 != " ", b1 != " ", c1 != " ",
+	a2 != " ", b2 != " ", c2 != " ",
+	a3 != " ", b3 != " ", c3 != " ".
+
+
+// test whether a game is finished
+
+.decl finished(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark
+)
+
+finished( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- won(a1,b1,c1,a2,b2,c2,a3,b3,c3).
+finished( a1,b1,c1,a2,b2,c2,a3,b3,c3 ) :- draw(a1,b1,c1,a2,b2,c2,a3,b3,c3).
+
+
+// successor relation
+
+
+.decl valid_move(
+	aa1:Mark, aa2:Mark, aa3:Mark,
+	ab1:Mark, ab2:Mark, ab3:Mark,
+	ac1:Mark, ac2:Mark, ac3:Mark,
+	a:Mark,
+
+	ba1:Mark, ba2:Mark, ba3:Mark,
+	bb1:Mark, bb2:Mark, bb3:Mark,
+	bc1:Mark, bc2:Mark, bc3:Mark
+)
+
+valid_move( " ",ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3,  a,   a ,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(" ",ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a).
+valid_move( aa1," ",ac1,aa2,ab2,ac2,aa3,ab3,ac3,  a,  aa1, a ,ac1,aa2,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1," ",ac1,aa2,ab2,ac2,aa3,ab3,ac3, a).
+valid_move( aa1,ab1," ",aa2,ab2,ac2,aa3,ab3,ac3,  a,  aa1,ab1, a ,aa2,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1," ",aa2,ab2,ac2,aa3,ab3,ac3, a).
+valid_move( aa1,ab1,ac1," ",ab2,ac2,aa3,ab3,ac3,  a,  aa1,ab1,ac1, a ,ab2,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1," ",ab2,ac2,aa3,ab3,ac3, a).
+valid_move( aa1,ab1,ac1,aa2," ",ac2,aa3,ab3,ac3,  a,  aa1,ab1,ac1,aa2, a ,ac2,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2," ",ac2,aa3,ab3,ac3, a).
+valid_move( aa1,ab1,ac1,aa2,ab2," ",aa3,ab3,ac3,  a,  aa1,ab1,ac1,aa2,ab2, a ,aa3,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2,ab2," ",aa3,ab3,ac3, a).
+valid_move( aa1,ab1,ac1,aa2,ab2,ac2," ",ab3,ac3,  a,  aa1,ab1,ac1,aa2,ab2,ac2, a ,ab3,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2,ab2,ac2," ",ab3,ac3, a).
+valid_move( aa1,ab1,ac1,aa2,ab2,ac2,aa3," ",ac3,  a,  aa1,ab1,ac1,aa2,ab2,ac2,aa3, a ,ac3 ) :- reachable_state(aa1,ab1,ac1,aa2,ab2,ac2,aa3," ",ac3, a).
+valid_move( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3," ",  a,  aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3, a  ) :- reachable_state(aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3," ", a).
+
+
+//
+// Note: the finished clause is ignored due to the recursive evaluation order.
+//	already finished games are not filtered properly
+//
+state_succ(  aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a,  ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3, b )
+	:- reachable_state( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a ), other(a,b), !finished( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3 ),
+	   valid_move( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, a,  ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3 ).
+
+
+// now search for states that are not finished games but in any way one of the players has already won
+
+// mapping a state to a potential winner
+.decl possible_results(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark,
+
+	p:Mark,
+
+	w:Mark
+)
+
+
+possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, p, "X") :- reachable_state(a1,b1,c1,a2,b2,c2,a3,b3,c3, p), has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X" ).
+possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, p, "O") :- reachable_state(a1,b1,c1,a2,b2,c2,a3,b3,c3, p), has_won( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O" ).
+
+
+possible_results( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, ap, x) :- state_succ( aa1,ab1,ac1,aa2,ab2,ac2,aa3,ab3,ac3, ap, ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3, bp ),
+							possible_results( ba1,bb1,bc1,ba2,bb2,bc2,ba3,bb3,bc3, bp, x).
+
+
+// search for game states where only one player can win any more but not within a single step
+
+.decl decided_games(
+	a1:Mark, a2:Mark, a3:Mark,
+	b1:Mark, b2:Mark, b3:Mark,
+	c1:Mark, c2:Mark, c3:Mark,
+
+	p:Mark,
+
+	w:Mark
+)
+.output decided_games()
+
+decided_games( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O", "X" ) :-
+	!won(a1,b1,c1,a2,b2,c2,a3,b3,c3),
+	possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O", "X" ),
+	!possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "O", "O" ).
+
+
+decided_games( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X", "O" ) :-
+	!won(a1,b1,c1,a2,b2,c2,a3,b3,c3),
+	possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X", "O" ),
+	!possible_results( a1,b1,c1,a2,b2,c2,a3,b3,c3, "X", "X" ).
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\tic-tac-toe\tic-tac-toe.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
+// The Lehigh University Benchmark (LUBM)
+// http://swat.cse.lehigh.edu/projects/lubm/
+// ported by Anthony Potter
+//
+// Unary relations
+.decl University (a:symbol)
+.output University ()
+.input University ()
+.decl Person (a:symbol)
+.output Person ()
+.decl Employee (a:symbol)
+.output Employee ()
+.decl Faculty (a:symbol)
+.output Faculty ()
+.decl Professor (a:symbol)
+.output Professor ()
+.decl Course (a:symbol)
+.output Course ()
+.input Course ()
+.decl AssociateProfessor (a:symbol)
+.input AssociateProfessor ()
+.decl AssistantProfessor (a:symbol)
+.input AssistantProfessor ()
+.decl Organization (a:symbol)
+.output Organization ()
+.decl Chair (a:symbol)
+.output Chair ()
+.decl Work (a:symbol)
+.output Work ()
+.decl Lecturer (a:symbol)
+.output Lecturer ()
+.input Lecturer ()
+.decl Student (a:symbol)
+.output Student ()
+.decl GraduateStudent (a:symbol)
+.input GraduateStudent ()
+.decl ResearchAssistant (a:symbol)
+.input ResearchAssistant ()
+.decl GraduateCourse (a:symbol)
+.input GraduateCourse ()
+.decl UndergraduateStudent (a:symbol)
+.input UndergraduateStudent ()
+.decl ResearchGroup (a:symbol)
+.output ResearchGroup ()
+.input ResearchGroup ()
+.decl Publication (a:symbol)
+.output Publication ()
+.input Publication ()
+.decl TeachingAssistant (a:symbol)
+.output TeachingAssistant ()
+.input TeachingAssistant ()
+.decl FullProfessor (a:symbol)
+.input FullProfessor ()
+.decl Department (a:symbol)
+.input Department ()
+
+// Binary relations
+.decl hasAlumnus (a:symbol, b:symbol)
+.output hasAlumnus ()
+.decl degreeFrom (a:symbol, b:symbol)
+.output degreeFrom ()
+.decl member (a:symbol, b:symbol)
+.output member ()
+.decl teachingAssistantOf (a:symbol, b:symbol)
+.input teachingAssistantOf ()
+.decl headOf (a:symbol, b:symbol)
+.input headOf ()
+.decl teacherOf (a:symbol, b:symbol)
+.input teacherOf ()
+.decl publicationAuthor (a:symbol, b:symbol)
+.input publicationAuthor ()
+.decl doctoralDegreeFrom (a:symbol, b:symbol)
+.input doctoralDegreeFrom ()
+.decl undergraduateDegreeFrom (a:symbol, b:symbol)
+.input undergraduateDegreeFrom ()
+.decl mastersDegreeFrom (a:symbol, b:symbol)
+.input mastersDegreeFrom ()
+.decl subOrganizationOf (a:symbol, b:symbol)
+.output subOrganizationOf ()
+.input subOrganizationOf ()
+.decl takesCourse (a:symbol, b:symbol)
+.input takesCourse ()
+.decl worksFor (a:symbol, b:symbol)
+.output worksFor ()
+.input worksFor ()
+.decl memberOf (a:symbol, b:symbol)
+.output memberOf ()
+.input memberOf ()
+.decl advisor (a:symbol, b:symbol)
+.input advisor ()
+.decl emailAddress (a:symbol, b:symbol)
+.input emailAddress ()
+.decl telephone (a:symbol, b:symbol)
+.input telephone ()
+.decl name (a:symbol, b:symbol)
+.input name ()
+.decl researchInterest (a:symbol, b:symbol)
+.input researchInterest ()
+
+// Ontology
+University(Y) :- mastersDegreeFrom(_,Y) .
+degreeFrom(X,Y) :- hasAlumnus(Y,X) .
+hasAlumnus(X,Y) :- degreeFrom(Y,X) .
+Employee(X) :- Faculty(X) .
+Faculty(X) :- Professor(X) .
+Professor(X) :- AssociateProfessor(X) .
+Person(Y) :- member(_,Y) .
+Professor(X) :- AssistantProfessor(X) .
+Professor(X) :- Chair(X) .
+worksFor(X,Y) :- headOf(X,Y) .
+Person(X) :- degreeFrom(X,_) .
+University(Y) :- degreeFrom(_,Y) .
+Person(Y) :- hasAlumnus(_,Y) .
+TeachingAssistant(X) :- Person(X), teachingAssistantOf(X,Y), Course(Y) .
+Chair(X) :- Person(X), headOf(X,Y), Department(Y) .
+memberOf(X,Y) :- member(Y,X) .
+member(X,Y) :- memberOf(Y,X) .
+Course(Y) :- teacherOf(_,Y) .
+University(X) :- hasAlumnus(X,_) .
+Person(X) :- telephone(X,_) .
+Organization(Y) :- subOrganizationOf(_,Y) .
+memberOf(X,Y) :- worksFor(X,Y) .
+Person(X) :- Employee(X) .
+Person(X) :- advisor(X,_) .
+Organization(X) :- member(X,_) .
+Organization(X) :- Department(X) .
+Faculty(X) :- Lecturer(X) .
+Person(Y) :- publicationAuthor(_,Y) .
+Professor(Y) :- advisor(_,Y) .
+Work(X) :- Course(X) .
+Professor(X) :- FullProfessor(X) .
+degreeFrom(X,Y) :- doctoralDegreeFrom(X,Y) .
+TeachingAssistant(X) :- teachingAssistantOf(X,_) .
+Person(X) :- undergraduateDegreeFrom(X,_) .
+Organization(X) :- University(X) .
+Person(X) :- doctoralDegreeFrom(X,_) .
+University(Y) :- doctoralDegreeFrom(_,Y) .
+Course(Y) :- teachingAssistantOf(_,Y) .
+University(Y) :- undergraduateDegreeFrom(_,Y) .
+degreeFrom(X,Y) :- mastersDegreeFrom(X,Y) .
+Person(X) :- GraduateStudent(X) .
+Person(X) :- ResearchAssistant(X) .
+Student(X) :- UndergraduateStudent(X) .
+degreeFrom(X,Y) :- undergraduateDegreeFrom(X,Y) .
+Publication(X) :- publicationAuthor(X,_) .
+Person(X) :- mastersDegreeFrom(X,_) .
+Organization(X) :- ResearchGroup(X) .
+Faculty(X) :- teacherOf(X,_) .
+Person(X) :- Chair(X) .
+Employee(X) :- Person(X), worksFor(X,Y), Organization(Y) .
+Course(X) :- GraduateCourse(X) .
+Student(X) :- Person(X), takesCourse(X,Y), Course(Y) .
+Person(X) :- TeachingAssistant(X) .
+Organization(X) :- subOrganizationOf(X,_) .
+Person(X) :- Student(X) .
+Person(X) :- emailAddress(X,_) .
+subOrganizationOf(X,Z) :- subOrganizationOf(X,Y), subOrganizationOf(Y,Z) .
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\lubm\lubm.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl ====
+
+.type node = number
+
+// defines the interface and some basic properties
+.comp Closure {
+    .decl edge(a:node,b:node)
+    .decl link(a:node,b:node)
+.output link()
+
+    link(X,Y) :- edge(X,Y).
 }
 
-.comp Automaton<TState, TAlpha, TWord> {
-	// note: TWord must be list of TAlpha
+// strategy A
+.comp LeftRecursive : Closure {
+    link(X,Z) :- link(X,Y), edge(Y,Z).
+}
 
-	// input relations:
-	.decl state(s: TState)
-	.decl start_state(s: TState)
-	.decl final(s: TState)
-	.decl alphabet(x: TAlpha)
-	.decl tr(s: TState, q: TState, a: TAlpha)
+// strategy B
+.comp RightRecursive : Closure {
+    link(X,Z) :- edge(X,Y), link(Y,Z).
+}
 
-	.decl max_acceptance_size(n: number)
-
-	// private
-	.init Word = Vector<TAlpha, TWord>
-	Word.size(x) :- max_acceptance_size(x).
-	Word.element(x) :- alphabet(x).
-
-	// output
-	.decl accepts(w: TWord)
-	.decl accepts_from_state(w: TWord, s: TState)
-
-	accepts(w) :- Word.sublist(w), start_state(s), accepts_from_state(w, s).
-
-	accepts_from_state(nil, s) :- final(s).
-	accepts_from_state([h, t], s) :-
-		alphabet(h), state(s), Word.sublist(t),
-		tr(s, q, h), accepts_from_state(t, q).
+// strategy C
+.comp QuadraticRecursive : Closure {
+    link(X,Z) :- link(X,Y), link(Y,Z).
 }
 
 
-// -------------------------------------------------------
-// -------------------------------------------------------
-// Conversion NFSA -> FSA
+// get input data
+.decl less(a:node,b:node)
+less(1,2).
+less(2,3).
+less(3,4).
+less(4,5).
+less(5,6).
 
 
-.type Word = [ c : Letter, r : Word ]
-.init Nfsa = Automaton<N, Letter, Word>
-Nfsa.start_state(1).
-Nfsa.state(s) :- state(s).
-Nfsa.final(fs) :- fs = max s : { state(s) }.
-Nfsa.alphabet(c) :- alphabet(c).
-Nfsa.max_acceptance_size(5).
-Nfsa.tr(s, q, c) :- tr(s, q, c).
+// init strategies
+.init A = LeftRecursive
+.init B = RightRecursive
+.init C = QuadraticRecursive
 
-// FSA state is bitvector that represents the set of NFSA states
-.init FsaState = Vector<number, NumberList>
-FsaState.size(sz) :- Nfsa.final(sz).
-FsaState.element(0).
-FsaState.element(1).
+// wire in input data
+A.edge(X,Y) :- less(X,Y).
+B.edge(X,Y) :- less(X,Y).
+C.edge(X,Y) :- less(X,Y).
 
 
-.decl not_fsa_start_state(s: NumberList)
-not_fsa_start_state(s) :- FsaState.member_at(s, x, 1), !Nfsa.start_state(x).
-
-.init Fsa = Automaton<NumberList, Letter, Word>
-Fsa.state(s) :- FsaState.vector(s).
-Fsa.start_state(s) :- FsaState.member_at(s, nfsa_init, 1), Nfsa.start_state(nfsa_init), !not_fsa_start_state(s).
-Fsa.final(s) :- Nfsa.final(fin), FsaState.member_at(s, fin, 1).
-Fsa.alphabet(c) :- alphabet(c).
-Fsa.max_acceptance_size(5).
-
-// the result of the conversion is this relation that
-// defines the transitions of the resulting FSA
-Fsa.tr(s, q, a) :-
-	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
-	!not_fsa_tr(s, q, a), // negation of negation helps us to get rid of quantification (for all)
-	Nfsa.tr(x, y, a),		// this is so that there is at least one transition between the two states
-	FsaState.member_at(s, x, 1), FsaState.member_at(q, y, 1). // this is so that s,q (the states) are not empty sets
 
 
-.decl has_x(s: NumberList, y: N, a: Letter) // does the list have some 'x' for which tr(x, y, a)?
-has_x(S, y, a) :- FsaState.member_at(S, x, 1), Nfsa.tr(x,y,a).
+// ==== END: d:\work24\souffle-lsp-plugin\example\strategies\strategies.dl ====
 
-.decl not_fsa_tr(s: NumberList, q: NumberList, a: Letter)
-
-// it is not fsa transition if have some x from S and tr(x,y,a) for such y that is not member of Q
-// i.e. Q is missing some target states
-not_fsa_tr(s, q, a) :-
-	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
-	Nfsa.tr(x, y, a), FsaState.member_at(s, x, 1), !FsaState.member_at(q, y, 1).
-
-// it is not fsa transition if for y from Q there is no x from S such that tr(x,y,a):
-// i.e. Q has got some more states than it should
-not_fsa_tr(s, q, a) :-
-	FsaState.vector(s), FsaState.vector(q), Nfsa.alphabet(a),
-	FsaState.member_at(q, y, 1), !has_x(s, y, a).
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
-// Debug output: accepted word of length <= 5 and deterministric transition relation
-
-// note: the numbering of recursive structures may differ when we
-// run the program in parallel, so relations that output recursive structures
-// cannot be used for testing purposes. For that reason, we convert the states
-// into strings, e.g. "01011" and words too.
-
-.type String <: symbol
-.decl fsa_state_to_str(state: NumberList, str: String)
-fsa_state_to_str(nil, " ").
-fsa_state_to_str([0,t], cat("0", str)) :- FsaState.sublist(t), fsa_state_to_str(t, str).
-fsa_state_to_str([1,t], cat("1", str)) :- FsaState.sublist(t), fsa_state_to_str(t, str).
-
-.decl word_to_str(word: Word, str: String)
-word_to_str(nil, " ").
-word_to_str([h,t], cat(h, str)) :- Fsa.alphabet(h), Fsa.Word.sublist(t), word_to_str(t, str).
-
-.decl fsa_accepted(w: String)
-.output fsa_accepted()
-fsa_accepted(w) :- Fsa.accepts(list), word_to_str(list, w).
-
-.decl nfsa_accepted(w: String)
-.output nfsa_accepted()
-nfsa_accepted(w) :- Nfsa.accepts(list), word_to_str(list, w).
-
-.decl fsa_tr(s: String, q: String, c: Letter)
-.output fsa_tr()
-fsa_tr(s_str, q_str, c) :- Fsa.tr(s, q, c), fsa_state_to_str(s, s_str), fsa_state_to_str(q, q_str).
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\nfsa2fsa\nfsa2fsa.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-// Compute the factorial function.
+// Compute a Lucas Sequence.
 
-// fact(i, n) holds iff i! = n
-.decl fact(i:number, n:number)
-.output fact()
-
-// Calculate only up to the lowest value satisfying lim(n)
-.decl lim(n:number)
+// Maximum sequence element.
+.decl lim(l:number)
 .input lim()
 
-fact(I+1, N*(I+1)) :- fact(I, N), !lim(I).
-
-// Ground Fact: 0! := 1
-fact(0, 1).
-
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\factorial\factorial.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-//// Test-case for string matching
-
-.decl inputData(s:symbol)
-.input inputData
-
-.decl outputData(s:symbol)
-.output outputData
-
-outputData(x) :- inputData(x), !match("a.*", x).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\not_match\not_match.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Solves the n-queens problem
-
-// Side length of the board.
-.decl size( n : number )
-.input size()
-
-
-// The maximal compatible sets -- n queens.
-.decl solution( qs : QueenList )
-.printsize solution
-solution(qs) :- compatible(qs, s), size(s).
-
-
-// Natural numbers from 1 to the size of the board.
-.decl up_to_size( x : number )
-up_to_size(1).
-up_to_size(x + 1) :- up_to_size(x), !size(x).
-
-
-// A cartesian coordinate for a board square.
-.type Position = [ x : number, y : number ]
-
-
-// This relation holds the position of each square of the board.
-.decl on_board( p : Position )
-on_board([x, y]) :- up_to_size(x), up_to_size(y).
-
-
-// Mutually-non-attacking list of queen positions.
-.type QueenList = [ p : Position, qs : QueenList ]
-
-
-// Arguments are not on the same diagonal.
-.decl non_diagonals( p : Position, q : Position )
-non_diagonals([px, py], [qx, qy]) :- px - qx != py - qy, qx - px != py - qy, on_board([px, py]), on_board([qx, qy]).
-
-
-// Holds if p and q do not attack each other.
-.decl sympathetic( p : Position, q : Position )
-sympathetic(p, q) :- non_diagonals(p, q), px != qx, py != qy, p=[px, py], q=[qx,qy].
-
-
-// Holds if the head of qs is mutually non-attacking with its tail, which should itself be compatible.
-// Generated column by column, left to right.
-.decl compatible( qs : QueenList, n : number )
-compatible([p, nil], 1) :- on_board(p). //, p = [1,y].
-compatible([p, [head, tail]], n+1) :- sympathetic(p, head), compatible([p, tail], n), compatible([head, tail], n), p = [px, py], head = [hx, hy], px > hx.
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Find the shortest paths between all nodes, the slow way
-.type Node <: symbol
-
-.decl Edge(n:Node, m:Node, w:number)
-.input Edge()
-
-// Find all paths
-.decl Length   (n:Node, m:Node, l:number)
-Length(x,y,t)  :- t=l, Edge(x,y,l).
-Length(x,y,t+l)  :- Edge(x,z,l), Length(z,y,t).
-
-// Filter out the longest path
-.decl ShortestPath(n:Node, m:Node, l:number)
-.output ShortestPath()
-ShortestPath(x, y, a) :- Length(x, y, _), a = min Z : Length(x, y, Z).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\planar\planar.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Determines whether a graph is planar i.e. has no lines that intersect
-
-// Define an edge by its two x,y endpoints
-.decl edge(x1 : number, y1 : number, x2 : number, y2 : number)
-.input edge()
-
-// Check if two edges join only at an endpoint; this does not count as an intersection
-.decl sharedNode(x1 : number, y1 : number, x2 : number, y2 : number,
-	x3 : number, y3 : number, x4 : number, y4 : number)
-sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	x3 - x1 = 0, y3 - y1 = 0.
-sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	x4 - x1 = 0, y4 - y1 = 0.
-sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	x3 - x2 = 0, y3 - y2 = 0.
-sharedNode(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	x4 - x2 = 0, y4 - y2 = 0.
-
-// Check if there exists two intersecting lines, using the idea of orientation from computational geometry
-.decl intersect(x1 : number, y1 : number, x2 : number, y2 : number,
-	x3 : number, y3 : number, x4 : number, y4 : number)
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) > 0,
-	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) < 0,
-	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) > 0,
-	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) < 0.
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) > 0,
-	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) < 0, (y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) < 0, (y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) > 0.
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) < 0,
-	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) > 0,
-	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) > 0,
-	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) < 0.
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) < 0,
-	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) > 0,
-	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) < 0,
-	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) > 0.
-// The following lines check the case if the endpoint of one line lies on the other line (other than that line's endpoints)
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2) = 0,
-	x3 > min(x1, x2), x3 < max(x1, x2),
-	y3 > min(y1, y2), y3 < max(y1, y2).
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y2 - y1) * (x4 - x2) - (x2 - x1) * (y4 - y2) = 0,
-	x4 > min(x1, x2), x4 < max(x1, x2),
-	y4 > min(y1, y2), y4 < max(y1, y2).
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y4 - y3) * (x1 - x4) - (x4 - x3) * (y1 - y4) = 0,
-	x1 > min(x3, x4), x1 < max(x3, x4),
-	y1 > min(y3, y4), y1 < max(y3, y4).
-intersect(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	(y4 - y3) * (x2 - x4) - (x4 - x3) * (y2 - y4) = 0,
-	x2 > min(x3, x4), x1 < max(x3, x4),
-	y2 > min(y3, y4), y2 < max(y3, y4).
-
-// Main function checking if graph is planar
-.decl planar(x1 : number, y1 : number, x2 : number, y2 : number,
-	x3 : number, y3 : number, x4 : number, y4 : number)
-// If not planar, program outputs the pairs of lines that intersect
-.output planar()
-planar(x1, y1, x2, y2, x3, y3, x4, y4) :-
-	edge(x1, y1, x2, y2), edge(x3, y3, x4, y4),
-	intersect(x1, y1, x2, y2, x3, y3, x4, y4),
-	!sharedNode(x1, y1, x2, y2, x3, y3, x4, y4),
-	x1 <= x3, y1 <= y3.
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\planar\planar.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-
-.comp Impl {
-    .decl R(x: number)
-    R(0). R(1). R(2).
-}
-
-.comp A<T> {
-    .init impl = T
-    .decl Base(x: number)
-    Base(x) :- impl.R(x).
-}
-
-.comp Derived<K> : A<K> {
-    .decl Deriv(x:number)
-    Deriv(42).
-    Deriv(n) :- Base(n).
-}
-
-.init d = Derived<Impl>
-.init a = A<Impl>
-
-.decl DerivedOut(x: number)
-.output DerivedOut()
-.decl AOut(x: number)
-.output AOut()
-
-DerivedOut(x) :- d.Deriv(x).
-AOut(x) :- a.Base(x).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\comp-parametrized-inherit\comp-parametrized-inherit.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\sort\sort.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2018, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Sorts a list of integers using quicksort
-// Due to limitations of input format,
-// repeated values in input are not supported
-
-.type value <: number
-.type index <: number
-
-.type list = [
-    head : value,
-    tail : list
-]
-
-// Lists that must be sorted
-.decl ToSort(start : list)
-
-// Split a list into the values above and below the head value
-// Input : Split(head:tail, tail, nil, nil)
-// Output : Split(head:tail, nil, below, above)
-.decl Split(start : list, notdone : list, below : list, above : list)
-Split([p,l],l,nil,nil) :- ToSort([p,l]).
-Split([p,l],t,[h,b],a) :- Split([p,l],[h,t],b,a), h < p.
-Split([p,l],t,b,[h,a]) :- Split([p,l],[h,t],b,a), h >= p.
-
-// Recursively sort the partitions
-ToSort(l) :- Split(_,nil,l,_).
-ToSort(l) :- Split(_,nil,_,l).
-
-// Lists that need to be concatenated
-.decl ToCat(a : list, b : list)
-ToCat(t,b) :- ToCat([_,t],b).
-
-// Result of concatenation
-.decl Cat(a : list, b : list, c : list)
-Cat(nil, b, b) :- ToCat(nil, b).
-Cat([h,a], b, [h,c]) :- ToCat([h,a],b), Cat(a,b,c).
-
-// Result of sorting
-.decl Sorted(start : list, end : list)
-Sorted(nil,nil).
-Sorted([h,t],end) :-
-    ToSort([h,t]),
-    Split([h,t],nil,b,a),
-    Sorted(a,s_a),
-    Sorted(b,s_b),
-    Cat(s_b,[h,s_a],end).
-
-ToCat(s_b,[h,s_a]) :-
-    Split([h,_],nil,b,a),
-    Sorted(a,s_a),
-    Sorted(b,s_b).
-
-// -- Input -- //
-
-// Collect values from file
-.decl InputVals(x : value)
-.input InputVals
-
-// Assign each value a unique index; 0,1,2,...
-.decl Indexed(x : value, i : index)
-Indexed(x, autoinc()) :- InputVals(x).
-
-// Build the list
-.decl InList(l : list, i : index)
-InList(nil, m) :- m = min x: Indexed(_, x).
-InList([h,t], i+1) :- InList(t, i), Indexed(h, i).
-
-// Input the list to the sorting algorithm
-ToSort(l) :- InList(l, m), m > max x: Indexed(_, x).
-
-// -- Output -- //
-
-// Get the sorted list from the sorting algorithm
-.decl Result(l : list)
-Result(s) :- Sorted(l,s), InList(l,m), m > max x: Indexed(_, x).
-
-// Convert a list to a string representation (only works once)
-.decl ToString(l : list, s : symbol)
-ToString(t, to_string(h)) :- Result([h,t]).
-ToString(t, cat(cat(s, ", "), to_string(h))) :- ToString([h,t], s).
-
-// Write output to file
-.decl SortedVals(s : symbol)
-SortedVals(s) :- ToString(nil, s).
-.output SortedVals
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\sort\sort.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Andersen's points-to analysis
-
-// Define the domain of variables
-.type var <: symbol
-
-// Take addresses of other variables, i.e., y = &x;
-.decl AddressOf(y:var, x:var)
-.input AddressOf()
-
-// Assign Statements, i.e.,  y = x;
-.decl Assign(y:var, x:var)
-.input Assign()
-
-// Load Statements, i.e., y = *x;
-.decl Load(y:var, x:var)
-.input Load()
-
-// Store Statements, i.e., *y = x;
-.decl Store(y:var, x:var)
-.input Store()
-
-// PointsTo Relation, i.e., whether y may point to x
-.decl PointsTo(y:var, x:var)
-.output PointsTo()
-
-PointsTo(y, x) :-
- AddressOf(y, x).
-
-PointsTo(y, x) :-
- Assign(y, z),
- PointsTo(z, x).
-
-PointsTo(y, w) :-
- Load(y, x),
- PointsTo(x, z),
- PointsTo(z, w).
-
-PointsTo(z, w) :-
- Store(y, x),
- PointsTo(y, z),
- PointsTo(x, w).
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\andersen\andersen.dl ====
-
-// ==== BEGIN: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2017, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Find pairs of amicable numbers up to a limit
-// A pair of numbers are amicable if the sum of their factors add up to each other
-
-// Build search range
-.decl num(x : number)
-num(1).
-num(x+1) :- num(x), x < l, lim(l).
-
-// Search limit
-.decl lim(n : number)
-.input lim
-
-// Find factors of x excluding itself
-.decl factor(x : number, f : number)
-factor(x, f) :- num(x), num(f), f <= x / 2, x % f = 0.
-
-// Compute the sum of all the factors of x
-.decl factor_sum(x : number, fs : number)
-factor_sum(x, f) :- num(x), f = sum i : factor(x, i).
-
-// Find pairs of numbers whose factors add up to each other
-.decl amicable(a : number, b : number)
-.output amicable()
-amicable(a, b) :- factor_sum(a, b), factor_sum(b, a), a < b.
-
-// ==== END: d:/work24/souffle-lsp-plugin/example/amicable/amicable.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Test Case adopted from Ocaml datalog
+// Coefficients for the sequence.
+.decl pq(p:number, q:number)
+.input pq()
+
+// Relation composing the i'th element of this sequence.
+// Base cases given in the .facts file.
+.decl lucas(i:number, n:number)
+.output lucas()
+.input lucas()
+
+lucas(I+1, P*N - Q*M) :- lucas(I, N), lucas(I-1, M), pq(P, Q), !lim(I).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\lucas\lucas.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\game2\game2.dl ====
+// Stratifiable two-people game
+// Equivalent to the nonstratifiable:
+// winning(X) :- move(X,Y), not(winning(X)).
+// April, 2011
+// Adopted from DES
 
 .type Node <: symbol
 
-.decl reachable (node1:Node, node2:Node)
-.output reachable ()
-.decl same_clique (node1:Node, node2:Node)
-.output same_clique ()
-.decl edge (node1:Node, node2:Node)
-.output edge ()
-.decl leg (node1:Node, node2:Node)
-.output leg ()
+.decl move (node1:Node, node2:Node)
+.output move ()
+.decl odd_move (node1:Node, node2:Node)
+.output odd_move ()
+.decl canMove (node1:Node)
+.output canMove ()
+.decl possible_winning (node1:Node)
+.output possible_winning ()
+.decl winning (node1:Node)
+.output winning ()
 
-leg(X,Z) :- edge(X,Y), edge(Y,Z).
+move("1","2").
+move("2","3").
+move("3","4").
+move("1","3").
+move("1","5").
 
-reachable(X,Y) :- edge(X,Y).
-reachable(X,Y) :- edge(X,Z), reachable(Z,Y).
-same_clique(X,Y) :- reachable(X,Y), reachable(Y,X).
+canMove(X):- move(X,_).
 
-edge("a", "b").
-edge("b", "c").
-edge("c", "d").
-edge("d", "a").
+possible_winning(X):- odd_move(X,Y), !canMove(Y).
 
-reachable("e","f").
+winning(X):- move(X,Y), !possible_winning(Y).
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\cliquer\cliquer.dl ====
+odd_move(X,Y) :- move(X,Y).
+
+odd_move(X,Y) :- move(X,Z1), move(Z1,Z2), odd_move(Z2,Y).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\game2\game2.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl ====
+// Implementation of a Turing Maching in Souffle
+
+.type Alphabet <: symbol
+.type State <: symbol
+.type Direction <: symbol
+
+//
+// Tape of the Turing Machine
+//
+// A triple (pos, symbol, step) enumerates all symbols of the
+// tape at the i-th position in the j-th computational step.
+//
+
+.decl Tape(position:number, symbol:Alphabet, step:number)
+.output Tape()
+
+// write new symbol from a successful transition.
+Tape(position, newSymbol, step + 1) :-
+   Tape(position, oldSymbol, step),
+   Configuration(position, currentState, step),
+   Transition(currentState, _, oldSymbol, newSymbol, _).
+
+// copy tape symbol from previous step at previously written
+// position, if not altered by current state transition.
+Tape(position, symbol, step + 1) :-
+   Tape(position, symbol, step),
+   Configuration(writePosition, _, step),
+   position != writePosition.
+
+// add blank symbol to the left of the tape, if the position has not been
+// written before.
+Tape(position, "b", step + 1) :-
+   Configuration(position, _, step + 1),
+   TapeLimits(step, left, _),
+   position < left.
+
+// add blank symbol to the right of the tape, if the position
+// has not been written before.
+Tape(position, "b", step + 1) :-
+   Configuration(position, _, step + 1),
+   TapeLimits(step, _, right),
+   position > right.
+
+//
+// Configuration of the Turing Machine
+//
+// The configuration defines the current tape position,
+// the current state, and the computational step.
+//
+
+.decl Configuration(position: number, state:State, step:number)
+.output Configuration()
+
+Configuration(position - 1, nextState, step + 1) :-
+   Tape(position, oldSymbol, step),
+   Configuration(position, currentState, step),
+   Transition(currentState, nextState, oldSymbol, _, "L").
+
+Configuration(position + 1, nextState, step + 1) :-
+   Tape(position, oldSymbol, step),
+   Configuration(position, currentState, step),
+   Transition(currentState, nextState, oldSymbol, _, "R").
+
+//
+// TapeLimits of Turing Machine
+//
+// The left and right-most position already written positions
+// on the tape. This relation is necessary for producing blank
+// symbols for new positions on the tape.
+//
+.decl TapeLimits(step:number, left:number, right:number)
+.output TapeLimits()
+
+// tape limit has not changed
+TapeLimits(step + 1, left, right) :-
+   TapeLimits(step, left, right),
+   Configuration(position, _, step + 1),
+   left <= position,
+   position <= right.
+
+// tape limit has changed to the left
+TapeLimits(step + 1, position, right) :-
+   TapeLimits(step, left, right),
+   Configuration(position, _, step + 1),
+   position < left.
+
+// tape limit has changed to the right
+TapeLimits(step + 1, left, position) :-
+   TapeLimits(step, left, right),
+   Configuration(position, _, step + 1),
+   right < position.
+
+//
+// Partial Transition Function of Turing Machine
+//
+// Defines the transition from one state to another,
+// the symbols that is necesary to transit, the new symbol that
+// is written, and in which direction the turing machine is moving.
+// Note that the turing machine stops if no new state can be found.
+//
+
+.decl Transition(src:State, dest:State, read:Alphabet, write:Alphabet, d:Direction)
+
+Transition("S0", "S0", "x", "y", "R").
+Transition("S0", "S1", "y", "x", "L").
+Transition("S1", "S1", "y", "x", "L").
+
+//
+// Initial State of the tape
+//
+
+// Tape: 001
+
+Tape(0, "x", 0). // first position on tape set to symbol "x"
+Tape(1, "x", 0). // second position on tape set to symbol "x"
+Tape(2, "y", 0). // third position on tape set to symbol "y"
+
+// Limits of tape for initial state
+TapeLimits(0, 0, 2).
+
+// Initial configuration of turing machine
+Configuration(0, "S0", 0).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\turing1\turing1.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2021, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+// define edge relation of a directed graph
+.decl e(x:number, y:number, c:number)
+
+e(1,2,1).
+e(2,2,1).
+e(2,3,1).
+e(3,4,1).
+e(1,4,100).
+
+// define shortest path relation
+.decl sp(x:number, y:number, c:number) btree_delete
+
+//
+// subsumption
+//
+// A longer path is subsumed by a shorter path, i.e.,
+// the longer path is discarded from the relation.
+sp(x,y,c1) <= sp(x,y, c2) :-
+  c2 <= c1.
+
+//
+// base case
+//
+sp(x,y,c) :-
+  e(x,y,c).
+
+//
+// inductive case
+//
+sp(x,z,c1 + c2) :-
+  sp(x,y,c1),
+  e(y,z,c2).
+
+.output sp
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_path2\shortest_path2.dl ====
 

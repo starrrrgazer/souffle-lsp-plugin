@@ -1,38 +1,44 @@
-9月 10, 2025 2:04:01 下午 SouffleTextDocumentService countLineNum
-信息: LOC: 4020 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:01 下午 SouffleTextDocumentService countNodeNum
-信息: NOD: 112634 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:01 下午 SouffleTextDocumentService countDEFAndOCC
-信息: DEF: 994 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:01 下午 SouffleTextDocumentService countDEFAndOCC
-信息: OCC: 7478 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:11 下午 ReferenceProvider getLocateTime
+9月 18, 2025 9:45:48 上午 SouffleTextDocumentService countLineNum
+信息: LOC: 3490 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:45:48 上午 SouffleTextDocumentService countNodeNum
+信息: NOD: 94796 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:45:48 上午 SouffleTextDocumentService countDEFAndOCC
+信息: DEF: 980 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:45:48 上午 SouffleTextDocumentService countDEFAndOCC
+信息: OCC: 6668 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:45:52 上午 ReferenceProvider getLocateTime
 信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:12 下午 ReferenceProvider getSearchTime
-信息: search: 543 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:12 下午 DefinitionProvider getDefinition
+9月 18, 2025 9:45:52 上午 ReferenceProvider getSearchTime
+信息: search: 557 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:45:52 上午 ReferenceProvider getSearchTime
+信息: subcontextNum: 2814 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:45:52 上午 DefinitionProvider getDefinition
 信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:12 下午 RenameProvider getRename
+9月 18, 2025 9:45:52 上午 RenameProvider getRename
 信息: rename: 4 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:15 下午 CompletionProvider getCompletions
-信息: completion: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:22 下午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:23 下午 ReferenceProvider getSearchTime
-信息: search: 728 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:23 下午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:23 下午 RenameProvider getRename
-信息: rename: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:25 下午 CompletionProvider getCompletions
-信息: completion: 5 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:34 下午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:35 下午 ReferenceProvider getSearchTime
-信息: search: 734 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:35 下午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:35 下午 RenameProvider getRename
-信息: rename: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
-9月 10, 2025 2:04:37 下午 CompletionProvider getCompletions
+9月 18, 2025 9:45:56 上午 CompletionProvider getCompletions
 信息: completion: 7 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:06 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:06 上午 ReferenceProvider getSearchTime
+信息: search: 551 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:06 上午 ReferenceProvider getSearchTime
+信息: subcontextNum: 2814 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:06 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:06 上午 RenameProvider getRename
+信息: rename: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:09 上午 CompletionProvider getCompletions
+信息: completion: 4 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:21 上午 ReferenceProvider getLocateTime
+信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:22 上午 ReferenceProvider getSearchTime
+信息: search: 541 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:22 上午 ReferenceProvider getSearchTime
+信息: subcontextNum: 2814 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:22 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:22 上午 RenameProvider getRename
+信息: rename: 1 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+9月 18, 2025 9:46:24 上午 CompletionProvider getCompletions
+信息: completion: 4 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl

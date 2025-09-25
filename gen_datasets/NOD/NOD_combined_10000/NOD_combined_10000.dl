@@ -1,630 +1,584 @@
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2017, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type State <: number
+.type Letter <: symbol
+
+.decl Q				(q:State)
+.decl Init			(q:State)
+.decl Final			(q:State)
+.decl Tr			(q:State, a:Letter, r:State)
+
+.input Final
+.input Tr
+
+Init(0).
+
+Q(q) :- Tr(q, _, _).
+
+.decl Dis			(q:State, r:State)
+
+Dis(q, r) :- Q(q), Q(r), Final(q), !Final(r).
+Dis(q, r) :- Tr(q, a, s), Tr(r, a, t), Dis(s, t).
+Dis(q, r) :- Dis(r, q).
+
+.decl Equiv		(q:State, r:State)
+
+Equiv(q, r) :- Q(q), Q(r), !Dis(q, r).
+
+.decl NotMinEquiv	(q:State, r:State)
+.decl MinEquiv		(q:State, r:State)
+
+NotMinEquiv(q, r) :- Equiv(q, r), Equiv(q, s), s < r.
+MinEquiv(q, r) :- Equiv(q, r), !NotMinEquiv(q, r).
+
+.output MinEquiv
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_min\dfa_min.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\movies\movies.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-// Solves the n-queens problem
 
-// Side length of the board.
-.decl size( n : number )
-.input size()
+.type Text <: symbol
 
+.decl Movie(id:number,title:Text,rating:Text)
+.decl MovieActors(movieid:number,actorsid:number)
+.decl Actors(actorid:number,name:Text)
 
-// The maximal compatible sets -- n queens.
-.decl solution( qs : QueenList )
-.printsize solution
-solution(qs) :- compatible(qs, s), size(s).
+Movie(1,"Movie a","2.3/10").
+Movie(2,"Movie b","9.3/10").
+Movie(3,"Movie c","8.6/10").
 
+MovieActors(1,1).
+MovieActors(1,2).
+MovieActors(1,3).
+MovieActors(2,2).
+MovieActors(2,3).
+MovieActors(2,4).
+MovieActors(3,1).
+MovieActors(3,4).
 
-// Natural numbers from 1 to the size of the board.
-.decl up_to_size( x : number )
-up_to_size(1).
-up_to_size(x + 1) :- up_to_size(x), !size(x).
-
-
-// A cartesian coordinate for a board square.
-.type Position = [ x : number, y : number ]
-
-
-// This relation holds the position of each square of the board.
-.decl on_board( p : Position )
-on_board([x, y]) :- up_to_size(x), up_to_size(y).
+Actors(1,"John Smith").
+Actors(2,"Joe Bloggs").
+Actors(3,"Francesca Allsworth").
+Actors(4,"Julia Thebest").
 
 
-// Mutually-non-attacking list of queen positions.
-.type QueenList = [ p : Position, qs : QueenList ]
 
+.decl MovieActorsText(title:Text, actorname:Text)
+.output MovieActorsText()
 
-// Arguments are not on the same diagonal.
-.decl non_diagonals( p : Position, q : Position )
-non_diagonals([px, py], [qx, qy]) :- px - qx != py - qy, qx - px != py - qy, on_board([px, py]), on_board([qx, qy]).
+MovieActorsText(c,d) :- MovieActors(a,b), Movie(a,c,_), Actors(b,d).
 
+.decl JoeBloggsMovies(title:Text)
+.output JoeBloggsMovies()
 
-// Holds if p and q do not attack each other.
-.decl sympathetic( p : Position, q : Position )
-sympathetic(p, q) :- non_diagonals(p, q), px != qx, py != qy, p=[px, py], q=[qx,qy].
+JoeBloggsMovies(a) :- MovieActorsText(a, b), match("Joe Bloggs", b).
 
+.decl ActorsRatings(name:Text, rating:Text)
+.output ActorsRatings()
 
-// Holds if the head of qs is mutually non-attacking with its tail, which should itself be compatible.
-// Generated column by column, left to right.
-.decl compatible( qs : QueenList, n : number )
-compatible([p, nil], 1) :- on_board(p). //, p = [1,y].
-compatible([p, [head, tail]], n+1) :- sympathetic(p, head), compatible([p, tail], n), compatible([head, tail], n), p = [px, py], head = [hx, hy], px > hx.
+ActorsRatings(a,rating) :- MovieActorsText(movie,a), Movie(_,movie_b,rating), match(movie, movie_b).
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\nqueens\nqueens.dl ====
+// ==== END: d:\work24\souffle-lsp-plugin\example\movies\movies.dl ====
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\movies\movies.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2016, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-// Find the shortest paths between all nodes, the slow way
+
+.type Text <: symbol
+
+.decl Movie(id:number,title:Text,rating:Text)
+.decl MovieActors(movieid:number,actorsid:number)
+.decl Actors(actorid:number,name:Text)
+
+Movie(1,"Movie a","2.3/10").
+Movie(2,"Movie b","9.3/10").
+Movie(3,"Movie c","8.6/10").
+
+MovieActors(1,1).
+MovieActors(1,2).
+MovieActors(1,3).
+MovieActors(2,2).
+MovieActors(2,3).
+MovieActors(2,4).
+MovieActors(3,1).
+MovieActors(3,4).
+
+Actors(1,"John Smith").
+Actors(2,"Joe Bloggs").
+Actors(3,"Francesca Allsworth").
+Actors(4,"Julia Thebest").
+
+
+
+.decl MovieActorsText(title:Text, actorname:Text)
+.output MovieActorsText()
+
+MovieActorsText(c,d) :- MovieActors(a,b), Movie(a,c,_), Actors(b,d).
+
+.decl JoeBloggsMovies(title:Text)
+.output JoeBloggsMovies()
+
+JoeBloggsMovies(a) :- MovieActorsText(a, b), match("Joe Bloggs", b).
+
+.decl ActorsRatings(name:Text, rating:Text)
+.output ActorsRatings()
+
+ActorsRatings(a,rating) :- MovieActorsText(movie,a), Movie(_,movie_b,rating), match(movie, movie_b).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\movies\movies.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\convex_hull\convex_hull.dl ====
+// Souffle - A Datalog Compiler
+// Copyright (c) 2021, The Souffle Developers. All rights reserved
+// Licensed under the Universal Permissive License v 1.0 as shown at:
+// - https://opensource.org/licenses/UPL
+// - <souffle root>/licenses/SOUFFLE-UPL.txt
+
+.type Coordinate=[x:number, y:number]
+.type List=[head:Coordinate,rest:List]
+
+.decl point(x:number, y:number)
+.input point
+
+.decl first(x:number, y:number)
+.decl last(x:number, y:number)
+.decl next_candidate(x1:number, y1:number, x2:number, y2:number)
+.decl next(x1:number, y1:number, x2:number, y2:number)
+
+// first point has no prev
+first(x,y) :- point(x,y), !next(_,_,x,y).
+
+// last point has no next
+last(x,y) :- point(x,y), !next(x,y,_,_).
+
+// next defined by minimum larger in lex-order
+next_candidate(x1,y1,x2,y2) :- point(x1,y1),
+                     x2 = x1,
+                     y2 = min y : { point(x,y), x = x1, y > y1 }.
+
+next(x1,y1,x2,y2) :- point(x1,y1),
+                     x2 = min x3 : { point(x3,_), x3 > x1 },
+                     y2 = min y3 : { point(x3,y3), x3 = x2, y3 >= 0 },
+                     !next_candidate(x1,y1,_,_).
+
+next(x1,y1,x2,y2) :- next_candidate(x1,y1,x2,y2).
+
+.decl sorted_point_array(index:number, p:Coordinate)
+sorted_point_array(0,[x,y]) :- first(x,y).
+sorted_point_array(i+1,[x2,y2]) :- sorted_point_array(i,[x1,y1]), next(x1,y1,x2,y2).
+
+// now everything is sorted by x then y we build the upper/lower hulls
+.decl cross(a:Coordinate, b:Coordinate, o:Coordinate, value:number) inline
+cross([a0,a1],[b0,b1],[o0,o1],value) :- value = (a0 - o0) * (b1 - o1) - (a1 - o1) * (b0 - o0).
+
+.decl upper_hull(result:List, iteration:number, index:number, popped:number)
+upper_hull(nil, 0, end, 0) :- end = count : sorted_point_array(_,_) - 1.
+
+upper_hull([next, rest], n+1, i-1, 0) :-
+    upper_hull(rest, n, i, 1),
+    sorted_point_array(i, next).
+
+upper_hull(nil, n+1, i, 1) :-
+    upper_hull(nil, n, i, 0).
+
+upper_hull([first, nil], n+1, i, 1) :-
+    upper_hull([first, nil], n, i, 0).
+
+upper_hull([next, [first, nil]], n+1, i-1, 0) :-
+    upper_hull([first, nil], n, i, 1),
+    sorted_point_array(i, next).
+
+upper_hull([first, [second, rest]], n+1, i, 1) :-
+    upper_hull([first, [second, rest]], n, i, 0),
+    sorted_point_array(i, next),
+    cross(second, first, next, value),
+    value > 0.
+
+upper_hull([second, rest], n+1, i, 0) :-
+    upper_hull([first, [second, rest]], n, i, 0),
+    sorted_point_array(i, next),
+    cross(second, first, next, value),
+    value <= 0.
+
+.decl lower_hull(result:List, iteration:number, index:number, popped:number)
+
+lower_hull(nil, 0, 0, 0).
+
+lower_hull([next, rest], n+1, i+1, 0) :-
+    lower_hull(rest, n, i, 1),
+    sorted_point_array(i, next).
+
+lower_hull(nil, n+1, i, 1) :-
+    lower_hull(nil, n, i, 0).
+
+lower_hull([first, nil], n+1, i, 1) :-
+    lower_hull([first, nil], n, i, 0).
+
+lower_hull([next, [first, nil]], n+1, i+1, 0) :-
+    lower_hull([first, nil], n, i, 1),
+    sorted_point_array(i, next).
+
+lower_hull([first, [second, rest]], n+1, i, 1) :-
+    lower_hull([first, [second, rest]], n, i, 0),
+    sorted_point_array(i, next),
+    cross(second, first, next, value),
+    value > 0.
+
+lower_hull([second, rest], n+1, i, 0) :-
+    lower_hull([first, [second, rest]], n, i, 0),
+    sorted_point_array(i, next),
+    cross(second, first, next, value),
+    value <= 0.
+
+.decl to_hull(result:List, lower:List, upper:List)
+
+to_hull(nil, lower_rest, upper_rest) :-
+    n = count : sorted_point_array(_,_),
+    lower_hull([_, lower_rest], _, n, _),
+    upper_hull([_, upper_rest], _, -1, _).
+
+to_hull(back_lower, nil, upper) :-
+    to_hull(nil, lower, upper),
+    reversed(lower, back_lower).
+
+to_hull([upper_first,rest], nil, upper_rest) :-
+    to_hull(rest, nil, [upper_first, upper_rest]).
+
+.decl convex_hull(result:List)
+.output convex_hull
+
+convex_hull(result) :- to_hull(orig, nil, nil), reversed(orig, result).
+
+.decl reversed(orig:List, result:List)
+reversed(orig, result) :- reversed_intermediate(orig, result, nil).
+
+.decl reversed_intermediate(orig:List, result:List, remaining:List)
+reversed_intermediate(orig, nil, orig) :- to_reverse(orig).
+reversed_intermediate(orig, [first, x], rest) :- reversed_intermediate(orig, x, [first, rest]).
+
+.decl to_reverse(orig:List)
+to_reverse(orig) :- to_hull(nil, orig, _).
+to_reverse(orig) :- to_hull(orig, nil, nil).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\convex_hull\convex_hull.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\tc\tc.dl ====
+//// Reproduced from [FD92]
+//// Adopted from DES
+
 .type Node <: symbol
 
-.decl Edge(n:Node, m:Node, w:number)
-.input Edge()
+.decl tcl  (node1:Node, node2:Node)
+.output tcl  ()
+.decl tcr  (node1:Node, node2:Node)
+.output tcr  ()
+.decl base (node1:Node, node2:Node)
+.output base ()
+.input base ()
+.decl tc (node1:Node, node2:Node)
+.output tc ()
 
-// Find all paths
-.decl Length   (n:Node, m:Node, l:number)
-Length(x,y,t)  :- t=l, Edge(x,y,l).
-Length(x,y,t+l)  :- Edge(x,z,l), Length(z,y,t).
+// Left-Recursive Transitive Closure
+tcl(X, Y) :- base(X,Y).
+tcl(X,Y) :- tcl(X,Z), base(Z,Y).
 
-// Filter out the longest path
-.decl ShortestPath(n:Node, m:Node, l:number)
-.output ShortestPath()
-ShortestPath(x, y, a) :- Length(x, y, _), a = min Z : Length(x, y, Z).
+// Right-recursive Transitive Closure
+tcr(X,Y) :- base(X,Y).
+tcr(X,Y) :- base(X, Z),tcr(Z,Y).
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\shortest_path\shortest_path.dl ====
+// Double-recursive Transitive Closure
+tc(X,Y) :- base(X,Y).
+tc(X,Y) :- tc(X,Z),tc(Z,Y).
 
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\tree\tree.dl ====
+// base relation
+base("a","b").
+base("b","c").
+base("c","d").
 
-.type Node <: symbol
+// ==== END: d:\work24\souffle-lsp-plugin\example\tc\tc.dl ====
 
-.decl S      (node1:Node, node2:Node)
-.output S      ()
-.decl T      (node1:Node, node2:Node)
-.output T      ()
-.decl R      (node1:Node, node2:Node, node3:Node)
-
-S (x1, x3) :- T(x1, x2), R(x2, _, x3).
-T (x1, x4) :- R(x1, _, x2), R(x2, _, x3), T(x3, x4).
-T (x1, x3) :- R(x1, a, x2), R(x2, a, x3).
-
-
-R("1", "a", "2").
-R("2", "b", "3").
-R("3", "a", "4").
-R("4", "a", "5").
-R("5", "a", "6").
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\tree\tree.dl ====
-
-// ==== BEGIN: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-.decl gen(x : number)
-gen(1).
-gen(x+1) :- gen(x), !lim(x).
-
-.decl lim(x : number)
-lim(100).
-
-//factors excluding 1
-.decl factor(num : number, fc : number)
-factor(x, fc) :- gen(x), gen(fc), x % fc = 0, fc != 1.
-
-//finds if there exist two numbers which multiply to x
-.decl prod(num : number)
-prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
-
-//finds the prime factors
-.decl p_factor(x : number, fc : number)
-.output p_factor()
-p_factor(x, fc) :- factor(x, fc), !prod(fc).
-
-// ==== END: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl ====
 // Souffle - A Datalog Compiler
 // Copyright (c) 2018, The Souffle Developers. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
+//
+// profile_json.dl
+//
+// Example for logging in json format.
+//
 
-// Perform the Euclidean Algorithm to calculate the Greatest Common Divisor of Rational Polynomials
+// The '.json' extension here is recognised, and so logging will be
+// produced in JSON format.
+.pragma "profile" "profile_json.json"
 
-// Integers, used in definition of Rationals
-.type int <: number
-// Indices of polynomials
-.type index <: number
+.decl p(x:number, y:number)
+.input p
 
-// Rational numbers, just hope the denominator isn't zero
-.type rational = [
-    numerator : int,
-    denominator : int
-]
+.decl q(x:number, y:number)
+.output q
 
-// Polynomials with rational coefficients, written as `constant + higher * x'
-.type poly = [
-    constant : rational,
-    higher : poly
-]
+q(x, y) :- p(x, y).
+q(x, z) :- p(x, y), q(y, z).
 
-// -- Calculating the greatest common divisor of two integers -- //
+// ==== END: d:\work24\souffle-lsp-plugin\example\profile_json\profile_json.dl ====
 
-// Integers we should calculate the gcd of recursively
-.decl ToGcdInt(first : int, second : int)
-ToGcdInt(second,modulo) :-
-    ToGcdInt(first,second),
-    modulo = first % second,
-    modulo != 0. // Modulo = 0 is a base case, do not recurse.
-
-// Base case of integer gcd
-.decl GcdBase(first : int)
-GcdBase(second) :-
-    ToGcdInt(first,second),
-    0 = first % second.
-
-// Result of calculating gcd of integers
-.decl GcdInt(first : int, second : int, gcd : int)
-GcdInt(first,0,first) :- GcdBase(first).
-GcdInt(first,second,gcd) :-
-    ToGcdInt(first,second),
-    modulo = first % second,
-    GcdInt(second,modulo,gcd).
-
-// -- Simplifying coefficients and trimming tails of polynomials -- //
-
-// Polynomials we wish to simplify
-.decl ToSimplify(a : poly)
-ToSimplify(tail) :- ToSimplify([_,tail]).
-
-// Result of simplification
-.decl Simplify(a : poly, b : poly)
-Simplify(nil,nil) :- ToSimplify(nil).
-Simplify([head,tail],nil) :- // Trim the tail of polynomials equivalent to zero
-    ToSimplify([head,tail]),
-    Simplify(tail,nil),
-    head = [0,denominator].
-Simplify([head,tail],[newHead,newTail]) :-
-    ToSimplify([head,tail]),
-    Simplify(tail,newTail),
-    head = [numerator,denominator] ,
-    (newTail != nil; numerator != 0), // make sure polynomial is non-zero
-    GcdInt(numerator,denominator,gcd),
-    newHead = [numerator/gcd,denominator/gcd]. // simplify coefficient
-
-// Helper method for simplify
-ToGcdInt(numerator,denominator) :-
-    ToSimplify([head,tail]),
-    head = [numerator,denominator] ,
-    ( Simplify(tail, newTail),
-      newTail != nil
-    ; numerator != 0
-    ).
-
-// -- Add polynomials recursively -- //
-
-// Polynomials that we need to add
-.decl ToAdd(first : poly, second : poly)
-ToAdd(firstTail, secondTail) :- ToAdd([_,firstTail],[_,secondTail]).
-
-// Result of addition
-.decl Add(first : poly, second : poly, added : poly)
-Add(first,nil,first) :- ToAdd(first,nil).
-Add(nil,second,second) :- ToAdd(nil,second).
-Add([firstHead,firstTail],[secondHead,secondTail],[sumHead,sumTail]) :-
-    ToAdd([firstHead,firstTail],[secondHead,secondTail]),
-    Add(firstTail,secondTail,sumTail),
-    firstHead = [firstNumerator,firstDenominator],
-    secondHead = [secondNumerator,secondDenominator],
-    sumHead =
-        [firstNumerator*secondDenominator+firstDenominator*secondNumerator,
-            firstDenominator*secondDenominator].
-
-// -- Multiply polynomials by rational constants -- //
-
-// Constant and polynomial to be multiplied
-.decl ToMultiply(constant : rational, polynomial : poly)
-ToMultiply(constant,tail) :- ToMultiply(constant,[_,tail]).
-
-// Result of multiplication
-.decl Multiply(constant : rational, polynomial : poly, product : poly)
-Multiply(constant, nil, nil) :- ToMultiply(constant, nil).
-Multiply(constant, [head,tail], [productHead, productTail]) :-
-    ToMultiply(constant, [head,tail]),
-    Multiply(constant, tail, productTail),
-    constant = [constantNumerator, constantDenominator],
-    head = [headNumerator, headDenominator],
-    productHead =
-        [constantNumerator*headNumerator, constantDenominator*headDenominator].
-
-// -- Find the leading coefficient and index of a polynomial -- //
-// We do not assume the polynomial is simplified
-// The index of a polynomial equivalent to 0 will be 0
-// Otherwise if the leading term is a*x^n (a /= 0) we return a and n+1
-
-// Polynomials to find the leading term of
-.decl ToLeading(a : poly)
-ToLeading(tail) :- ToLeading([_,tail]).
-
-// Resulting leading terms
-.decl Leading(a : poly, coefficient : rational, i : index)
-Leading(nil, [0,1], 0) :- ToLeading(nil).
-Leading([head,tail], [0,1], 0) :- // Polynomial is equivalent to 0
-    ToLeading([head,tail]),
-    Leading(tail,[0,1],0),
-    head = [0,denominator].
-Leading([head,tail], head, 1) :- // Polynomial is equivalent to non-zero constant
-    ToLeading([head,tail]),
-    Leading(tail,[0,1],0),
-    head = [numerator,denominator], numerator!=0.
-Leading([head,tail], coefficient, i+1) :-
-    ToLeading([head,tail]),
-    Leading(tail,coefficient,i),
-    i != 0.
-
-// -- Multiply polynomials by powers of x -- //
-
-// Input is of the form Raise(start,goal,0,start)
-// Output is of the form Raise(start,goal,goal,result)
-.decl Raise(start : poly, goal : index, current : index, result : poly)
-Raise(start,goal,current+1,[[0,1],result]) :-
-    Raise(start,goal,current,result),
-    current < goal.
-
-// -- Calculate one polynomial modulo another -- //
-
-// Polynomials to calculate modulo of
-.decl ToMod(first : poly, second : poly)
-ToMod(next,second) :-
-    ToMod(first,second),
-    Leading(first,firstCoefficient,firstDegree),
-    Leading(second,secondCoefficient,secondDegree),
-    firstDegree >= secondDegree, // check we are not in a base case
-    firstCoefficient = [firstNumerator,firstDenominator],
-    secondCoefficient = [secondNumerator,secondDenominator],
-    multiplicationConstant =
-        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
-    Multiply(multiplicationConstant,second,multiplicationResult), // make the leading coefficients negatives of each other
-    Raise(multiplicationResult,firstDegree-secondDegree,
-        firstDegree-secondDegree,raiseResult), // make the leading indices the same
-    Add(first,raiseResult,nextUnsimp), // this will cancel out the leading term
-    Simplify(nextUnsimp,next). // avoid integer overflow and excessive computation
-
-// Helper methods for ToMod
-ToLeading(first) :- ToMod(first,_).
-ToLeading(second) :- ToMod(_,second).
-ToMultiply(multiplicationConstant,second) :-
-    ToMod(first,second),
-    Leading(first,firstCoefficient,firstDegree),
-    Leading(second,secondCoefficient,secondDegree),
-    firstDegree >= secondDegree,
-    firstCoefficient = [firstNumerator,firstDenominator],
-    secondCoefficient = [secondNumerator,secondDenominator],
-    multiplicationConstant =
-        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator].
-Raise(multiplicationResult,firstDegree-secondDegree,0,multiplicationResult) :-
-    ToMod(first,second),
-    Leading(first,firstCoefficient,firstDegree),
-    Leading(second,secondCoefficient,secondDegree),
-    firstDegree >= secondDegree,
-    firstCoefficient = [firstNumerator,firstDenominator],
-    secondCoefficient = [secondNumerator,secondDenominator],
-    multiplicationConstant =
-        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
-    Multiply(multiplicationConstant,second,multiplicationResult).
-ToAdd(first,raiseResult) :-
-    ToMod(first,second),
-    Leading(first,firstCoefficient,firstDegree),
-    Leading(second,secondCoefficient,secondDegree),
-    firstDegree >= secondDegree,
-    firstCoefficient = [firstNumerator,firstDenominator],
-    secondCoefficient = [secondNumerator,secondDenominator],
-    multiplicationConstant =
-        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
-    Multiply(multiplicationConstant,second,multiplicationResult),
-    Raise(multiplicationResult,firstDegree-secondDegree,
-        firstDegree-secondDegree,raiseResult).
-ToSimplify(nextUnsimp) :-
-    ToMod(first,second),
-    Leading(first,firstCoefficient,firstDegree),
-    Leading(second,secondCoefficient,secondDegree),
-    firstDegree >= secondDegree,
-    firstCoefficient = [firstNumerator,firstDenominator],
-    secondCoefficient = [secondNumerator,secondDenominator],
-    multiplicationConstant =
-        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
-    Multiply(multiplicationConstant,second,multiplicationResult),
-    Raise(multiplicationResult,firstDegree-secondDegree,
-        firstDegree-secondDegree,raiseResult),
-    Add(first,raiseResult,nextUnsimp).
-
-// The result of the modulo operation
-.decl Mod(first : poly, second : poly, modulo : poly)
-Mod(first,second,first) :-
-    ToMod(first,second),
-    Leading(first,_,firstDegree),
-    Leading(second,_,secondDegree),
-    firstDegree < secondDegree. // base case, first is smaller so return it
-Mod(first,second,modulo) :-
-    ToMod(first,second),
-    Leading(first,firstCoefficient,firstDegree),
-    Leading(second,secondCoefficient,secondDegree),
-    firstDegree >= secondDegree,
-    firstCoefficient = [firstNumerator,firstDenominator],
-    secondCoefficient = [secondNumerator,secondDenominator],
-    multiplicationConstant =
-        [-firstNumerator*secondDenominator,firstDenominator*secondNumerator],
-    Multiply(multiplicationConstant,second,multiplicationResult),
-    Raise(multiplicationResult,firstDegree-secondDegree,
-        firstDegree-secondDegree,raiseResult),
-    Add(first,raiseResult,nextUnsimp),
-    Simplify(nextUnsimp,next),
-    Mod(next,second,modulo).
-
-// -- Cakculate the greatest common divisor of two polynomials -- //
-
-// Polynomials to calculate the gcd of
-.decl ToGcd(first : poly, second : poly)
-ToGcd(second,modulo) :-
-    ToGcd(first,second),
-    Leading(second,_,secondDegree),
-    secondDegree > 0, // ensure this is not a base case
-    Mod(first,second,modulo).
-
-// Helper methods for ToGcd
-ToMod(first,second) :-
-    ToGcd(first,second),
-    Leading(second,_,secondDegree),
-    secondDegree > 0.
-ToLeading(second) :- ToGcd(_,second).
-
-// Calculate the resuling gcd
-.decl Gcd(first : poly, second : poly, gcd : poly)
-Gcd(first,second,gcd) :-
-    ToGcd(first,second),
-    Leading(second,_,0), // base case, one term is zero so return the other
-    Leading(first,[firstNumerator,firstDenominator],_),
-    Multiply([firstDenominator,firstNumerator],first,multiplicationResult), // make the gcd monic
-    Simplify(multiplicationResult, gcd). // make output gcd look nicer
-Gcd(first,second,gcd) :-
-    ToGcd(first,second),
-    Leading(second,_,secondDegree),
-    secondDegree > 0,
-    Mod(first,second,modulo),
-    Gcd(second,modulo,gcd).
-
-// Helper methods for Gcd base case
-ToLeading(first) :- ToGcd(first,_).
-ToMultiply([firstDenominator,firstNumerator],first) :-
-    ToGcd(first,second),
-    Leading(second,_,0),
-    Leading(first,[firstNumerator,firstDenominator],_).
-ToSimplify(multiplicationResult) :-
-    ToGcd(first,second),
-    Leading(second,_,0),
-    Leading(first,[firstNumerator,firstDenominator],_),
-    Multiply([firstDenominator,firstNumerator],first,multiplicationResult).
-
-// -- Input -- //
-
-// Which input polynomial (FirstTerm = 1, SecondTerm = 2)
-.type inputIndex <: number
-
-.decl FirstTerm(i : index, numerator : int, denominator : int)
-.input FirstTerm
-
-.decl SecondTerm(i : index, numerator : int, denominator : int)
-.input SecondTerm
-
-// Calculate the largest index in each polynomial
-.decl Degree(n : inputIndex, i : index)
-Degree(1,i) :- i = max x : FirstTerm(x,_,_).
-Degree(2,i) :- i = max x : SecondTerm(x,_,_).
-
-// Re-format input to be in one relation, with no missing indices
-.decl Term(n : inputIndex, coefficient : rational, i : index)
-Term(1,[numerator,denominator],i) :- FirstTerm(i,numerator,denominator).
-Term(1,[0,1],i+1) :-
-    Term(1,_,i),
-    Degree(1,degree),
-    degree > i,
-    !FirstTerm(i+1,_,_). // Replace missing index with 0
-Term(2,[numerator,denominator],i) :- SecondTerm(i,numerator,denominator).
-Term(2,[0,1],i+1) :-
-    Term(2,_,i),
-    Degree(2,degree),
-    degree > i,
-    !SecondTerm(i+1,_,_). // Replace missing index with 0
-
-// Build the link-list style polynomial objects
-.decl InputPoly(n : inputIndex, i : index, polynomial : poly)
-InputPoly(n,degree+1,nil) :- Degree(n,degree).
-InputPoly(n,i-1,[head,tail]) :- InputPoly(n,i,tail), Term(n,head,i-1).
-
-ToGcd(first,second) :-
-    InputPoly(1,0,first),
-    InputPoly(2,0,second).
-
-// -- Output -- //
-
-// Find the output polynomial and its degree
-.decl OutputPoly(gcd : poly, degree : index)
-OutputPoly(gcd, degree-1) :- // subtract one because Leading added one
-    InputPoly(1,0,first),
-    InputPoly(2,0,second),
-    Gcd(first,second,gcd),
-    Leading(gcd,_,degree).
-
-ToLeading(gcd) :-
-    InputPoly(1,0,first),
-    InputPoly(2,0,second),
-    Gcd(first,second,gcd).
-
-// calculate the coefficient at each term, and keep the remaining terms on hand
-.decl OutTerm(i : index, coefficient : rational, remaining : poly)
-OutTerm(0, head, tail) :- OutputPoly([head,tail],_).
-OutTerm(0, [0,1], nil) :- OutputPoly(_,0). // handle degenerate case
-OutTerm(i+1, head, tail) :-
-    OutTerm(i, _, [head,tail]),
-    OutputPoly(_,degree),
-    i < degree.
-
-.decl Output(i : index, numerator : int, denominator : int)
-Output(i,numerator,denominator) :- OutTerm(i,[numerator,denominator],_).
-.output Output
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\euclid\euclid.dl ====
-
-// ==== BEGIN: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl ====
 // Souffle - A Datalog Compiler
-// Copyright (c) 2016, The Souffle Developers. All rights reserved
+// Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved
 // Licensed under the Universal Permissive License v 1.0 as shown at:
 // - https://opensource.org/licenses/UPL
 // - <souffle root>/licenses/SOUFFLE-UPL.txt
 
-.decl gen(x : number)
-gen(1).
-gen(x+1) :- gen(x), !lim(x).
-
-.decl lim(x : number)
-lim(100).
-
-//factors excluding 1
-.decl factor(num : number, fc : number)
-factor(x, fc) :- gen(x), gen(fc), x % fc = 0, fc != 1.
-
-//finds if there exist two numbers which multiply to x
-.decl prod(num : number)
-prod(x) :- gen(x), gen(a), gen(b), b != x, a != x, x = a*b.
-
-//finds the prime factors
-.decl p_factor(x : number, fc : number)
-.output p_factor()
-p_factor(x, fc) :- factor(x, fc), !prod(fc).
-
-// ==== END: d:/work24/souffle-lsp-plugin/example/factoring/factoring.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl ====
-// Souffle - A Datalog Compiler
-// Copyright (c) 2018, The Souffle Developers. All rights reserved
-// Licensed under the Universal Permissive License v 1.0 as shown at:
-// - https://opensource.org/licenses/UPL
-// - <souffle root>/licenses/SOUFFLE-UPL.txt
-
-// Simulates a Deterministic Finite Automata to parse strings
-
-.type state <: symbol
-.type string <: symbol
-.type index <: number
-
-.decl transition(from : state, on : string, to : state)
-.input transition
-
-.decl accepting(x : state)
-.input accepting
-
-.decl start(x : state)
-.input start
-
-.decl toparse(x : string)
-.input toparse
-
-// When parsing `in` we have processed `i` characters and are at state `cur`
-.decl parse(in : string, cur : state, i : index)
-parse(in,cur,0) :- toparse(in), start(cur).
-parse(in,new,i+j) :-
-    parse(in,old,i),
-    transition(old,diff,new),
-    j=strlen(diff),
-    diff=substr(in,i,j).
-// The rule above can cause the AST translator to fail in old versions of Souffle
-
-.decl accept(in : string)
-accept(in) :- parse(in,cur,strlen(in)), accepting(cur).
-
-.decl out(s : string, result : symbol)
-out(s, "Accept") :- accept(s).
-out(s, "Reject") :- toparse(s), !accept(s).
-.output out
-
-// ==== END: d:\work24\souffle-lsp-plugin\example\dfa_parse\dfa_parse.dl ====
-
-// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
-
-// some subsets
-.decl A( x : number )
-.decl B( x : number )
-.decl C( x : number )
-.decl D( x : number )
-.decl E( x : number )
+//
+// An example constraint-based analysis:
+//
+// Given the Lambda term: (\ denotes a lambda)
+//
+//	(\x. x 3 2) (\y.\z.z)
+//
+// what is its value?
+//
 
 
-// A
-A(0).
+// Step A) model the input code
 
-// B
-B(1).
-B(2).
-B(3).
+.type Kind <: symbol
 
-// C
-C(4).
-C(5).
-C(6).
+.decl kind(k:Kind)
 
-// D
-D(3).
-D(4).
+kind("Lit").
+kind("Var").
+kind("Abs").
+kind("App").
 
-// E
-E(6).
-E(7).
-
-// the universe
-.decl U( x : number )
-.output U()
-U(X) :- A(X) ; B(X) ; C(X) ; D(X); E(X) .
-
-// an empty set
-.decl N( x : number )
-.output N()
-N(X) :- A(X), B(X).
+// the global term register - id, kind and index in corresponding relation
+.decl term( id:number, k:Kind, i:number )
 
 
-.decl R1( x : number )
-.output R1()
-R1(X) :- A(X) ; B(X) , D(X) .
+.type Value <: symbol
 
-.decl R2( x : number )
-.output R2()
-R2(X) :- U(X) , !( B(X) ; D(X) ) .
+.decl lits( i:number, n:Value )
 
-.decl R3( x : number )
-.output R3()
-R3(X) :- U(X) , !( B(X) , D(X) ) .
+lits( 0, "3" ).
+lits( 1, "2" ).
 
-.decl R4( x : number )
-.output R4()
-R4(X) :- U(X) , !( B(X) ; D(X) ) .
-
-.decl R5( x : number )
-.output R5()
-R5(X) :- U(X) , !!!( B(X) ; D(X) ) .
-
-.decl R6( x : number )
-.output R6()
-R6(X) :- (!B(X) ; D(X)) , U(X) .
+term( 0, "Lit", 0 ).
+term( 1, "Lit", 1 ).
 
 
-// ==== END: d:\work24\souffle-lsp-plugin\example\dnf\dnf.dl ====
+.type VarName <: symbol
+.decl vars( i:number, n:VarName )
+
+vars( 0, "x" ).
+vars( 1, "y" ).
+vars( 2, "z" ).
+
+term( 2, "Var", 0 ).
+term( 3, "Var", 1 ).
+term( 4, "Var", 2 ).
+
+
+.decl abs( i:number, v:number, b:number)
+
+abs( 0, 0, 8 ).
+abs( 1, 1, 7 ).
+abs( 2, 2, 4 ).
+
+term( 5, "Abs", 0 ).
+term( 6, "Abs", 1 ).
+term( 7, "Abs", 2 ).
+
+
+.decl app( i:number, t1:number, t2:number )
+
+app( 0, 9, 1 ).
+app( 1, 2, 0 ).
+app( 2, 5, 6 ).
+
+term( 8, "App", 0 ).
+term( 9, "App", 1 ).
+term(10, "App", 2 ).
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Step B) Analysis - get the value computed by the term
+
+
+.decl data_var( i:number, v:Value )
+.decl data_term( i:number, v:Value )
+.output data_term()
+
+.decl ctrl_var( i:number, f:number )
+.decl ctrl_term( i:number, f:number )
+
+
+//////////// D - Data Analysis //////////////
+
+// the value of a literal is the value it is representing
+data_term( i, v ) :- term(i,"Lit",l), lits( l, v ).
+
+// the value of a variable is the value in the variable assignment
+data_term( i, v ) :- term(i,"Var",x), data_var( x, v ).
+
+// the value of an application is the value of the body of the targeted abstraction
+data_term( i, v ) :- term(i,"App",x), app(x,t1,_), ctrl_term(t1, f), abs( f, _, b), data_term( b, v ).
+
+// the value of an abstraction is not defined
+
+// parameter binding
+data_var( i, v ) :- app( _, a, b ), ctrl_term( a, f ), abs( f, i, _), data_term( b, v).
+
+
+//////////// C - Control Flow Analysis //////////////
+
+// the value of a variable is the value in the variable assignment
+ctrl_term( i, v ) :- term(i,"Var",x), ctrl_var( x, v ).
+
+// the value of an application is the value of the body of the targeted abstraction
+ctrl_term( i, v ) :- term(i,"App",x), app(x,t1,_), ctrl_term(t1, f), abs( f, _, b), ctrl_term( b, v ).
+
+// the control flow value of an abstraction is the term itself
+ctrl_term( i, v ) :- term( i, "Abs", v ).
+
+// parameter binding
+ctrl_var( i, v ) :- app( _, a, b ), ctrl_term( a, f ), abs( f, i, _), ctrl_term( b, v).
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\cba_expr_value\cba_expr_value.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\po1\po1.dl ====
+.decl Check(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number)
+.input Check()
+.decl In(n1:number, n2:number, n3:number, n4:number, n5:number, n6: number, in:number)
+.input In()
+.decl A(l:number, o:number)
+.output A()
+
+A(1,i) :- Check(_, b, c, d, e, f), In(_, b, c, d, e, f, i).
+A(2,i) :- Check(a, _, c, d, e, f), In(a, _, c, d, e, f, i).
+A(3,i) :- Check(a, b, _, d, e, f), In(a, b, _, d, e, f, i).
+A(4,i) :- Check(a, b, c, _, e, f), In(a, b, c, _, e, f, i).
+A(5,i) :- Check(a, b, c, d, _, f), In(a, b, c, d, _, f, i).
+A(6,i) :- Check(a, b, c, d, e, _), In(a, b, c, d, e, _, i).
+
+A(7, i) :- Check(_, _, c, d, e, f), In(_, _, c, d, e, f, i).
+A(8, i) :- Check(a, _, _, d, e, f), In(a, _, _, d, e, f, i).
+A(9, i) :- Check(a, b, _, _, e, f), In(a, b, _, _, e, f, i).
+A(10, i) :- Check(a, b, c, _, _, f), In(a, b, c, _, _, f, i).
+A(11, i) :- Check(a, b, c, d, _, _), In(a, b, c, d, _, _, i).
+
+A(12, i) :- Check(_, _, _, d, e, f), In(_, _, _, d, e, f, i).
+A(13, i) :- Check(a, _, _, _, e, f), In(a, _, _, _, e, f, i).
+A(14, i) :- Check(a, b, _, _, _, f), In(a, b, _, _, _, f, i).
+A(15, i) :- Check(a, b, c, _, _, _), In(a, b, c, _, _, _, i).
+
+A(16, i) :- Check(_, _, _, _, e, f), In(_, _, _, _, e, f, i).
+A(17, i) :- Check(a, _, _, _, _, f), In(a, _, _, _, _, f, i).
+A(18, i) :- Check(a, b, _, _, _, _), In(a, b, _, _, _, _, i).
+
+A(19, i) :- Check(a, b, c, d, e, f), In(a, b, c, d, e, f, i).
+
+
+
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\po1\po1.dl ====
+
+// ==== BEGIN: d:\work24\souffle-lsp-plugin\example\magic_access-policy\magic_access-policy.dl ====
+// Example adapted (hacked) from Olson, Gunter, Madhusudan CCS'08, Data is random
+
+// A copy of the `access-policy' test, this time using
+// the magic set transformation
+.pragma "magic-transform" "*"
+
+.type String <: symbol
+
+.decl view_employee(x : String, p:String, ssn:String, s:number, e:String, d:String, pos:String, bday:number)
+.output view_employee()
+.decl view_cwPriv(n : String, person :String, bank1Priv :number, bank2Priv : number)
+.input view_cwPriv()
+.decl view_bank1(n :String, Data1 :number, Data2 :number)
+.input view_bank1()
+.decl view_bank2(n :String, Data1 : number, Data2:number)
+.input view_bank2()
+
+.decl employee(person : String, ssn:String, salary : number, email: String, dept : String, pos : String, bday : number)
+.input employee()
+
+.decl inslogtable(user :String, person :String, day : number)
+.input inslogtable()
+
+.decl insurance(user : String)
+.input insurance()
+
+.decl bank1(d:number, d2:number)
+.input bank1()
+.decl bank2(d:number, d2:number)
+.input bank2()
+
+.decl inscwPriv(user : String, x:number, y:number)
+.input inscwPriv()
+.decl delcwPriv(user:String, x:number, y:number)
+.input delcwPriv()
+.decl cwPriv(person:String, bank1Priv : number, Bank2Privi : number)
+.input cwPriv()
+
+
+view_employee("Alice", Person, SSN, Salary, Email, Dept, Position, Bday) :-
+  employee(Person, SSN, Salary, Email, Dept, Position, Bday).
+
+view_employee(User, Person, SSN, Salary, Email, Dept, Position, Bday) :-
+  User=Person, view_employee("alice", Person, SSN, Salary, Email, Dept, Position, Bday).
+
+view_employee(User, Person, SSN, Salary, Email, Dept, Position, Bday) :-
+  view_employee("Alice", User, _, _, _, Dept,"Manager", _),
+  view_employee("Alice", Person, SSN, Salary, Email, Dept, Position, Bday).
+
+view_employee(User, Person, "0", 0, Email, Dept, Position, Bday) :-
+  view_employee("Alice", User, _, _, _, _, _, _),
+  view_employee("Alice", Person, _, _, Email, Dept, Position, Bday).
+
+view_employee(User, Person, "0", 0, " ", " ", " ", Bday) :-
+  insurance(User),
+  view_employee("Alice", Person, _, _, _, _, _, Bday),
+  inslogtable(User, Person, 92311).
+
+view_cwPriv("Bob", Person, Bank1Priv, Bank2Priv) :-
+  cwPriv(Person, Bank1Priv, Bank2Priv).
+
+view_bank1("Bob", Data1, Data2) :-
+  bank1(Data1, Data2).
+
+view_bank1(User, Data1, Data2) :-
+  view_cwPriv("Bob", User, 1, _),
+  delcwPriv(User, 1, _), inscwPriv(User, 1, 0),
+  view_bank1("Bob", Data1, Data2).
+
+view_bank2("Bob", Data1, Data2) :-
+  bank2(Data1, Data2).
+
+view_bank2(User, Data1, Data2) :-
+  view_cwPriv("Bob", User, _, 1),
+  delcwPriv(User, _, 1),
+  inscwPriv(User, 0, 1),
+  view_bank2("Bob", Data1, Data2).
+
+// ==== END: d:\work24\souffle-lsp-plugin\example\magic_access-policy\magic_access-policy.dl ====
 
