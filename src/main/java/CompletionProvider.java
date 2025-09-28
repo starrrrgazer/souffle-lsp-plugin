@@ -54,6 +54,7 @@ public class CompletionProvider {
     public Either<List<CompletionItem>, CompletionList> getCompletions() {
         Range range = Utils.positionToRange(position);
         List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
+        int moreTraverse = 0;
         if( params.getContext().getTriggerCharacter() != null && params.getContext().getTriggerCharacter().equals("(")){
             state = CompletionState.IN_ARGS;
             return Either.forLeft(completionItems);
@@ -78,16 +79,17 @@ public class CompletionProvider {
                 }
 
                 for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
-                    //搜索 document 次数
+                    //遍历 document 次数
                     findInScope(documentContext.getScope(), completionItems, items);
                 }
 
-                //搜索 1 次
+                //遍历 1 次
                 if(context != null){
                     if(context.getParent() != null && context.getParent().getKind() == SouffleContextType.COMPONENT){
                         context = context.getParent();
                     }
                     if(context.getKind() == SouffleContextType.COMPONENT){
+                        moreTraverse++;
                         findInScope(((SouffleComponent)context.getContextSymbols().get(0)).getScope(), completionItems, items);
                     }
                 }
@@ -103,11 +105,54 @@ public class CompletionProvider {
         }
         var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
         LOG.info("completion: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+
+        getTraverseTime(moreTraverse);
+
+
         return Either.forLeft(completionItems);
 //        return null;
     }
 
 
+    private void getTraverseTime(int moreTraverse) {
+        List<CompletionItem> completionItems = new ArrayList<CompletionItem>();
+        Set<String> items = new HashSet<>();
+        for (SouffleContext documentContext : SouffleProjectContext.getInstance().getDocuments().values()) {
+            Map<String, List<SouffleSymbol>> scope = documentContext.getScope();
+            var started = Instant.now();
+            for (List<SouffleSymbol> symbols : scope.values()) {
+                for (SouffleSymbol symbol : symbols) {
+                    if(!items.contains(symbol.toString())){
+                        items.add(symbol.toString());
+                        CompletionItem completionItem = new CompletionItem();
+                        completionItem.setLabel(symbol.toString());
+                        completionItem.setInsertText(symbol.getName());
+                        switch (symbol.getKind()) {
+                            case TYPE_DECL:
+                                completionItem.setKind(CompletionItemKind.Interface);
+                                completionItem.setLabel(symbol.getName());
+                                completionItem.setDetail(symbol.toString().replaceFirst(".type", ""));
+                                completionItems.add(completionItem);
+                                break;
+                            case RELATION_DECL:
+                                addCompletionItem(completionItem, symbol, CompletionItemKind.Method, completionItems);
+                                break;
+                            case COMPONENT_INIT:
+                                addCompletionItem(completionItem, symbol, CompletionItemKind.Variable, completionItems);
+                                break;
+                            case COMPONENT_DECL:
+                                completionItem.setDetail(".comp");
+                                addCompletionItem(completionItem, symbol, CompletionItemKind.Class, completionItems);
+                                break;
+                        }
+                    }
+                }
+            }
+            var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
+            LOG.info("traverse: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+        }
+        LOG.info("traverseTimes: "+ (SouffleProjectContext.getInstance().getDocuments().values().size() + moreTraverse) + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+    }
 
     private static void addSnippets(List<CompletionItem> completionItems) {
         CompletionItem factSnippet = new CompletionItem();
