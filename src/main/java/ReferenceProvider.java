@@ -19,6 +19,7 @@ public class ReferenceProvider {
         return getReferences(params, true);
     }
     public List<Location> getReferences(TextDocumentPositionAndWorkDoneProgressParams params, boolean includeComponent) {
+
         Range cursor = Utils.positionToRange(params.getPosition());
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         Set<Location> references = new HashSet<>();
@@ -66,10 +67,11 @@ public class ReferenceProvider {
         SouffleContext documentContext = SouffleProjectContext.getInstance().getDocumentContext(params.getTextDocument().getUri());
 
 
-        ArrayList<SouffleSymbol> souffleSymbols = new ArrayList<>();
+        ArrayList<SouffleSymbol> souffleSymbolArrayList = new ArrayList<>();
         for (List<SouffleSymbol> symbols : documentContext.getScope().values()) {
             for (SouffleSymbol symbol : symbols) {
-                souffleSymbols.add(symbol);
+                if (!souffleSymbolArrayList.contains(symbol))
+                    souffleSymbolArrayList.add(symbol);
             }
         }
 //        System.err.println("symbol size: " + souffleSymbols.size() + "\nSymbols: " + souffleSymbols);
@@ -91,22 +93,67 @@ public class ReferenceProvider {
         Random random = new Random();
         ArrayList<SouffleSymbol> randomSymbols = new ArrayList<>();
         for (int i = 0; i < 10000; i++) {
-            randomSymbols.add(souffleSymbols.get(random.nextInt(souffleSymbols.size())));
+            randomSymbols.add(souffleSymbolArrayList.get(random.nextInt(souffleSymbolArrayList.size())));
         }
 
 
 
+        // 一个 search 是 在 一个 document 里 根据 一个 name  搜索 一个 列表
+        //就是一次 getReference 的 耗时
         var started = Instant.now();
         for (int i = 0; i < 10000; i++) {
-            SouffleSymbol symbol = randomSymbols.get(i);
-            documentContext.getSymbols(symbol.getName());
-            if(documentContext.getSubContext() != null){
-                for (SouffleContext ruleContext : documentContext.getSubContext().values()) {
-                    if ((documentContext.getKind() == SouffleContextType.COMPONENT || ruleContext.getKind() != SouffleContextType.COMPONENT)){
-                        ruleContext.getSymbols(symbol.getName());
+            SouffleSymbol currentSymbol = randomSymbols.get(i);
+            String name = currentSymbol.getName();
+//            LOG.info("searchSymbol: "+ name + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+            Set<Location> references = new HashSet<>();
+//            String key = params.getTextDocument().getUri();
+            Range cursor = Utils.positionToRange(params.getPosition());
+            SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
+
+            if (context != null) {
+//                SouffleSymbol currentSymbol = context.getSymbol(cursor);
+                for (Map.Entry<String, SouffleContext> souffleContextEntry : SouffleProjectContext.getInstance().getDocuments().entrySet()) {
+                    //搜索。此处搜索 首先获取当前作用域下同名符号列表，然后递归查找子作用域，每个子作用域查找同名符号列表
+                    Optional.ofNullable(souffleContextEntry.getValue()
+                                    .getSymbols(name))
+                            .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(souffleContextEntry.getKey(), symbol.getRange()))));
+                    if(souffleContextEntry.getValue().getSubContext() != null){
+                        for (SouffleContext ruleContext : souffleContextEntry.getValue().getSubContext().values()) {
+                            if (
+                                    (context.getKind() == SouffleContextType.COMPONENT || ruleContext.getKind() != SouffleContextType.COMPONENT)) {
+                                Optional.ofNullable(ruleContext
+                                                .getSymbols(name))
+                                        .ifPresent(souffleSymbols ->
+                                                souffleSymbols.forEach(symbol ->{
+                                                    if(symbol.getURI() != null && symbol.getURI().equals(souffleContextEntry.getKey()))
+                                                        references.add(new Location(souffleContextEntry.getKey(), symbol.getRange()));
+                                                    else if(symbol.getURI() == null)
+                                                        references.add(new Location(souffleContextEntry.getKey(), symbol.getRange()));
+                                                }));
+                            }
+                        }
                     }
                 }
             }
+
+//            Optional.ofNullable(documentContext
+//                            .getSymbols(name))
+//                    .ifPresent(souffleSymbols -> souffleSymbols.forEach(symbol -> references.add(new Location(key, symbol.getRange()))));
+//            if(documentContext.getSubContext() != null){
+//                for (SouffleContext ruleContext : documentContext.getSubContext().values()) {
+//                    if ((documentContext.getKind() == SouffleContextType.COMPONENT || ruleContext.getKind() != SouffleContextType.COMPONENT)) {
+//                        Optional.ofNullable(ruleContext
+//                                        .getSymbols(name))
+//                                .ifPresent(souffleSymbols ->
+//                                        souffleSymbols.forEach(symbol ->{
+//                                            if(symbol.getURI() != null && symbol.getURI().equals(key))
+//                                                references.add(new Location(key, symbol.getRange()));
+//                                            else if(symbol.getURI() == null)
+//                                                references.add(new Location(key, symbol.getRange()));
+//                                        }));
+//                    }
+//                }
+//            }
         }
         var elapsedMs = Duration.between(started, Instant.now()).toMillis();
         LOG.info("search: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));

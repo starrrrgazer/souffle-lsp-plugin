@@ -88,14 +88,14 @@ public class RenameProvider {
     public WorkspaceEdit getRename(TextDocumentPositionAndWorkDoneProgressParams params) {
         WorkspaceEdit edit = new WorkspaceEdit();
         Map<String, List<TextEdit>> textEdits = new HashMap<String, List<TextEdit>>();
-        var started = Instant.now();
+//        var started = Instant.now();
         Position cursorPosition = params.getPosition();
         cursorPosition.setCharacter(cursorPosition.getCharacter() - 1);
         Range cursor = Utils.positionToRange(cursorPosition);
-        //定位。从项目的SouffleProjectContext 中 根据 文件的getTextDocument().getUri() 获取该文件的 context
+        //定位
         SouffleContext context = SouffleProjectContext.getInstance().getContext(params.getTextDocument().getUri(), cursor);
         if (context != null) {
-            SouffleSymbol currentSymbol = context.getSymbol(cursor); //搜索：根据光标的range，从context中获得对应的符号
+            SouffleSymbol currentSymbol = context.getSymbol(cursor); //定位
             if (currentSymbol != null) {
                 switch (currentSymbol.getKind()) {
                     case RELATION_DECL:
@@ -106,8 +106,13 @@ public class RenameProvider {
                     case RELATION_USE:
                     case ATTRIBUTE:
                     case RULE:
+                        LOG.info("currentSymbol: "+ currentSymbol.getName() + " kind " +
+                                currentSymbol.getKind() +" document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
                         //对引用的地方进行修改。这个函数是定位 + 搜索
+                        var started = Instant.now();
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
+                        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+                        LOG.info("rename: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 //                        for (Location reference : references) {
 //                            if (!textEdits.containsKey(reference.getUri())) {
 //                                textEdits.put(reference.getUri(), new ArrayList<TextEdit>());
@@ -148,8 +153,8 @@ public class RenameProvider {
                 }
             }
         }
-        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
-        LOG.info("rename: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
+//        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+//        LOG.info("rename: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
         edit.setChanges(textEdits);
         return edit;
     }
