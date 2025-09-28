@@ -120,7 +120,7 @@ function getServerOptions() {
   console.log(jarPath);
   const serverOptions: ServerOptions = {
   command: "java",
-  args: ["-Xmx2g", "-Xss2m","-Djava.compiler=NONE", "-jar", jarPath],
+  args: ["-Xmx2g", "-Xss8m","-Xint", "-jar", jarPath],
 };
   return serverOptions;
 }

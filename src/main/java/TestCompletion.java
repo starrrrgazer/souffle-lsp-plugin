@@ -85,7 +85,7 @@ public class TestCompletion {
                 state = CompletionState.IDLE;
 //                return Either.forLeft(completionItems);
         }
-        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
         LOG.info("completion: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
         return Either.forLeft(completionItems);
 //        return null;

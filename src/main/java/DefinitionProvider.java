@@ -30,7 +30,7 @@ public class DefinitionProvider {
                 }
             }
         }
-        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
         LOG.info("gotoDefinition: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 
         return Either.forLeft(declLocations);
@@ -50,7 +50,7 @@ public class DefinitionProvider {
                 }
             }
         }
-        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
         LOG.info("gotoDefinition: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 
         return Either.forLeft(declLocations);

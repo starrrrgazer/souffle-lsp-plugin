@@ -79,7 +79,7 @@ public class RenameProvider {
                 }
             }
         }
-        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
         LOG.info("rename: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
         edit.setChanges(textEdits);
         return edit;
@@ -111,7 +111,7 @@ public class RenameProvider {
                         //对引用的地方进行修改。这个函数是定位 + 搜索
                         var started = Instant.now();
                         List<Location> references = new ReferenceProvider().getReferences(params, false);
-                        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+                        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
                         LOG.info("rename: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
 //                        for (Location reference : references) {
 //                            if (!textEdits.containsKey(reference.getUri())) {
@@ -153,7 +153,7 @@ public class RenameProvider {
                 }
             }
         }
-//        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+//        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
 //        LOG.info("rename: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
         edit.setChanges(textEdits);
         return edit;

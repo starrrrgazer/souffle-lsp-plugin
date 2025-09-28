@@ -58,7 +58,7 @@ public class ReferenceProvider {
         if (context != null) {
             SouffleSymbol currentSymbol = context.getSymbol(cursor);
         }
-        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
         LOG.info("locate: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
     }
 
@@ -92,7 +92,7 @@ public class ReferenceProvider {
 
         Random random = new Random();
         ArrayList<SouffleSymbol> randomSymbols = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             randomSymbols.add(souffleSymbolArrayList.get(random.nextInt(souffleSymbolArrayList.size())));
         }
 
@@ -101,7 +101,7 @@ public class ReferenceProvider {
         // 一个 search 是 在 一个 document 里 根据 一个 name  搜索 一个 列表
         //就是一次 getReference 的 耗时
         var started = Instant.now();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             SouffleSymbol currentSymbol = randomSymbols.get(i);
             String name = currentSymbol.getName();
 //            LOG.info("searchSymbol: "+ name + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
@@ -155,7 +155,7 @@ public class ReferenceProvider {
 //                }
 //            }
         }
-        var elapsedMs = Duration.between(started, Instant.now()).toMillis();
+        var elapsedMs = Duration.between(started, Instant.now()).toNanos() / 1_000_000.0;
         LOG.info("search: "+ elapsedMs + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
         LOG.info("subcontextNum: "+ subContextNum + " document: " + LogUtils.extractRelativeUri(params.getTextDocument().getUri()));
     }
