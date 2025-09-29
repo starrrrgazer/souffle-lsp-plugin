@@ -1,44 +1,68 @@
-9月 18, 2025 10:16:04 上午 SouffleTextDocumentService countLineNum
+9月 29, 2025 11:10:58 上午 SouffleTextDocumentService countLineNum
 信息: LOC: 7457 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:04 上午 SouffleTextDocumentService countNodeNum
+9月 29, 2025 11:10:59 上午 SouffleTextDocumentService countNodeNum
 信息: NOD: 196142 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:04 上午 SouffleTextDocumentService countDEFAndOCC
+9月 29, 2025 11:11:00 上午 SouffleTextDocumentService countDEFAndOCC
 信息: DEF: 1968 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:04 上午 SouffleTextDocumentService countDEFAndOCC
+9月 29, 2025 11:11:00 上午 SouffleTextDocumentService countDEFAndOCC
 信息: OCC: 13534 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:07 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:08 上午 ReferenceProvider getSearchTime
-信息: search: 1104 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:08 上午 ReferenceProvider getSearchTime
+9月 29, 2025 11:11:00 上午 ReferenceProvider getLocateTime
+信息: locate: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:00 上午 CompletionProvider getCompletions
+信息: completion: 152.0011 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:00 上午 CompletionProvider getTraverseTime
+信息: traverse: 98.9993 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:00 上午 CompletionProvider getTraverseTime
+信息: traverse: 55.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:00 上午 CompletionProvider getTraverseTime
+信息: traverseTimes: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:08 上午 ReferenceProvider getSearchTime
+信息: search: 7226.0564 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:08 上午 ReferenceProvider getSearchTime
 信息: subcontextNum: 5708 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:08 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:08 上午 RenameProvider getRename
-信息: rename: 7 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:11 上午 CompletionProvider getCompletions
-信息: completion: 11 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:18 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:19 上午 ReferenceProvider getSearchTime
-信息: search: 1286 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:19 上午 ReferenceProvider getSearchTime
+9月 29, 2025 11:11:08 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:08 上午 RenameProvider getRename
+信息: currentSymbol: Satisfiable kind RULE document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:08 上午 RenameProvider getRename
+信息: rename: 8.9975 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:13 上午 CompletionProvider getCompletions
+信息: completion: 145.0006 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:13 上午 CompletionProvider getTraverseTime
+信息: traverse: 91.9994 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:13 上午 CompletionProvider getTraverseTime
+信息: traverse: 54.9995 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:13 上午 CompletionProvider getTraverseTime
+信息: traverseTimes: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:13 上午 ReferenceProvider getLocateTime
+信息: locate: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:21 上午 ReferenceProvider getSearchTime
+信息: search: 6943.0339 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:21 上午 ReferenceProvider getSearchTime
 信息: subcontextNum: 5708 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:19 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:19 上午 RenameProvider getRename
-信息: rename: 3 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:22 上午 CompletionProvider getCompletions
-信息: completion: 8 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:39 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:41 上午 ReferenceProvider getSearchTime
-信息: search: 1307 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:41 上午 ReferenceProvider getSearchTime
+9月 29, 2025 11:11:21 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:21 上午 RenameProvider getRename
+信息: currentSymbol: Configuration kind RELATION_USE document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:21 上午 RenameProvider getRename
+信息: rename: 7.9984 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:32 上午 CompletionProvider getCompletions
+信息: completion: 138.9994 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:32 上午 CompletionProvider getTraverseTime
+信息: traverse: 90.9995 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:32 上午 CompletionProvider getTraverseTime
+信息: traverse: 55.9943 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:32 上午 CompletionProvider getTraverseTime
+信息: traverseTimes: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:36 上午 ReferenceProvider getLocateTime
+信息: locate: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:43 上午 ReferenceProvider getSearchTime
+信息: search: 6800.9806 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:43 上午 ReferenceProvider getSearchTime
 信息: subcontextNum: 5708 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:41 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:41 上午 RenameProvider getRename
-信息: rename: 3 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
-9月 18, 2025 10:16:43 上午 CompletionProvider getCompletions
-信息: completion: 8 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:43 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:43 上午 RenameProvider getRename
+信息: currentSymbol: num kind RULE document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl
+9月 29, 2025 11:11:43 上午 RenameProvider getRename
+信息: rename: 6.9987 document: d:/work24/souffle-lsp-plugin/gen_datasets/NOD/NOD_combined_200000/NOD_combined_200000.dl

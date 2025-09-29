@@ -16059,7 +16059,7 @@ Equiv(q, r) :- Q(q), Q(r), !Dis(q, r).
 .decl MinEquiv		(q:State, r:State)
 
 NotMinEquiv(q, r) :- Equiv(q, r), Equiv(q, s), s < r.
-MinEquiv(q, r) :- Equiv(q, r), !NotMinEquiv(q, r).
+NotMinEquiv(q, r) :- Equiv(q, r), !NotMinEquiv(q, r).
 
 .output MinEquiv
 

@@ -1,44 +1,68 @@
-9月 18, 2025 9:38:04 上午 SouffleTextDocumentService countLineNum
+9月 29, 2025 10:54:29 上午 SouffleTextDocumentService countLineNum
 信息: LOC: 9822 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:04 上午 SouffleTextDocumentService countNodeNum
+9月 29, 2025 10:54:31 上午 SouffleTextDocumentService countNodeNum
 信息: NOD: 266495 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:04 上午 SouffleTextDocumentService countDEFAndOCC
+9月 29, 2025 10:54:32 上午 SouffleTextDocumentService countDEFAndOCC
 信息: DEF: 2662 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:04 上午 SouffleTextDocumentService countDEFAndOCC
+9月 29, 2025 10:54:32 上午 SouffleTextDocumentService countDEFAndOCC
 信息: OCC: 18235 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:15 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:17 上午 ReferenceProvider getSearchTime
-信息: search: 1472 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:17 上午 ReferenceProvider getSearchTime
+9月 29, 2025 10:54:33 上午 CompletionProvider getCompletions
+信息: completion: 231.9986 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:33 上午 CompletionProvider getTraverseTime
+信息: traverse: 143.0009 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:33 上午 CompletionProvider getTraverseTime
+信息: traverse: 93.9985 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:33 上午 CompletionProvider getTraverseTime
+信息: traverseTimes: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:38 上午 ReferenceProvider getLocateTime
+信息: locate: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:47 上午 ReferenceProvider getSearchTime
+信息: search: 8701.5978 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:47 上午 ReferenceProvider getSearchTime
 信息: subcontextNum: 7315 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:17 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:17 上午 RenameProvider getRename
-信息: rename: 7 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:20 上午 CompletionProvider getCompletions
-信息: completion: 10 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:29 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:30 上午 ReferenceProvider getSearchTime
-信息: search: 1575 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:30 上午 ReferenceProvider getSearchTime
+9月 29, 2025 10:54:47 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 1.0009 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:47 上午 RenameProvider getRename
+信息: currentSymbol: out kind RULE document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:47 上午 RenameProvider getRename
+信息: rename: 11.9998 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:56 上午 CompletionProvider getCompletions
+信息: completion: 213.0001 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:56 上午 CompletionProvider getTraverseTime
+信息: traverse: 132.0002 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:56 上午 CompletionProvider getTraverseTime
+信息: traverse: 73.0007 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:54:56 上午 CompletionProvider getTraverseTime
+信息: traverseTimes: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:02 上午 ReferenceProvider getLocateTime
+信息: locate: 1.002 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:12 上午 ReferenceProvider getSearchTime
+信息: search: 8967.3506 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:12 上午 ReferenceProvider getSearchTime
 信息: subcontextNum: 7315 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:30 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:30 上午 RenameProvider getRename
-信息: rename: 5 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:33 上午 CompletionProvider getCompletions
-信息: completion: 10 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:39 上午 ReferenceProvider getLocateTime
-信息: locate: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:41 上午 ReferenceProvider getSearchTime
-信息: search: 1643 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:41 上午 ReferenceProvider getSearchTime
+9月 29, 2025 10:55:12 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:12 上午 RenameProvider getRename
+信息: currentSymbol: step kind RULE document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:12 上午 RenameProvider getRename
+信息: rename: 10.9996 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:43 上午 CompletionProvider getCompletions
+信息: completion: 187.0732 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:43 上午 CompletionProvider getTraverseTime
+信息: traverse: 118.0005 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:43 上午 CompletionProvider getTraverseTime
+信息: traverse: 88.0002 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:43 上午 CompletionProvider getTraverseTime
+信息: traverseTimes: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:49 上午 ReferenceProvider getLocateTime
+信息: locate: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:59 上午 ReferenceProvider getSearchTime
+信息: search: 9260.0153 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:59 上午 ReferenceProvider getSearchTime
 信息: subcontextNum: 7315 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:41 上午 DefinitionProvider getDefinition
-信息: gotoDefinition: 0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:41 上午 RenameProvider getRename
-信息: rename: 4 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
-9月 18, 2025 9:38:43 上午 CompletionProvider getCompletions
-信息: completion: 9 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:59 上午 DefinitionProvider getDefinition
+信息: gotoDefinition: 0.0 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:59 上午 RenameProvider getRename
+信息: currentSymbol: universe kind RULE document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
+9月 29, 2025 10:55:59 上午 RenameProvider getRename
+信息: rename: 10.0006 document: d:/work24/souffle-lsp-plugin/gen_datasets/LOC/LOC_combined_10000/LOC_combined_10000.dl
