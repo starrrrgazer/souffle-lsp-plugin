@@ -1731,3 +1731,154 @@
 9月 29, 2025 11:24:57 上午 RenameProvider getRename
 信息: rename: 4.9999 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_9600/OCC_combined_9600.dl
 
+
+10月 09, 2025 10:15:34 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_10400/OCC_combined_10400.dl
+
+10月 09, 2025 10:15:34 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 4472 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_10400/OCC_combined_10400.dl
+
+10月 09, 2025 10:15:37 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_11200/OCC_combined_11200.dl
+
+10月 09, 2025 10:15:37 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 4567 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_11200/OCC_combined_11200.dl
+
+10月 09, 2025 10:15:40 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_12000/OCC_combined_12000.dl
+
+10月 09, 2025 10:15:40 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 5130 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_12000/OCC_combined_12000.dl
+
+10月 09, 2025 10:15:43 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_12800/OCC_combined_12800.dl
+
+10月 09, 2025 10:15:43 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 5289 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_12800/OCC_combined_12800.dl
+
+10月 09, 2025 10:15:46 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_13600/OCC_combined_13600.dl
+
+10月 09, 2025 10:15:46 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 5382 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_13600/OCC_combined_13600.dl
+
+10月 09, 2025 10:15:49 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_14400/OCC_combined_14400.dl
+
+10月 09, 2025 10:15:49 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 5779 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_14400/OCC_combined_14400.dl
+
+10月 09, 2025 10:15:53 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_15200/OCC_combined_15200.dl
+
+10月 09, 2025 10:15:53 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 6180 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_15200/OCC_combined_15200.dl
+
+10月 09, 2025 10:15:53 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_1600/OCC_combined_1600.dl
+
+10月 09, 2025 10:15:53 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 582 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_1600/OCC_combined_1600.dl
+
+10月 09, 2025 10:15:56 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+
+10月 09, 2025 10:15:56 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 6556 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16000/OCC_combined_16000.dl
+
+10月 09, 2025 10:16:01 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16800/OCC_combined_16800.dl
+
+10月 09, 2025 10:16:01 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 7192 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_16800/OCC_combined_16800.dl
+
+10月 09, 2025 10:16:05 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_17600/OCC_combined_17600.dl
+
+10月 09, 2025 10:16:05 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 7496 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_17600/OCC_combined_17600.dl
+
+10月 09, 2025 10:16:09 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_18400/OCC_combined_18400.dl
+
+10月 09, 2025 10:16:09 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 7983 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_18400/OCC_combined_18400.dl
+
+10月 09, 2025 10:16:14 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_19200/OCC_combined_19200.dl
+
+10月 09, 2025 10:16:14 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 8197 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_19200/OCC_combined_19200.dl
+
+10月 09, 2025 10:16:18 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_20000/OCC_combined_20000.dl
+
+10月 09, 2025 10:16:18 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 8216 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_20000/OCC_combined_20000.dl
+
+10月 09, 2025 10:16:19 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_2400/OCC_combined_2400.dl
+
+10月 09, 2025 10:16:19 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 881 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_2400/OCC_combined_2400.dl
+
+10月 09, 2025 10:16:20 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_3200/OCC_combined_3200.dl
+
+10月 09, 2025 10:16:20 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 1294 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_3200/OCC_combined_3200.dl
+
+10月 09, 2025 10:16:20 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_4000/OCC_combined_4000.dl
+
+10月 09, 2025 10:16:20 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 1690 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_4000/OCC_combined_4000.dl
+
+10月 09, 2025 10:16:21 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_4800/OCC_combined_4800.dl
+
+10月 09, 2025 10:16:21 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 1883 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_4800/OCC_combined_4800.dl
+
+10月 09, 2025 10:16:22 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_5600/OCC_combined_5600.dl
+
+10月 09, 2025 10:16:22 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 2608 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_5600/OCC_combined_5600.dl
+
+10月 09, 2025 10:16:24 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_6400/OCC_combined_6400.dl
+
+10月 09, 2025 10:16:24 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 2584 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_6400/OCC_combined_6400.dl
+
+10月 09, 2025 10:16:26 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_7200/OCC_combined_7200.dl
+
+10月 09, 2025 10:16:26 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 3022 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_7200/OCC_combined_7200.dl
+
+10月 09, 2025 10:16:26 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_800/OCC_combined_800.dl
+
+10月 09, 2025 10:16:26 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 360 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_800/OCC_combined_800.dl
+
+10月 09, 2025 10:16:27 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_8000/OCC_combined_8000.dl
+
+10月 09, 2025 10:16:27 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 3522 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_8000/OCC_combined_8000.dl
+
+10月 09, 2025 10:16:29 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_8800/OCC_combined_8800.dl
+
+10月 09, 2025 10:16:29 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 3731 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_8800/OCC_combined_8800.dl
+
+10月 09, 2025 10:16:32 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_9600/OCC_combined_9600.dl
+
+10月 09, 2025 10:16:32 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 4404 document: d:/work24/souffle-lsp-plugin/gen_datasets/OCC/OCC_combined_9600/OCC_combined_9600.dl
+

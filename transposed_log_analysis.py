@@ -31,6 +31,8 @@ def process_log_file(log_file_path):
         'DEF': re.compile(r'DEF: (\d+(?:\.\d+)?) document: (.+)$'),
         'OCC': re.compile(r'OCC: (\d+(?:\.\d+)?) document: (.+)$'),
         'LOC': re.compile(r'LOC: (\d+(?:\.\d+)?) document: (.+)$'),
+        'DEG': re.compile(r'DEG: (\d+(?:\.\d+)?) document: (.+)$'),
+        'DEP': re.compile(r'DEP: (\d+(?:\.\d+)?) document: (.+)$'),
         'gotoDefinition': re.compile(r'gotoDefinition: (\d+(?:\.\d+)?) document: (.+)$'),
         'rename': re.compile(r'rename: (\d+(?:\.\d+)?) document: (.+)$'),
         'completion': re.compile(r'completion: (\d+(?:\.\d+)?) document: (.+)$'),
@@ -67,6 +69,8 @@ def process_log_file(log_file_path):
             'DEF': data.get('DEF', (0, 1))[0] / data.get('DEF', (0, 1))[1],
             'OCC': data.get('OCC', (0, 1))[0] / data.get('OCC', (0, 1))[1],
             'LOC': data.get('LOC', (0, 1))[0] / data.get('LOC', (0, 1))[1],
+            'DEG': data.get('DEG', (0, 1))[0] / data.get('DEG', (0, 1))[1],
+            'DEP': data.get('DEP', (0, 1))[0] / data.get('DEP', (0, 1))[1],
             'gotoDefinition': data.get('gotoDefinition', (0, 1))[0] / data.get('gotoDefinition', (0, 1))[1],
             'rename': data.get('rename', (0, 1))[0] / data.get('rename', (0, 1))[1],
             'completion': data.get('completion', (0, 1))[0] / data.get('completion', (0, 1))[1],
@@ -92,7 +96,7 @@ def merge_logs(metric_folder, output_log):
 def export_multi_to_csv(all_results, output_file):
     """把四个表导出到一个 CSV 文件"""
     fieldnames = ['document', 'traverse_component', 'traverseTimes', 'locate_component',
-                  'search_component', 'NOD', 'DEF', 'OCC', 'LOC',
+                  'search_component', 'NOD', 'DEF', 'OCC', 'LOC', 'DEG','DEP',
                 #   'subcontextNum',
                   'gotoDefinition', 'rename', 'completion']
     with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
@@ -110,7 +114,7 @@ def export_multi_to_csv(all_results, output_file):
 
 def analyze_feature_importance(all_results, output_file="feature_importance.csv"):
     """基于 permutation importance + KFold 计算特征重要性"""
-    features = ['LOC', 'DEF', 'OCC', 'NOD']
+    features = ['LOC', 'DEF', 'OCC', 'NOD', 'DEG', 'DEP']
     targets = ['locate_component', 'search_component', 'traverse_component',
                'gotoDefinition', 'rename', 'completion']
 
@@ -341,8 +345,8 @@ def derived_prediction_eval(results,
                 continue
 
             real_y = test_df["rename"].values
-            x_nod = test_df[["NOD"]].values
-            x_loc = test_df[["LOC"]].values
+            x_nod = test_df[["DEP"]].values
+            x_loc = test_df[["DEP"]].values
 
             locate_pred = k_locate * x_nod.flatten() + b_locate
             search_pred = k_search * x_loc.flatten() + b_search
@@ -375,10 +379,11 @@ def derived_prediction_eval(results,
                 continue
 
             real_y = test_df["completion"].values
+            x_dep = test_df[["DEP"]].values
             x_nod = test_df[["NOD"]].values
             x_times = test_df[["traverseTimes"]].values
 
-            locate_pred = k_locate * x_nod.flatten() + b_locate
+            locate_pred = k_locate * x_dep.flatten() + b_locate
             traverse_pred = k_traverse * x_nod.flatten() + b_traverse
             pred_y = locate_pred + traverse_pred * x_times.flatten()
 
@@ -409,7 +414,7 @@ def derived_prediction_eval(results,
                 continue
 
             real_y = test_df["gotoDefinition"].values
-            x_nod = test_df[["NOD"]].values
+            x_nod = test_df[["DEP"]].values
 
             locate_pred = k_locate * x_nod.flatten() + b_locate
             pred_y = locate_pred
@@ -448,10 +453,10 @@ if __name__ == "__main__":
     for metric in metrics:
         metric_folder = os.path.join(root, metric)
         merged_log = os.path.join(root, f"souffle_{metric}.log")
-        merge_logs(metric_folder, merged_log)
+        # merge_logs(metric_folder, merged_log)
         results = process_log_file(merged_log)
         all_results[metric] = results
-        print(f"[{metric}] 合并完成，生成 {merged_log}")
+        # print(f"[{metric}] 合并完成，生成 {merged_log}")
 
     export_multi_to_csv(all_results, "results_all.csv")
     analyze_feature_importance(all_results, "feature_importance.csv")
@@ -463,8 +468,8 @@ if __name__ == "__main__":
     # df = pd.DataFrame(all_data).drop_duplicates(subset=["document"])
     
     
-    k_s, b_s, _ = linear_regression_fit(all_data, target="search_component", train_dataset="LOC", x_param="LOC")
-    k_l, b_l, _ = linear_regression_fit(all_data, target="locate_component", train_dataset="NOD", x_param="NOD")
+    k_s, b_s, _ = linear_regression_fit(all_data, target="search_component", train_dataset="LOC", x_param="DEP")
+    k_l, b_l, _ = linear_regression_fit(all_data, target="locate_component", train_dataset="NOD", x_param="DEP")
     k_t, b_t, _ = linear_regression_fit(all_data, target="traverse_component", train_dataset="NOD", x_param="NOD")
     derived_prediction_eval(all_data, k_l, b_l, k_t, b_t, k_s, b_s)
     

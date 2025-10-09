@@ -1737,3 +1737,154 @@
 9月 29, 2025 10:12:21 上午 CompletionProvider getTraverseTime
 信息: traverseTimes: 2 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_900/DEF_combined_900.dl
 
+
+10月 09, 2025 10:13:07 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_100/DEF_combined_100.dl
+
+10月 09, 2025 10:13:07 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 316 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_100/DEF_combined_100.dl
+
+10月 09, 2025 10:13:09 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+
+10月 09, 2025 10:13:09 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 2851 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1000/DEF_combined_1000.dl
+
+10月 09, 2025 10:13:10 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1100/DEF_combined_1100.dl
+
+10月 09, 2025 10:13:10 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 3055 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1100/DEF_combined_1100.dl
+
+10月 09, 2025 10:13:12 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1200/DEF_combined_1200.dl
+
+10月 09, 2025 10:13:12 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 3139 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1200/DEF_combined_1200.dl
+
+10月 09, 2025 10:13:13 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+
+10月 09, 2025 10:13:13 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 3211 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1300/DEF_combined_1300.dl
+
+10月 09, 2025 10:13:15 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1400/DEF_combined_1400.dl
+
+10月 09, 2025 10:13:15 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 3195 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1400/DEF_combined_1400.dl
+
+10月 09, 2025 10:13:17 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1500/DEF_combined_1500.dl
+
+10月 09, 2025 10:13:17 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 4438 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1500/DEF_combined_1500.dl
+
+10月 09, 2025 10:13:19 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1600/DEF_combined_1600.dl
+
+10月 09, 2025 10:13:19 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 4042 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1600/DEF_combined_1600.dl
+
+10月 09, 2025 10:13:22 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1700/DEF_combined_1700.dl
+
+10月 09, 2025 10:13:22 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 4820 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1700/DEF_combined_1700.dl
+
+10月 09, 2025 10:13:24 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1800/DEF_combined_1800.dl
+
+10月 09, 2025 10:13:24 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 4675 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1800/DEF_combined_1800.dl
+
+10月 09, 2025 10:13:26 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1900/DEF_combined_1900.dl
+
+10月 09, 2025 10:13:26 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 5140 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_1900/DEF_combined_1900.dl
+
+10月 09, 2025 10:13:26 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_200/DEF_combined_200.dl
+
+10月 09, 2025 10:13:26 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 636 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_200/DEF_combined_200.dl
+
+10月 09, 2025 10:13:29 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2000/DEF_combined_2000.dl
+
+10月 09, 2025 10:13:29 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 5978 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2000/DEF_combined_2000.dl
+
+10月 09, 2025 10:13:33 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2100/DEF_combined_2100.dl
+
+10月 09, 2025 10:13:33 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 6209 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2100/DEF_combined_2100.dl
+
+10月 09, 2025 10:13:35 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2200/DEF_combined_2200.dl
+
+10月 09, 2025 10:13:35 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 5644 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2200/DEF_combined_2200.dl
+
+10月 09, 2025 10:13:39 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2300/DEF_combined_2300.dl
+
+10月 09, 2025 10:13:39 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 6748 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2300/DEF_combined_2300.dl
+
+10月 09, 2025 10:13:42 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2400/DEF_combined_2400.dl
+
+10月 09, 2025 10:13:42 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 6355 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2400/DEF_combined_2400.dl
+
+10月 09, 2025 10:13:45 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2500/DEF_combined_2500.dl
+
+10月 09, 2025 10:13:45 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 6419 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_2500/DEF_combined_2500.dl
+
+10月 09, 2025 10:13:45 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_300/DEF_combined_300.dl
+
+10月 09, 2025 10:13:45 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 942 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_300/DEF_combined_300.dl
+
+10月 09, 2025 10:13:46 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_400/DEF_combined_400.dl
+
+10月 09, 2025 10:13:46 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 1311 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_400/DEF_combined_400.dl
+
+10月 09, 2025 10:13:46 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_500/DEF_combined_500.dl
+
+10月 09, 2025 10:13:46 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 1267 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_500/DEF_combined_500.dl
+
+10月 09, 2025 10:13:47 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_600/DEF_combined_600.dl
+
+10月 09, 2025 10:13:47 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 1452 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_600/DEF_combined_600.dl
+
+10月 09, 2025 10:13:48 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_700/DEF_combined_700.dl
+
+10月 09, 2025 10:13:48 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 2126 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_700/DEF_combined_700.dl
+
+10月 09, 2025 10:13:49 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_800/DEF_combined_800.dl
+
+10月 09, 2025 10:13:49 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 2076 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_800/DEF_combined_800.dl
+
+10月 09, 2025 10:13:50 上午 SouffleTextDocumentService countMaxDegree
+信息: DEG: 6 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_900/DEF_combined_900.dl
+
+10月 09, 2025 10:13:50 上午 SouffleTextDocumentService countMaxDepth
+信息: DEP: 2447 document: d:/work24/souffle-lsp-plugin/gen_datasets/DEF/DEF_combined_900/DEF_combined_900.dl
+
